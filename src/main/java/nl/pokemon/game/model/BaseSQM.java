@@ -1,8 +1,8 @@
-package nl.pokemon.game.rpg.model;
+package nl.pokemon.game.model;
 
 import javax.swing.*;
 
-public abstract class BaseSQM extends JLabel {
+public abstract class BaseSQM extends JLabel implements Walkable{
 
     int indexX;
     int indexY;
@@ -14,10 +14,20 @@ public abstract class BaseSQM extends JLabel {
     public static final int SQM_PIXEL_HEIGHT_Y = 50;
 
     private static final int OFFSET_PIXEL_X = -120;
-    private static final int OFFSET_PIXEL_Y = -120;
+    private static final int OFFSET_PIXEL_Y = -170;
 
-    public abstract void loadNewImageIcon(ImageIcon icon);
+
     public abstract ImageIcon getImageIcon();
+
+    public void restrictedSQM() {
+
+    }
+
+
+
+    public void loadNewImageIcon(ImageIcon icon) {
+        this.setIcon(icon);
+    }
 
     public void setPixelPosXByIndex(int index) {
         this.indexX = index;

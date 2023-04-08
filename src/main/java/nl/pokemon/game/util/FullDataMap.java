@@ -1,11 +1,11 @@
-package nl.pokemon.game.rpg.util;
+package nl.pokemon.game.util;
 
 
 public class FullDataMap {
 
     private static int[][] dataMap;
 
-    public static int[][] generate() {
+    public static int[][] getFDMap() {
         // y / x
         dataMap = new int[][]{
                 {93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94, 93, 94},

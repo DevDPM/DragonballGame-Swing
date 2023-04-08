@@ -1,10 +1,10 @@
-package nl.pokemon.game.rpg.controller;
+package nl.pokemon.game.controller;
 
+import nl.pokemon.game.model.CurrentPlayer;
+import nl.pokemon.game.service.Direction;
 import org.dpmFramework.annotation.Controller;
 import org.dpmFramework.annotation.Inject;
-import nl.pokemon.game.rpg.model.CurrentPlayer;
-import nl.pokemon.game.rpg.service.ViewService;
-import nl.pokemon.game.rpg.service.MapService;
+import nl.pokemon.game.service.ViewService;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -17,33 +17,31 @@ public class RpgController implements KeyListener {
     CurrentPlayer player;
 
     @Inject
-    MapService mapService;
-
-    @Inject
     ViewService viewService;
 
     boolean isNotMoving = true;
-    Stack<ViewService.Direction> moveStack = new Stack<>();
+    Stack<Direction> moveStack = new Stack<>();
 
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
 
         switch (keyEvent.getKeyChar()) {
-            case 'w' -> addDirectionToStack(ViewService.Direction.NORTH);
-            case 'a' -> addDirectionToStack(ViewService.Direction.WEST);
-            case 's' -> addDirectionToStack(ViewService.Direction.SOUTH);
-            case 'd' -> addDirectionToStack(ViewService.Direction.EAST);
+            case 'w' -> addDirectionToStack(Direction.NORTH);
+            case 'a' -> addDirectionToStack(Direction.WEST);
+            case 's' -> addDirectionToStack(Direction.SOUTH);
+            case 'd' -> addDirectionToStack(Direction.EAST);
         }
 
         if (isNotMoving) {
             isNotMoving = false;
 
-            viewService.moveViewXYSmoothly(moveStack.pop());
+            if (!moveStack.isEmpty())
+                viewService.moveViewXYSmoothly(moveStack.pop());
         }
 
     }
-    private void addDirectionToStack(ViewService.Direction direction) {
+    private void addDirectionToStack(Direction direction) {
 
         if ((moveStack.isEmpty())) {
             moveStack.add(direction);
@@ -68,7 +66,7 @@ public class RpgController implements KeyListener {
         isNotMoving = notMoving;
     }
 
-    public Stack<ViewService.Direction> getMoveStack() {
+    public Stack<Direction> getMoveStack() {
         return moveStack;
     }
 }

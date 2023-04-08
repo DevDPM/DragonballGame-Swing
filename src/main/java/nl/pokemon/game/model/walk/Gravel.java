@@ -1,6 +1,7 @@
-package nl.pokemon.game.rpg.model.walk;
+package nl.pokemon.game.model.walk;
 
-import nl.pokemon.game.rpg.model.BaseSQM;
+import nl.pokemon.game.model.BaseSQM;
+import nl.pokemon.game.service.Direction;
 
 import javax.swing.*;
 
@@ -13,13 +14,12 @@ public class Gravel extends BaseSQM {
     }
 
     @Override
-    public void loadNewImageIcon(ImageIcon icon) {
-        this.setIcon(icon);
-    }
-
-    @Override
     public ImageIcon getImageIcon() {
         return this.icon;
     }
 
+    @Override
+    public boolean isNotWalkable() {
+        return false;
+    }
 }

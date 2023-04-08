@@ -1,6 +1,6 @@
-package nl.pokemon.game.rpg.model.obstacle.bigTree;
+package nl.pokemon.game.model.obstacle.bigTree;
 
-import nl.pokemon.game.rpg.model.BaseSQM;
+import nl.pokemon.game.model.BaseSQM;
 
 import javax.swing.*;
 
@@ -13,12 +13,12 @@ public class BigTreeTL extends BaseSQM {
     }
 
     @Override
-    public void loadNewImageIcon(ImageIcon icon) {
-        this.setIcon(icon);
+    public ImageIcon getImageIcon() {
+        return this.icon;
     }
 
     @Override
-    public ImageIcon getImageIcon() {
-        return this.icon;
+    public boolean isNotWalkable() {
+        return true;
     }
 }

@@ -1,18 +1,18 @@
-package nl.pokemon.game.rpg.view;
+package nl.pokemon.game.view;
 
-import nl.pokemon.game.rpg.controller.RpgController;
-import nl.pokemon.game.rpg.model.BaseSQM;
-import nl.pokemon.game.rpg.model.CurrentPlayer;
-import nl.pokemon.game.rpg.service.ViewService;
+import nl.pokemon.game.controller.RpgController;
+import nl.pokemon.game.model.BaseSQM;
+import nl.pokemon.game.model.CurrentPlayer;
+import nl.pokemon.game.service.ViewService;
 import org.dpmFramework.Kickstarter;
 
 import javax.swing.*;
 
-public class Rpg extends JFrame {
+public class Console extends JFrame {
 
-    public Rpg() {
+    public Console() {
 
-        this.setTitle("RPG!     ");
+        this.setTitle("Pokemon!");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setSize(800, 800);
@@ -21,16 +21,11 @@ public class Rpg extends JFrame {
         this.setLayout(null);
         this.add(Kickstarter.getInstanceOf(CurrentPlayer.class));
 
-
-//        Kickstarter.getInstanceOf(MapServiceImpl.class).generateMap();
-
         ViewService viewSQM = Kickstarter.getInstanceOf(ViewService.class);
 
         BaseSQM[][] fields = viewSQM.getViewMap();
         for (int y = 0; y < viewSQM.getMAX_Y(); y++) {
             for (int x = 0; x < viewSQM.getMAX_X(); x++) {
-                if (fields[y][x] == null)
-                    return;
                 this.add(fields[y][x]);
             }
         }

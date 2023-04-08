@@ -1,6 +1,7 @@
-package nl.pokemon.game.rpg.model;
+package nl.pokemon.game.model;
 
-import nl.pokemon.game.rpg.service.ViewService;
+import nl.pokemon.game.service.Direction;
+import nl.pokemon.game.service.ViewService;
 
 import javax.swing.*;
 import java.awt.*;
@@ -22,7 +23,7 @@ public class CurrentPlayer extends JLabel implements Movable {
         this.setVisible(true);
     }
 
-    public void moveDirection(ViewService.Direction direction) {
+    public void moveDirection(Direction direction) {
         ImageIcon icon;
 
         icon = switch (direction) {
@@ -34,7 +35,7 @@ public class CurrentPlayer extends JLabel implements Movable {
         this.setIcon(icon);
     }
 
-    public void standStill(ViewService.Direction direction) {
+    public void standStill(Direction direction) {
         ImageIcon icon;
 
         icon = switch (direction) {

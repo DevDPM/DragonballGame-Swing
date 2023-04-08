@@ -1,8 +1,8 @@
-package nl.pokemon.game.rpg.config;
+package nl.pokemon.game.config;
 
+import nl.pokemon.game.model.CurrentPlayer;
 import org.dpmFramework.annotation.Configurations;
 import org.dpmFramework.annotation.Enable;
-import nl.pokemon.game.rpg.model.CurrentPlayer;
 
 import javax.swing.*;
 

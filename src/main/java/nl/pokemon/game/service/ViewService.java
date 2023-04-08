@@ -1,20 +1,13 @@
-package nl.pokemon.game.rpg.service;
+package nl.pokemon.game.service;
 
-import nl.pokemon.game.rpg.controller.RpgController;
+import nl.pokemon.game.controller.RpgController;
+import nl.pokemon.game.model.BaseSQM;
+import nl.pokemon.game.model.CurrentPlayer;
+import nl.pokemon.game.model.ViewSQM;
+import nl.pokemon.game.util.FullDataMap;
 import org.dpmFramework.Kickstarter;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
-import nl.pokemon.game.rpg.model.BaseSQM;
-import nl.pokemon.game.rpg.model.CurrentPlayer;
-import nl.pokemon.game.rpg.model.SQM;
-import nl.pokemon.game.rpg.model.obstacle.GreenPlant;
-import nl.pokemon.game.rpg.model.obstacle.bigTree.BigTreeLL;
-import nl.pokemon.game.rpg.model.obstacle.bigTree.BigTreeLR;
-import nl.pokemon.game.rpg.model.obstacle.bigTree.BigTreeTL;
-import nl.pokemon.game.rpg.model.obstacle.bigTree.BigTreeTR;
-import nl.pokemon.game.rpg.model.walk.Grass;
-import nl.pokemon.game.rpg.model.walk.Gravel;
-import nl.pokemon.game.rpg.util.FullDataMap;
 
 import javax.swing.*;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -34,13 +27,16 @@ public class ViewService {
     private int smoothMovePosY = 0;
 
     @Inject
+    SQMService sqmService;
+
+    @Inject
     RpgController controller;
 
     @Inject
     CurrentPlayer player;
 
     private void init() {
-        FullDataMap.generate();
+        FullDataMap.getFDMap();
         viewMap = new BaseSQM[MAX_Y][MAX_X];
 
         StringBuilder sb = new StringBuilder();
@@ -48,7 +44,7 @@ public class ViewService {
         for (int viewY = 0; viewY < MAX_Y; viewY++) {
             for (int viewX = 0; viewX < MAX_X; viewX++) {
                 sb.append(viewY+1).append("-").append(viewX+1);
-                BaseSQM sqm = Kickstarter.getInstanceOf(SQM.class, sb.toString());
+                BaseSQM sqm = Kickstarter.getInstanceOf(ViewSQM.class, sb.toString());
                 sqm.setPixelPosXByIndex(viewX);
                 sqm.setPixelPosYByIndex(viewY);
                 sqm.updateBounds();
@@ -76,7 +72,6 @@ public class ViewService {
 
                 BaseSQM sqm = viewMap[y][x];
                 sqm = insertFDMPositionToSQM(sqm, FDMCurrentPosX, FDMCurrentPosY);
-                viewMap[y][x] = sqm;
                 sqm.updateBounds();
 
             }
@@ -84,6 +79,11 @@ public class ViewService {
     }
 
     public void moveViewXYSmoothly(Direction direction) {
+
+         if (sqmService.isNotWalkable(direction)) {
+             controller.setNotMoving(true);
+             return;
+         }
 
         setSmoothPosYXByDirection(direction);
 
@@ -103,7 +103,7 @@ public class ViewService {
                 }
             }
 
-            if (pixelCounter.getAndIncrement() >= (SQM.SQM_PIXEL_WIDTH_X/speedPixelPerIterate)) {
+            if (pixelCounter.getAndIncrement() >= (ViewSQM.SQM_PIXEL_WIDTH_X/speedPixelPerIterate)) {
 
                 if (controller.getMoveStack().isEmpty()) {
                     Timer timer = (Timer) e.getSource();
@@ -113,11 +113,21 @@ public class ViewService {
                     updateView();
                     player.standStill(lastDirection.get());
                 } else {
-                    pixelCounter.set(0);
-                    setViewToDefaultXY();
-                    updateView();
-                    lastDirection.set(controller.getMoveStack().pop());
-                    setSmoothPosYXByDirection(lastDirection.get());
+                    Direction nextDirection = controller.getMoveStack().pop();
+                    if (sqmService.isNotWalkable(nextDirection)) {
+                        Timer timer = (Timer) e.getSource();
+                        timer.stop();
+                        controller.setNotMoving(true);
+                        setViewToDefaultXY();
+                        updateView();
+                        player.standStill(lastDirection.get());
+                    } else {
+                        pixelCounter.set(0);
+                        setViewToDefaultXY();
+                        updateView();
+                        lastDirection.set(nextDirection);
+                        setSmoothPosYXByDirection(lastDirection.get());
+                    }
                 }
             }
         });
@@ -161,20 +171,8 @@ public class ViewService {
     }
 
     private BaseSQM insertFDMPositionToSQM(BaseSQM currentSQM, int playerXPosFDM, int playerYPosFDM) {
-        int[][] dataMap = FullDataMap.generate();
-        BaseSQM sqm = switch(dataMap[playerYPosFDM][playerXPosFDM]) {
-            case 0 -> new Gravel();
-            case 1 -> new Grass();
-            case 3 -> new GreenPlant();
-            case 91 -> new BigTreeLL();
-            case 92 -> new BigTreeLR();
-            case 93 -> new BigTreeTL();
-            case 94 -> new BigTreeTR();
-            default -> new SQM();
-        };
-
+        BaseSQM sqm = sqmService.convertFDM_XY_ToSQM(playerXPosFDM, playerYPosFDM);
         currentSQM.loadNewImageIcon(sqm.getImageIcon());
-
         return currentSQM;
     }
 
@@ -188,9 +186,5 @@ public class ViewService {
 
     public int getMAX_Y() {
         return MAX_Y;
-    }
-
-    public enum Direction {
-        NORTH, EAST, SOUTH, WEST
     }
 }
