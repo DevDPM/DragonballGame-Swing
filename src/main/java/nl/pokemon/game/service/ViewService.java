@@ -4,6 +4,7 @@ import nl.pokemon.game.controller.RpgController;
 import nl.pokemon.game.model.BaseSQM;
 import nl.pokemon.game.model.CurrentPlayer;
 import nl.pokemon.game.model.ViewSQM;
+import nl.pokemon.game.util.FDMapToSQM;
 import nl.pokemon.game.util.FullDataMap;
 import org.dpmFramework.Kickstarter;
 import org.dpmFramework.annotation.Inject;
@@ -85,6 +86,12 @@ public class ViewService {
              return;
          }
 
+         JFrame frame = sqmService.isPortal(direction);
+         if (frame != null) {
+             frame.getContentPane();
+             frame.setVisible(true);
+         }
+
         setSmoothPosYXByDirection(direction);
 
         AtomicReference<Direction> lastDirection = new AtomicReference<>(direction);
@@ -122,6 +129,7 @@ public class ViewService {
                         updateView();
                         player.standStill(lastDirection.get());
                     } else {
+                        sqmService.isPortal(nextDirection);
                         pixelCounter.set(0);
                         setViewToDefaultXY();
                         updateView();
@@ -171,7 +179,7 @@ public class ViewService {
     }
 
     private BaseSQM insertFDMPositionToSQM(BaseSQM currentSQM, int playerXPosFDM, int playerYPosFDM) {
-        BaseSQM sqm = sqmService.convertFDM_XY_ToSQM(playerXPosFDM, playerYPosFDM);
+        BaseSQM sqm = FDMapToSQM.convertFDM_XY_ToSQM(playerXPosFDM, playerYPosFDM);
         currentSQM.loadNewImageIcon(sqm.getImageIcon());
         return currentSQM;
     }
