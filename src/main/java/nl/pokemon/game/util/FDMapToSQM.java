@@ -24,7 +24,12 @@ public class FDMapToSQM {
             case 0 -> new Gravel();
             case 1 -> new Grass();
             case 3 -> new GreenPlant();
-            case 4 -> new GravelPortal();
+            case 4 -> {
+                GravelPortal sqm = new GravelPortal();
+                int[] xyDestination = Portals.getDestinationXYByPortalXY(x, y);
+                sqm.setDestinationFDMIndexXY(xyDestination[0], xyDestination[1]);
+                yield sqm;
+            }
             case 91 -> new BigTreeLL();
             case 92 -> new BigTreeLR();
             case 93 -> new BigTreeTL();

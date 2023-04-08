@@ -8,7 +8,9 @@ import javax.swing.*;
 @Service
 public class PortalService {
 
-    public JFrame getFrameByPortalXY(int x, int y) {
-        return Portals.getFrameByPortalXY(x,y);
+
+
+    public void getFrameByPortalXY(int x, int y) {
+
     }
 }

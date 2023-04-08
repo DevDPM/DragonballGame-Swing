@@ -4,12 +4,12 @@ import javax.swing.*;
 
 public class Portals {
 
-    public static JFrame getFrameByPortalXY(int x, int y) {
+    public static int[] getDestinationXYByPortalXY(int x, int y) {
         String xy = x + "-" + y;
 
         return switch (xy) {
-            case "10-10" -> new JFrame();
-            default -> null;
+            case "13-7" -> new int[]{0,0};
+            default -> throw new RuntimeException("Portal at: x" + x + " / y" + y + " does not exist.");
         };
     }
 }

@@ -4,6 +4,7 @@ import nl.pokemon.game.controller.RpgController;
 import nl.pokemon.game.model.BaseSQM;
 import nl.pokemon.game.model.CurrentPlayer;
 import nl.pokemon.game.model.ViewSQM;
+import nl.pokemon.game.model.walk.Portable;
 import nl.pokemon.game.util.FDMapToSQM;
 import nl.pokemon.game.util.FullDataMap;
 import org.dpmFramework.Kickstarter;
@@ -11,6 +12,7 @@ import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -21,7 +23,7 @@ public class ViewService {
     private final int MAX_X = 21;
     private final int MAX_Y = 21;
 
-    private final int speedPixelPerIterate = 5; // 50 = max
+    private final int speedPixelPerIterate = 1; // 50 = max
     private final int speedTimerDelay = 5;
 
     private int smoothMovePosX = 0;
@@ -32,6 +34,9 @@ public class ViewService {
 
     @Inject
     RpgController controller;
+
+    @Inject
+    PlayerService playerService;
 
     @Inject
     CurrentPlayer player;
@@ -66,11 +71,6 @@ public class ViewService {
 
             for (int x = 0; x < MAX_X; x++, FDMCurrentPosX++) {
 
-                // check if x/y player position of 20 by 20 view is out of range in FullDataMap array
-                if (FDMCurrentPosX < 0 || FDMCurrentPosY < 0 || FDMCurrentPosX > FullDataMap.X_MAX_VALUE()-1 || FDMCurrentPosY > FullDataMap.Y_MAX_VALUE()-1) {
-                    continue;
-                }
-
                 BaseSQM sqm = viewMap[y][x];
                 sqm = insertFDMPositionToSQM(sqm, FDMCurrentPosX, FDMCurrentPosY);
                 sqm.updateBounds();
@@ -86,13 +86,8 @@ public class ViewService {
              return;
          }
 
-         JFrame frame = sqmService.isPortal(direction);
-         if (frame != null) {
-             frame.getContentPane();
-             frame.setVisible(true);
-         }
-
         setSmoothPosYXByDirection(direction);
+        playerService.setXYByDirection(direction);
 
         AtomicReference<Direction> lastDirection = new AtomicReference<>(direction);
         AtomicInteger pixelCounter = new AtomicInteger(0);
@@ -112,34 +107,46 @@ public class ViewService {
 
             if (pixelCounter.getAndIncrement() >= (ViewSQM.SQM_PIXEL_WIDTH_X/speedPixelPerIterate)) {
 
-                if (controller.getMoveStack().isEmpty()) {
-                    Timer timer = (Timer) e.getSource();
-                    timer.stop();
-                    controller.setNotMoving(true);
-                    setViewToDefaultXY();
-                    updateView();
-                    player.standStill(lastDirection.get());
+                if (isPortalAndTeleport() || controller.getMoveStack().isEmpty()) {
+                    endSmoothWalking(lastDirection, e);
                 } else {
+
                     Direction nextDirection = controller.getMoveStack().pop();
                     if (sqmService.isNotWalkable(nextDirection)) {
-                        Timer timer = (Timer) e.getSource();
-                        timer.stop();
-                        controller.setNotMoving(true);
-                        setViewToDefaultXY();
-                        updateView();
-                        player.standStill(lastDirection.get());
+                        endSmoothWalking(lastDirection, e);
                     } else {
-                        sqmService.isPortal(nextDirection);
+                        sqmService.getBaseSQMfromDirection(nextDirection);
                         pixelCounter.set(0);
                         setViewToDefaultXY();
                         updateView();
                         lastDirection.set(nextDirection);
                         setSmoothPosYXByDirection(lastDirection.get());
+                        playerService.setXYByDirection(lastDirection.get());
                     }
                 }
             }
         });
         smoothMoving.start();
+    }
+
+    private void endSmoothWalking(AtomicReference<Direction> lastDirection, ActionEvent e) {
+        Timer timer = (Timer) e.getSource();
+        timer.stop();
+        controller.setNotMoving(true);
+        setViewToDefaultXY();
+        updateView();
+        player.standStill(lastDirection.get());
+    }
+
+    private boolean isPortalAndTeleport() {
+        BaseSQM portalSQM = sqmService.getBaseSQMfromCurrentXY();
+        if (portalSQM != null) {
+            Portable portal = (Portable) portalSQM;
+            player.setFDMIndexY(portal.getDestinationFDMIndexY());
+            player.setFDMIndexX(portal.getDestinationFDMIndexX());
+            return true;
+        }
+        return false;
     }
 
     private void setViewToDefaultXY() {
@@ -159,19 +166,15 @@ public class ViewService {
 
         switch (direction) {
             case NORTH -> {
-                player.setFDMIndexY(player.getFDMIndexY() - 1);
                 smoothMovePosY = speedPixelPerIterate;
             }
             case EAST -> {
-                player.setFDMIndexX(player.getFDMIndexX() + 1);
                 smoothMovePosX = -speedPixelPerIterate;
             }
             case SOUTH -> {
-                player.setFDMIndexY(player.getFDMIndexY() + 1);
                 smoothMovePosY = -speedPixelPerIterate;
             }
             case WEST -> {
-                player.setFDMIndexX(player.getFDMIndexX() - 1);
                 smoothMovePosX = speedPixelPerIterate;
             }
         }
@@ -180,6 +183,9 @@ public class ViewService {
 
     private BaseSQM insertFDMPositionToSQM(BaseSQM currentSQM, int playerXPosFDM, int playerYPosFDM) {
         BaseSQM sqm = FDMapToSQM.convertFDM_XY_ToSQM(playerXPosFDM, playerYPosFDM);
+        if (sqm == null)
+            sqm = new ViewSQM();
+
         currentSQM.loadNewImageIcon(sqm.getImageIcon());
         return currentSQM;
     }

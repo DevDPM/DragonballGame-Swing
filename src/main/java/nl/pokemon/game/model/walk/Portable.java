@@ -1,8 +1,9 @@
 package nl.pokemon.game.model.walk;
 
-import javax.swing.*;
-
 public interface Portable {
 
-    JFrame getFrameByPortalXY(int x, int y);
+    int getDestinationFDMIndexY();
+    int getDestinationFDMIndexX();
+    void setDestinationFDMIndexXY(int x, int y);
+
 }

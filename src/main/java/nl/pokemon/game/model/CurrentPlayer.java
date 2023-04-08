@@ -13,7 +13,6 @@ public class CurrentPlayer extends JLabel implements Movable {
     int FDMIndexX = 8;
     int FDMIndexY = 8;
 
-    int speed = 10;
 
     public CurrentPlayer() {
         this.setBounds(x, y,50,50);
