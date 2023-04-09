@@ -2,6 +2,7 @@ package nl.pokemon.game.service;
 
 import nl.pokemon.game.model.BaseSQM;
 import nl.pokemon.game.model.CurrentPlayer;
+import nl.pokemon.game.model.ViewSQM;
 import nl.pokemon.game.model.walk.Portable;
 import nl.pokemon.game.util.FDMapToSQM;
 import org.dpmFramework.annotation.Inject;
@@ -36,10 +37,19 @@ public class SQMService {
         return sqm;
     }
 
+    public BaseSQM insertFDMPositionToSQM(BaseSQM currentSQM, int playerXPosFDM, int playerYPosFDM) {
+        BaseSQM sqm = FDMapToSQM.convertFDM_XY_ToSQM(player.getViewMap(), playerXPosFDM, playerYPosFDM);
+        if (sqm == null)
+            sqm = new ViewSQM();
+
+        currentSQM.loadNewImageIcon(sqm.getImageIcon());
+        return currentSQM;
+    }
+
     private BaseSQM getBaseSQMByCurrentXY() {
         int FDMIndexX = player.getFDMIndexX();
         int FDMIndexY = player.getFDMIndexY();
-        BaseSQM sqm = FDMapToSQM.convertFDM_XY_ToSQM(FDMIndexX, FDMIndexY);
+        BaseSQM sqm = FDMapToSQM.convertFDM_XY_ToSQM(player.getViewMap(),FDMIndexX, FDMIndexY);
         return sqm;
     }
 
@@ -61,7 +71,7 @@ public class SQMService {
                 FDMIndexX = player.getFDMIndexX() - 1;
             }
         }
-        BaseSQM sqm = FDMapToSQM.convertFDM_XY_ToSQM(FDMIndexX, FDMIndexY);
+        BaseSQM sqm = FDMapToSQM.convertFDM_XY_ToSQM(player.getViewMap(),FDMIndexX, FDMIndexY);
         return sqm;
     }
 }

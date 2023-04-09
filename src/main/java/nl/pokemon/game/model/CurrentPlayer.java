@@ -2,6 +2,8 @@ package nl.pokemon.game.model;
 
 import nl.pokemon.game.service.Direction;
 import nl.pokemon.game.service.ViewService;
+import nl.pokemon.game.util.Destination;
+import nl.pokemon.game.util.FullDataMap;
 
 import javax.swing.*;
 import java.awt.*;
@@ -10,9 +12,9 @@ public class CurrentPlayer extends JLabel implements Movable {
 
     int x = 380;
     int y = 330;
+    Destination viewMap = Destination.FULL_MAP;
     int FDMIndexX = 8;
     int FDMIndexY = 8;
-
 
     public CurrentPlayer() {
         this.setBounds(x, y,50,50);
@@ -74,5 +76,11 @@ public class CurrentPlayer extends JLabel implements Movable {
         return y;
     }
 
+    public Destination getViewMap() {
+        return viewMap;
+    }
 
+    public void setViewMap(Destination viewMap) {
+        this.viewMap = viewMap;
+    }
 }

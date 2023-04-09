@@ -13,10 +13,10 @@ import nl.pokemon.game.model.walk.Gravel;
 
 public class FDMapToSQM {
 
-    public static BaseSQM convertFDM_XY_ToSQM(int x, int y) {
-        int[][] dataMap = FullDataMap.getFDMap();
+    public static BaseSQM convertFDM_XY_ToSQM(Destination destination, int x, int y) {
+        int[][] dataMap = destination.getMap();
 
-        if (x < 0 || y < 0 || x > FullDataMap.X_MAX_VALUE()-1 || y > FullDataMap.Y_MAX_VALUE()-1) {
+        if (x < 0 || y < 0 || x > destination.getMap()[1].length-1 || y > destination.getMap().length-1) {
             return null;
         }
 
@@ -26,8 +26,8 @@ public class FDMapToSQM {
             case 3 -> new GreenPlant();
             case 4 -> {
                 GravelPortal sqm = new GravelPortal();
-                int[] xyDestination = Portals.getDestinationXYByPortalXY(x, y);
-                sqm.setDestinationFDMIndexXY(xyDestination[0], xyDestination[1]);
+                Object[] xyDestination = Portals.getDestinationXYByPortalXY(x, y, destination);
+                sqm.setDestinationFDMIndexXY((Integer) xyDestination[0], (Integer) xyDestination[1],(Destination) xyDestination[2],(Destination) xyDestination[3]);
                 yield sqm;
             }
             case 91 -> new BigTreeLL();

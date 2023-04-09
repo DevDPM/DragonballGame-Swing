@@ -17,6 +17,6 @@ public class ViewSQM extends BaseSQM {
 
     @Override
     public boolean isNotWalkable() {
-        return true;
+        return false;
     }
 }

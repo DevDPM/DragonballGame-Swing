@@ -37,7 +37,7 @@ public class RpgController implements KeyListener {
             isNotMoving = false;
 
             if (!moveStack.isEmpty())
-                viewService.moveViewXYSmoothly(moveStack.pop());
+                viewService.startViewXYSmoothWalking(moveStack.pop());
         }
 
     }
