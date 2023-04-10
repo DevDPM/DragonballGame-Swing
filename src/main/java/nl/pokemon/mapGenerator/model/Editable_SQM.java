@@ -8,6 +8,7 @@ public class Editable_SQM extends MG_BaseSQM {
     ImageIcon icon;
 
     public Editable_SQM() {
+        generateUniqueID();
         this.icon = new ImageIcon("src/main/resources/images/walk/grass.jpg");
     }
 
@@ -18,6 +19,6 @@ public class Editable_SQM extends MG_BaseSQM {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println("test");
+        System.out.println(getId());
     }
 }

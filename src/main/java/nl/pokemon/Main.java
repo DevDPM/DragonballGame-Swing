@@ -7,7 +7,7 @@ import nl.pokemon.game.view.Console;
 public class Main {
     public static void main(String[] args) {
         Kickstarter.ignite(Main.class);
-        new Console();
-//        new MapGenerator();
+//        new Console();
+        new MapGenerator();
     }
 }
