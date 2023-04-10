@@ -1,4 +1,4 @@
-package nl.pokemon.game.model.SQMObjects._200_299_tree;
+package nl.pokemon.game.model.SQMObjects._1_99_house;
 
 import nl.pokemon.game.enums.Classify;
 import nl.pokemon.game.model.BaseSQM;
@@ -6,24 +6,22 @@ import nl.pokemon.game.model.Combinable;
 
 import javax.swing.*;
 
-public class BigTreeTR_201 extends BaseSQM implements Combinable {
+public class GreenHouse_7 extends BaseSQM implements Combinable {
 
     ImageIcon icon;
-    int sqmWidth = 2;
-    int sqmHeight = 2;
 
-    public BigTreeTR_201() {
-        this.icon = new ImageIcon("src/main/resources/images/bigTree/bigTree-TR.jpg");
+    public GreenHouse_7() {
+        this.icon = new ImageIcon("src/main/resources/images/houses/green-house/green-BR2.png");
     }
 
     @Override
     public ImageIcon getImageIcon() {
-        return this.icon;
+        return icon;
     }
 
     @Override
     public int getObjectNumber() {
-        return 201;
+        return 7;
     }
 
     @Override
@@ -33,17 +31,17 @@ public class BigTreeTR_201 extends BaseSQM implements Combinable {
 
     @Override
     public Classify getClassify() {
-        return Classify.TREE1;
+        return Classify.GREEN_HOUSE;
     }
 
     @Override
     public int getNumberOfSQMWidth() {
-        return sqmWidth;
+        return 4;
     }
 
     @Override
     public int getNumberOfSQMHeight() {
-        return sqmHeight;
+        return 2;
     }
 
     @Override

@@ -2,11 +2,11 @@ package nl.pokemon.game.model.SQMObjects._200_299_tree;
 
 import nl.pokemon.game.enums.Classify;
 import nl.pokemon.game.model.BaseSQM;
-import nl.pokemon.game.model.Collectable;
+import nl.pokemon.game.model.Combinable;
 
 import javax.swing.*;
 
-public class BigTreeTL_200 extends BaseSQM implements Collectable {
+public class BigTreeTL_200 extends BaseSQM implements Combinable {
 
     ImageIcon icon;
     int sqmWidth = 2;

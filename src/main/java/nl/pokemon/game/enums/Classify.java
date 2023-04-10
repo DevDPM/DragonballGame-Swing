@@ -1,7 +1,7 @@
 package nl.pokemon.game.enums;
 
 public enum Classify {
-    HOUSE1,
+    GREEN_HOUSE,
     WALK,
     TREE1,
     PLANT,

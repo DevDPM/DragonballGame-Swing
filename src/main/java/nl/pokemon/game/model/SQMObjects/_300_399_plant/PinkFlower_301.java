@@ -5,12 +5,12 @@ import nl.pokemon.game.model.BaseSQM;
 
 import javax.swing.*;
 
-public class GreenLeaf_300 extends BaseSQM {
+public class PinkFlower_301 extends BaseSQM {
 
     ImageIcon icon;
 
-    public GreenLeaf_300() {
-        this.icon = new ImageIcon("src/main/resources/images/plants/greenLeaf.jpg");
+    public PinkFlower_301() {
+        this.icon = new ImageIcon("src/main/resources/images/plants/pink-flower.png");
     }
 
     @Override
@@ -20,7 +20,7 @@ public class GreenLeaf_300 extends BaseSQM {
 
     @Override
     public int getObjectNumber() {
-        return 300;
+        return 301;
     }
 
     @Override

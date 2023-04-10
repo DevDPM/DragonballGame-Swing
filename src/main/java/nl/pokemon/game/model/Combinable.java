@@ -1,6 +1,6 @@
 package nl.pokemon.game.model;
 
-public interface Collectable {
+public interface Combinable {
     int getNumberOfSQMWidth();
     int getNumberOfSQMHeight();
     boolean isTopLeftCornerOfCollection();

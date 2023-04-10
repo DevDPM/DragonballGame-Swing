@@ -1,6 +1,6 @@
 package nl.pokemon.mapGenerator.service;
 
-import nl.pokemon.game.model.Collectable;
+import nl.pokemon.game.model.Combinable;
 import nl.pokemon.game.util.SQMObjects;
 import nl.pokemon.mapGenerator.model.BigFiller;
 import nl.pokemon.mapGenerator.model.Filler;
@@ -31,7 +31,7 @@ public class MG_SQMService {
         sqm.setImageIcon(selection.getImageIcon());
         sqm.updateBounds();
 
-        if (selection.getBaseSQM() instanceof Collectable e) {
+        if (selection.getBaseSQM() instanceof Combinable e) {
             if ((sqm.getIdY()+e.getNumberOfSQMWidth() < mgViewService.getViewMap()[0].length) &&
                     ((sqm.getIdX()+e.getNumberOfSQMHeight() < mgViewService.getViewMap().length)) &&
                     (e.isTopLeftCornerOfCollection())) {
