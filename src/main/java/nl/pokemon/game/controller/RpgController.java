@@ -26,14 +26,16 @@ public class RpgController implements KeyListener {
     @Override
     public void keyPressed(KeyEvent keyEvent) {
 
-        switch (keyEvent.getKeyChar()) {
+        boolean validKey;
+        validKey = switch (keyEvent.getKeyChar()) {
             case 'w' -> addDirectionToStack(Direction.NORTH);
             case 'a' -> addDirectionToStack(Direction.WEST);
             case 's' -> addDirectionToStack(Direction.SOUTH);
             case 'd' -> addDirectionToStack(Direction.EAST);
-        }
+            default -> false;
+        };
 
-        if (isNotMoving) {
+        if (isNotMoving && validKey) {
             isNotMoving = false;
 
             if (!moveStack.isEmpty())
@@ -41,15 +43,14 @@ public class RpgController implements KeyListener {
         }
 
     }
-    private void addDirectionToStack(Direction direction) {
+    private boolean addDirectionToStack(Direction direction) {
 
         if ((moveStack.isEmpty())) {
-            moveStack.add(direction);
+            return moveStack.add(direction);
         } else {
             moveStack.pop();
-            moveStack.add(direction);
+            return moveStack.add(direction);
         }
-
     }
 
     @Override

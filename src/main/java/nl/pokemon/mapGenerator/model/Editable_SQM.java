@@ -1,15 +1,20 @@
 package nl.pokemon.mapGenerator.model;
 
+import nl.pokemon.mapGenerator.service.MG_SQMService;
+import org.dpmFramework.Kickstarter;
+
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 
 public class Editable_SQM extends MG_BaseSQM {
 
-    ImageIcon icon;
+    private ImageIcon icon;
 
-    public Editable_SQM() {
-        generateUniqueID();
-        this.icon = new ImageIcon("src/main/resources/images/walk/grass.jpg");
+    public Editable_SQM(int x, int y) {
+        this.icon = new ImageIcon("src/main/resources/images/emptySpot.png");
+        this.setFocusable(false);
+        setIdX(x);
+        setIdY(y);
     }
 
     @Override
@@ -19,6 +24,6 @@ public class Editable_SQM extends MG_BaseSQM {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        System.out.println(getId());
+        Kickstarter.getInstanceOf(MG_SQMService.class).updateSQM(this);
     }
 }

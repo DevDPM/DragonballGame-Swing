@@ -1,8 +1,10 @@
 package nl.pokemon.game.model;
 
+import nl.pokemon.game.enums.Classify;
+
 import javax.swing.*;
 
-public abstract class BaseSQM extends JLabel implements Walkable, Classifiable {
+public abstract class BaseSQM extends JLabel {
 
     int indexX;
     int indexY;
@@ -19,12 +21,8 @@ public abstract class BaseSQM extends JLabel implements Walkable, Classifiable {
 
     public abstract ImageIcon getImageIcon();
     public abstract int getObjectNumber();
-
-    public void restrictedSQM() {
-
-    }
-
-
+    public abstract boolean isNotWalkable();
+    public abstract Classify getClassify();
 
     public void loadNewImageIcon(ImageIcon icon) {
         this.setIcon(icon);
@@ -54,24 +52,6 @@ public abstract class BaseSQM extends JLabel implements Walkable, Classifiable {
 
     public void setPixelPosY(int pixel) {
         this.pixelY = pixel;
-    }
-
-    public int getIndexX() {
-        return indexX;
-    }
-
-    public int getIndexY() {
-        return indexY;
-    }
-
-    @Override
-    public int getX() {
-        return pixelX;
-    }
-
-    @Override
-    public int getY() {
-        return pixelY;
     }
 
     public void updateBounds() {

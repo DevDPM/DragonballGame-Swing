@@ -4,6 +4,7 @@ import nl.pokemon.game.enums.Destination;
 import nl.pokemon.game.model.BasePortalSQM;
 import nl.pokemon.game.model.BaseSQM;
 import nl.pokemon.game.model.SQMObjects.ViewSQM;
+import nl.pokemon.mapGenerator.view.ViewPanel;
 
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -13,7 +14,7 @@ import java.util.Map;
 
 public class SQMObjects {
 
-    public static final Map<Integer, BaseSQM> SQMObjects = new HashMap<>();
+    private static Map<Integer, BaseSQM> SQMObjects = new HashMap<>();
     private static ClassLoader startSQMObjects;
 
 
@@ -87,5 +88,9 @@ public class SQMObjects {
                 throw new RuntimeException(e);
             }
         }
+    }
+
+    public static Map<Integer, BaseSQM> getSQMObjects() {
+        return SQMObjects;
     }
 }

@@ -10,7 +10,7 @@ public class ViewSQM extends BaseSQM {
     ImageIcon icon;
 
     public ViewSQM() {
-        this.icon = new ImageIcon("src/main/resources/images/walk/grass.jpg");
+        this.icon = new ImageIcon("src/main/resources/images/emptySpot.png");
     }
 
     @Override

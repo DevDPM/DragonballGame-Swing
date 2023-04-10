@@ -2,9 +2,6 @@ package nl.pokemon.game.model.SQMObjects._500_599_portal;
 
 import nl.pokemon.game.enums.Classify;
 import nl.pokemon.game.model.BasePortalSQM;
-import nl.pokemon.game.model.BaseSQM;
-import nl.pokemon.game.model.Walkable;
-import nl.pokemon.game.model.Portable;
 import nl.pokemon.game.enums.Destination;
 
 import javax.swing.*;

@@ -1,17 +1,12 @@
 package nl.pokemon.mapGenerator.model;
 
-import nl.pokemon.game.model.Walkable;
-
 import javax.swing.*;
 import java.awt.event.ActionListener;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.concurrent.atomic.AtomicLong;
 
 public abstract class MG_BaseSQM extends JButton implements ActionListener {
 
-
-    private static AtomicInteger ID_GENERATOR = new AtomicInteger(0);
-    private Integer id;
+    int idX;
+    int idY;
 
     int indexX;
     int indexY;
@@ -19,7 +14,9 @@ public abstract class MG_BaseSQM extends JButton implements ActionListener {
     int pixelX;
     int pixelY;
 
-    int objectNumber;
+    ImageIcon imageIcon;
+
+    int objectNumber = 0;
 
     public static final int SQM_PIXEL_WIDTH_X = 50;
     public static final int SQM_PIXEL_HEIGHT_Y = 50;
@@ -27,18 +24,32 @@ public abstract class MG_BaseSQM extends JButton implements ActionListener {
     private static final int OFFSET_PIXEL_X = 0;
     private static final int OFFSET_PIXEL_Y = 0;
 
-    public void generateUniqueID() {
-        this.id = ID_GENERATOR.getAndIncrement();
+    public ImageIcon getImageIcon() {
+        return this.imageIcon;
     }
-
-    public abstract ImageIcon getImageIcon();
 
     public void restrictedSQM() {
 
     }
 
-    public int getId() {
-        return this.id;
+    public int getIdX() {
+        return idX;
+    }
+
+    public void setIdX(int idX) {
+        this.idX = idX;
+        this.indexX = idX;
+        this.pixelX = (idX * SQM_PIXEL_WIDTH_X) + OFFSET_PIXEL_X;
+    }
+
+    public int getIdY() {
+        return idY;
+    }
+
+    public void setIdY(int idY) {
+        this.idY = idY;
+        this.indexY = idY;
+        this.pixelY = (idY * SQM_PIXEL_HEIGHT_Y) + OFFSET_PIXEL_Y;
     }
 
     public void setObjectNumber(int number) {
@@ -49,7 +60,8 @@ public abstract class MG_BaseSQM extends JButton implements ActionListener {
         return this.objectNumber;
     }
 
-    public void loadNewImageIcon(ImageIcon icon) {
+    public void setImageIcon(ImageIcon icon) {
+        this.imageIcon = icon;
         this.setIcon(icon);
     }
 
@@ -62,6 +74,8 @@ public abstract class MG_BaseSQM extends JButton implements ActionListener {
         this.indexY = index;
         this.pixelY = (index * SQM_PIXEL_HEIGHT_Y) + OFFSET_PIXEL_Y;
     }
+
+
 
     public int getPixelPosXByIndex() {
         return this.pixelX;
@@ -99,9 +113,10 @@ public abstract class MG_BaseSQM extends JButton implements ActionListener {
 
     public void updateBounds() {
         this.setBounds(this.pixelX, this.pixelY, SQM_PIXEL_WIDTH_X, SQM_PIXEL_HEIGHT_Y);
-        this.loadNewImageIcon(this.getImageIcon());
+        this.setImageIcon(this.imageIcon);
         this.setVisible(true);
     }
+
 
 
 }

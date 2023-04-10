@@ -1,9 +1,9 @@
 package nl.pokemon.game.enums;
 
 public enum Classify {
-    HOUSE,
+    HOUSE1,
     WALK,
-    TREE,
+    TREE1,
     PLANT,
     OBSTACLE,
     PORTAL
