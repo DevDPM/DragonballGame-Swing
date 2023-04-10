@@ -2,12 +2,9 @@ package nl.pokemon.game.service;
 
 import nl.pokemon.game.model.BaseSQM;
 import nl.pokemon.game.model.CurrentPlayer;
-import nl.pokemon.game.model.walk.Portable;
-import nl.pokemon.game.util.Portals;
+import nl.pokemon.game.model.Portable;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
-
-import javax.swing.*;
 
 @Service
 public class PortalService {

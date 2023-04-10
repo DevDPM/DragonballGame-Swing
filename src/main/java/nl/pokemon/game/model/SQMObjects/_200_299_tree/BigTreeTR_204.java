@@ -1,14 +1,15 @@
-package nl.pokemon.game.model.obstacle.bigTree;
+package nl.pokemon.game.model.SQMObjects._200_299_tree;
 
+import nl.pokemon.game.enums.Classify;
 import nl.pokemon.game.model.BaseSQM;
 
 import javax.swing.*;
 
-public class BigTreeTR extends BaseSQM {
+public class BigTreeTR_204 extends BaseSQM {
 
     ImageIcon icon;
 
-    public BigTreeTR() {
+    public BigTreeTR_204() {
         this.icon = new ImageIcon("src/main/resources/images/bigTree/bigTree-TR.jpg");
     }
 
@@ -18,7 +19,17 @@ public class BigTreeTR extends BaseSQM {
     }
 
     @Override
+    public int getObjectNumber() {
+        return 204;
+    }
+
+    @Override
     public boolean isNotWalkable() {
         return true;
+    }
+
+    @Override
+    public Classify getClassify() {
+        return Classify.TREE;
     }
 }

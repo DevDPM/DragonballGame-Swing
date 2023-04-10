@@ -1,9 +1,7 @@
 package nl.pokemon.game.model;
 
-import nl.pokemon.game.service.Direction;
-import nl.pokemon.game.service.ViewService;
-import nl.pokemon.game.util.Destination;
-import nl.pokemon.game.util.FullDataMap;
+import nl.pokemon.game.enums.Direction;
+import nl.pokemon.game.enums.Destination;
 
 import javax.swing.*;
 import java.awt.*;

@@ -1,6 +1,6 @@
 package nl.pokemon.game.util;
 
-import javax.swing.*;
+import nl.pokemon.game.enums.Destination;
 
 public class Portals {
 

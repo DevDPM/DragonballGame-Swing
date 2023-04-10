@@ -1,5 +1,6 @@
 package nl.pokemon.game.service;
 
+import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.CurrentPlayer;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;

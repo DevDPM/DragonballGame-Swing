@@ -1,8 +1,11 @@
-package nl.pokemon.game.model;
+package nl.pokemon.mapGenerator.model;
+
+import nl.pokemon.game.model.Walkable;
 
 import javax.swing.*;
+import java.awt.event.ActionListener;
 
-public abstract class BaseSQM extends JLabel implements Walkable, Classifiable {
+public abstract class MG_BaseSQM extends JButton implements ActionListener {
 
     int indexX;
     int indexY;
@@ -13,12 +16,11 @@ public abstract class BaseSQM extends JLabel implements Walkable, Classifiable {
     public static final int SQM_PIXEL_WIDTH_X = 50;
     public static final int SQM_PIXEL_HEIGHT_Y = 50;
 
-    private static final int OFFSET_PIXEL_X = -120;
-    private static final int OFFSET_PIXEL_Y = -170;
+    private static final int OFFSET_PIXEL_X = 0;
+    private static final int OFFSET_PIXEL_Y = 0;
 
 
     public abstract ImageIcon getImageIcon();
-    public abstract int getObjectNumber();
 
     public void restrictedSQM() {
 
@@ -76,5 +78,9 @@ public abstract class BaseSQM extends JLabel implements Walkable, Classifiable {
 
     public void updateBounds() {
         this.setBounds(this.pixelX, this.pixelY, SQM_PIXEL_WIDTH_X, SQM_PIXEL_HEIGHT_Y);
+        this.loadNewImageIcon(this.getImageIcon());
+        this.setVisible(true);
     }
+
+
 }

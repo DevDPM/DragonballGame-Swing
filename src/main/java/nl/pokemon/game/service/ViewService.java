@@ -1,10 +1,10 @@
 package nl.pokemon.game.service;
 
 import nl.pokemon.game.controller.RpgController;
+import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.BaseSQM;
 import nl.pokemon.game.model.CurrentPlayer;
-import nl.pokemon.game.model.ViewSQM;
-import nl.pokemon.game.util.FDMapToSQM;
+import nl.pokemon.game.model.SQMObjects.ViewSQM;
 import nl.pokemon.game.util.FullDataMap;
 import org.dpmFramework.Kickstarter;
 import org.dpmFramework.annotation.Inject;

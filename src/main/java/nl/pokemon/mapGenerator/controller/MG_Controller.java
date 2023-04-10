@@ -1,20 +1,17 @@
-package nl.pokemon.game.controller;
+package nl.pokemon.mapGenerator.controller;
 
-import nl.pokemon.game.model.CurrentPlayer;
 import nl.pokemon.game.enums.Direction;
+import nl.pokemon.game.service.ViewService;
 import org.dpmFramework.annotation.Controller;
 import org.dpmFramework.annotation.Inject;
-import nl.pokemon.game.service.ViewService;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Stack;
 
 @Controller
-public class RpgController implements KeyListener {
+public class MG_Controller implements KeyListener {
 
-    @Inject
-    CurrentPlayer player;
 
     @Inject
     ViewService viewService;

@@ -1,6 +1,6 @@
 package nl.pokemon.game.model;
 
-import nl.pokemon.game.service.Direction;
+import nl.pokemon.game.enums.Direction;
 
 public interface Movable {
 

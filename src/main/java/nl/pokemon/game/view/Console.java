@@ -4,6 +4,7 @@ import nl.pokemon.game.controller.RpgController;
 import nl.pokemon.game.model.BaseSQM;
 import nl.pokemon.game.model.CurrentPlayer;
 import nl.pokemon.game.service.ViewService;
+import nl.pokemon.game.util.SQMObjects;
 import org.dpmFramework.Kickstarter;
 
 import javax.swing.*;
@@ -21,6 +22,8 @@ public class Console extends JFrame {
         this.setLayout(null);
         this.add(Kickstarter.getInstanceOf(CurrentPlayer.class));
 
+        SQMObjects.bootstrap();
+
         ViewService viewSQM = Kickstarter.getInstanceOf(ViewService.class);
 
         BaseSQM[][] fields = viewSQM.getViewMap();
@@ -32,6 +35,5 @@ public class Console extends JFrame {
         viewSQM.updateView();
 
         this.setVisible(true);
-
     }
 }

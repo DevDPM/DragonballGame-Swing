@@ -1,6 +1,6 @@
-package nl.pokemon.game.model.walk;
+package nl.pokemon.game.model;
 
-import nl.pokemon.game.util.Destination;
+import nl.pokemon.game.enums.Destination;
 
 public interface Portable {
 

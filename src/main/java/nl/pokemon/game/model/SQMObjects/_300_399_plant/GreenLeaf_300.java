@@ -1,15 +1,15 @@
-package nl.pokemon.game.model.obstacle;
+package nl.pokemon.game.model.SQMObjects._300_399_plant;
 
+import nl.pokemon.game.enums.Classify;
 import nl.pokemon.game.model.BaseSQM;
-import nl.pokemon.game.service.Direction;
 
 import javax.swing.*;
 
-public class GreenPlant extends BaseSQM {
+public class GreenLeaf_300 extends BaseSQM {
 
     ImageIcon icon;
 
-    public GreenPlant() {
+    public GreenLeaf_300() {
         this.icon = new ImageIcon("src/main/resources/images/plants/plants.jpg");
     }
 
@@ -19,7 +19,17 @@ public class GreenPlant extends BaseSQM {
     }
 
     @Override
+    public int getObjectNumber() {
+        return 300;
+    }
+
+    @Override
     public boolean isNotWalkable() {
         return false;
+    }
+
+    @Override
+    public Classify getClassify() {
+        return Classify.PLANT;
     }
 }

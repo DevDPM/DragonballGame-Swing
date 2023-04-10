@@ -1,4 +1,7 @@
-package nl.pokemon.game.model;
+package nl.pokemon.game.model.SQMObjects;
+
+import nl.pokemon.game.enums.Classify;
+import nl.pokemon.game.model.BaseSQM;
 
 import javax.swing.*;
 
@@ -16,7 +19,17 @@ public class ViewSQM extends BaseSQM {
     }
 
     @Override
+    public int getObjectNumber() {
+        return 0;
+    }
+
+    @Override
     public boolean isNotWalkable() {
         return false;
+    }
+
+    @Override
+    public Classify getClassify() {
+        return Classify.OBSTACLE;
     }
 }

@@ -1,4 +1,7 @@
-package nl.pokemon.game.util;
+package nl.pokemon.game.enums;
+
+import nl.pokemon.game.util.FullDataMap;
+import nl.pokemon.game.util.House;
 
 public enum Destination {
 

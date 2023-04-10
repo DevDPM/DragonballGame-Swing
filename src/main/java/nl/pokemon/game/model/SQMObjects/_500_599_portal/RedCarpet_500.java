@@ -1,9 +1,15 @@
-package nl.pokemon.game.model.walk;
+package nl.pokemon.game.model.SQMObjects._500_599_portal;
 
+import nl.pokemon.game.enums.Classify;
+import nl.pokemon.game.model.BasePortalSQM;
+import nl.pokemon.game.model.BaseSQM;
 import nl.pokemon.game.model.Walkable;
-import nl.pokemon.game.util.Destination;
+import nl.pokemon.game.model.Portable;
+import nl.pokemon.game.enums.Destination;
 
-public class GravelPortal extends Gravel implements Walkable, Portable {
+import javax.swing.*;
+
+public class RedCarpet_500 extends BasePortalSQM {
 
     private int destinationX;
     private int destinationY;
@@ -41,7 +47,21 @@ public class GravelPortal extends Gravel implements Walkable, Portable {
         this.destinationY = y;
         this.currentLocation = currentLocation;
         this.newDestination = destination;
+    }
 
+    @Override
+    public ImageIcon getImageIcon() {
+        return null;
+    }
+
+    @Override
+    public Classify getClassify() {
+        return Classify.PORTAL;
+    }
+
+    @Override
+    public int getObjectNumber() {
+        return 500;
     }
 
 }

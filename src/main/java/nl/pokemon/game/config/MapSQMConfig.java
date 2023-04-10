@@ -1,6 +1,6 @@
 package nl.pokemon.game.config;
 
-import nl.pokemon.game.model.ViewSQM;
+import nl.pokemon.game.model.SQMObjects.ViewSQM;
 import org.dpmFramework.annotation.Configurations;
 import org.dpmFramework.annotation.Enable;
 
