@@ -1,96 +1,90 @@
 package nl.pokemon.game.util;
 
-import nl.pokemon.game.enums.Destination;
-import nl.pokemon.game.model.BasePortalSQM;
-import nl.pokemon.game.model.BaseSQM;
-import nl.pokemon.game.model.SQMObjects.ViewSQM;
-import nl.pokemon.mapGenerator.view.ViewPanel;
+import nl.pokemon.game.enums.AreaType;
+import nl.pokemon.game.model.SQMs.*;
 
+import javax.swing.*;
 import java.io.File;
-import java.lang.reflect.InvocationTargetException;
-import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class SQMObjects {
 
-    private static Map<Integer, BaseSQM> SQMObjects = new HashMap<>();
-    private static ClassLoader startSQMObjects;
+    private static Map<AreaType, Map<Integer, BaseSQM>> SQMByArea = new HashMap<>();
+    private static AtomicInteger ID_SQM;
 
+    public static BaseSQM getSQMByIntAndArea(AreaType area, int sqmId) {
+        return getSQMByArea(area).get(sqmId);
+    }
 
-    public static BaseSQM convertFDM_XY_ToSQM(Destination destination, int x, int y) {
-        int[][] dataMap = destination.getMap();
+    public static Map<AreaType, Map<Integer, BaseSQM>> getSQMByArea() {
+        return SQMByArea;
+    }
 
-        if (x < 0 || y < 0 || x > destination.getMap()[1].length-1 || y > destination.getMap().length-1) {
-            return null;
-        }
-
-        BaseSQM baseSQM = SQMObjects.get(dataMap[y][x]);
-
-        if (baseSQM instanceof BasePortalSQM basePortalSQM) {
-            Object[] xyDestination = Portals.getDestinationXYByPortalXY(x, y, destination);
-            basePortalSQM.setDestinationFDMIndexXY((Integer) xyDestination[0], (Integer) xyDestination[1],(Destination) xyDestination[2],(Destination) xyDestination[3]);
-            return basePortalSQM;
-        }
-
-        return baseSQM;
+    private static String getRootFolderByArea(AreaType area) {
+        return switch(area) {
+            case MAP -> "src/main/resources/images/map/";
+            case TERRAIN -> "src/main/resources/images/terrain/";
+        };
     }
 
     public static void bootstrap() {
-        Class<?> startFile = ViewSQM.class;
-        startSQMObjects = startFile.getClassLoader();
-        String rootPackagePath = startFile.getPackageName(); // get package path of startClass
-        loadClassPaths(rootPackagePath);
-    }
 
-    private static void loadClassPaths(String packagePath) {
-        String path = packagePath.replace('.', '/');
-        URL url = startSQMObjects.getResource(path);
+        for (AreaType area : AreaType.values()) {
 
-        if (url == null)
-            throw new NullPointerException("Could not get URL from ClassLoader (= null)");
+            ID_SQM = new AtomicInteger(1);
+            Map<Integer, BaseSQM> SQMMap = new HashMap<>();
+            String path = getRootFolderByArea(area);
 
-        File folder = new File(url.getPath());
-        File[] fileArray = folder.listFiles(); // get array of file names (class or package) from within the root package path
+            File file = new File(path);
+            File[] fileArray = file.listFiles();
 
-        if (fileArray == null)
-            throw new NullPointerException("FileArray did not retrieve any paths (= null)");
+            assert fileArray != null;
+            SQMMap.put(0, new MapSQM());
+            for (File fileName : fileArray) {
 
-        convertPathToClass(packagePath, fileArray);
-    }
+                System.out.println(fileName.getName());
+                if (!fileName.getName().contains(".") && fileName.getName().equals("elevate")) {
 
-    private static void convertPathToClass(String startPackagePath, File[] fileArray) {
-        for (int i = 0; i < fileArray.length; i++) {
-            String fileName = fileArray[i].getName();
-            int index = fileName.indexOf(".");
+                    File elevationFilePath = new File(fileName.getPath());
+                    File[] elevationFileArray = elevationFilePath.listFiles();
 
-            if (fileName.contains("$"))
-                continue;
+                    assert elevationFileArray != null;
+                    SQMMap.put(0, new MapSQM());
+                    for (File elevationFile : elevationFileArray) {
+                        BaseSQM sqm;
+                        if (elevationFile.getName().contains("up")) {
+                            sqm = new FloorUpSQM();
+                            sqm.setImageIcon(new ImageIcon(elevationFile.getPath()));
+                        } else {
+                            sqm = new FloorDownSQM();
+                            sqm.setImageIcon(new ImageIcon(elevationFile.getPath()));
+                        }
+                        SQMMap.put(ID_SQM.getAndIncrement(), sqm);
+                    }
+                    continue;
+                }
 
-            if (!fileName.contains(".class")) {
-                String childPath = startPackagePath + "." + fileName;
-                loadClassPaths(childPath);
-                continue;
+                BaseSQM sqm = SQMFactory.getSQMBySurface(area);
+                sqm.setImageIcon(new ImageIcon(fileName.getPath()));
+                sqm.updateSQM();
+                SQMMap.put(ID_SQM.getAndIncrement(), sqm);
             }
-
-            String className = fileName.substring(0, index);
-            String classNamePath = startPackagePath + "." + className;
-            try {
-                Class<?> foundClass = Class.forName(classNamePath);
-                BaseSQM instanceBaseSQM = (BaseSQM) foundClass.getConstructor(new Class[]{}).newInstance();
-                SQMObjects.put(instanceBaseSQM.getObjectNumber(), instanceBaseSQM);
-
-
-            } catch (ClassNotFoundException ex) {
-                ex.getStackTrace();
-            } catch (InvocationTargetException | InstantiationException | IllegalAccessException |
-                     NoSuchMethodException e) {
-                throw new RuntimeException(e);
-            }
+            SQMByArea.put(area, SQMMap);
         }
     }
 
-    public static Map<Integer, BaseSQM> getSQMObjects() {
-        return SQMObjects;
+    public static Map<Integer, BaseSQM> getSQMByArea(AreaType area) {
+        return SQMByArea.get(area);
+    }
+
+    public static void printSQMList() {
+        SQMObjects.getSQMByArea().forEach((key, value) -> {
+            System.out.println(key.name());
+            value.forEach((keyy, valuee) -> {
+                System.out.println(keyy +" -> " + valuee.getClass().getName() + " / " + valuee.getImageIcon());
+            });
+        });
     }
 }

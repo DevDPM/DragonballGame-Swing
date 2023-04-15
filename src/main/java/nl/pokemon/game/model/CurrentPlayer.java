@@ -1,18 +1,16 @@
 package nl.pokemon.game.model;
 
-import nl.pokemon.game.enums.Direction;
-import nl.pokemon.game.enums.Destination;
-
 import javax.swing.*;
 import java.awt.*;
 
-public class CurrentPlayer extends JLabel implements Movable {
+public class CurrentPlayer extends JLabel {
 
     int x = 380;
     int y = 330;
-    Destination viewMap = Destination.FULL_MAP;
-    int FDMIndexX = 8;
-    int FDMIndexY = 8;
+
+    int FDMIndexZ = -1;
+    int FDMIndexX = 3;
+    int FDMIndexY = 3;
 
     public CurrentPlayer() {
         this.setBounds(x, y,50,50);
@@ -22,31 +20,13 @@ public class CurrentPlayer extends JLabel implements Movable {
         this.setVisible(true);
     }
 
-    public void moveDirection(Direction direction) {
-        ImageIcon icon;
-
-        icon = switch (direction) {
-            case NORTH -> new ImageIcon("src/main/resources/images/userWalk/walk-north.gif");
-            case EAST -> new ImageIcon("src/main/resources/images/userWalk/walk-east.gif");
-            case SOUTH -> new ImageIcon("src/main/resources/images/userWalk/walk-south.gif");
-            case WEST -> new ImageIcon("src/main/resources/images/userWalk/walk-west.gif");
-        };
-        this.setIcon(icon);
+    public int getFDMIndexZ() {
+        return FDMIndexZ;
     }
 
-    public void standStill(Direction direction) {
-        ImageIcon icon;
-
-        icon = switch (direction) {
-            case NORTH -> new ImageIcon("src/main/resources/images/userWalk/stand-north.png");
-            case EAST -> new ImageIcon("src/main/resources/images/userWalk/stand-east.png");
-            case SOUTH -> new ImageIcon("src/main/resources/images/userWalk/stand-south.png");
-            case WEST -> new ImageIcon("src/main/resources/images/userWalk/stand-west.png");
-        };
-        this.setIcon(icon);
+    public void setFDMIndexZ(int FDMIndexZ) {
+        this.FDMIndexZ = FDMIndexZ;
     }
-
-
 
     public int getFDMIndexX() {
         return FDMIndexX;
@@ -72,13 +52,5 @@ public class CurrentPlayer extends JLabel implements Movable {
     @Override
     public int getY() {
         return y;
-    }
-
-    public Destination getViewMap() {
-        return viewMap;
-    }
-
-    public void setViewMap(Destination viewMap) {
-        this.viewMap = viewMap;
     }
 }

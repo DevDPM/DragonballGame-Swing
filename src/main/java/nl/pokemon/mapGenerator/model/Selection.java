@@ -1,6 +1,6 @@
 package nl.pokemon.mapGenerator.model;
 
-import nl.pokemon.game.model.BaseSQM;
+import nl.pokemon.game.model.SQMs.BaseSQM;
 
 import javax.swing.*;
 

@@ -40,7 +40,7 @@ public class MG_SQMService {
                     for (int x = sqm.getIdX(); x < sqm.getIdX()+e.getNumberOfSQMWidth(); x++) {
                         MG_BaseSQM baseSQM = mgViewService.getViewMap()[y][x];
                         baseSQM.setObjectNumber(startNumber);
-                        baseSQM.setImageIcon(SQMObjects.getSQMObjects().get(startNumber).getImageIcon());
+//                        baseSQM.setImageIcon(SQMObjects.getSQMObject().get(startNumber).getImageIcon());
                         startNumber++;
                     }
                 }

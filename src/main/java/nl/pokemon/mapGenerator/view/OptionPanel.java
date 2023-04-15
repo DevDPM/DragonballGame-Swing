@@ -4,7 +4,6 @@ import nl.pokemon.game.enums.Classify;
 import nl.pokemon.game.util.SQMObjects;
 import nl.pokemon.mapGenerator.model.BigFiller;
 import nl.pokemon.mapGenerator.model.Filler;
-import nl.pokemon.mapGenerator.model.Selected_SQM;
 import nl.pokemon.mapGenerator.service.MG_SQMService;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
@@ -70,23 +69,23 @@ public class OptionPanel extends JPanel {
             showClassification.setVisible(true);
             this.add(showClassification);
             AtomicInteger x = new AtomicInteger(0);
-            SQMObjects.getSQMObjects().forEach((key, value) -> {
-                if (x.get() == 6) {
-                    x.set(0);
-                    y.addAndGet(50);
-                }
-                if (value.getClassify().equals(classify)) {
-                    Selected_SQM button = new Selected_SQM(value.getImageIcon());
-                    button.addActionListener(button);
-                    button.setObjectId(key);
-                    button.setBaseSQM(value);
-                    button.setFocusable(false);
-                    button.setBounds(x.get(), y.get(),50,50);
-                    button.setVisible(true);
-                    this.add(button);
-                    x.addAndGet(50);
-                }
-            });
+//            SQMObjects.getSQMObject().forEach((key, value) -> {
+//                if (x.get() == 6) {
+//                    x.set(0);
+//                    y.addAndGet(50);
+//                }
+//                if (value.getClassify().equals(classify)) {
+//                    Selected_SQM button = new Selected_SQM(value.getImageIcon());
+//                    button.addActionListener(button);
+//                    button.setObjectId(key);
+//                    button.setBaseSQM(value);
+//                    button.setFocusable(false);
+//                    button.setBounds(x.get(), y.get(),50,50);
+//                    button.setVisible(true);
+//                    this.add(button);
+//                    x.addAndGet(50);
+//                }
+//            });
             y.addAndGet(50);
         }
 

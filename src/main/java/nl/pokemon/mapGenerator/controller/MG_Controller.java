@@ -1,14 +1,12 @@
 package nl.pokemon.mapGenerator.controller;
 
 import nl.pokemon.game.enums.Direction;
-import nl.pokemon.game.service.ViewService;
 import nl.pokemon.mapGenerator.service.MG_ViewService;
 import org.dpmFramework.annotation.Controller;
 import org.dpmFramework.annotation.Inject;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Stack;
 
 @Controller
 public class MG_Controller implements KeyListener {

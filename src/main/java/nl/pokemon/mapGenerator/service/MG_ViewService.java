@@ -1,14 +1,9 @@
 package nl.pokemon.mapGenerator.service;
 
 import nl.pokemon.game.enums.Direction;
-import nl.pokemon.mapGenerator.controller.MG_Controller;
 import nl.pokemon.mapGenerator.model.Editable_SQM;
 import nl.pokemon.mapGenerator.model.MG_BaseSQM;
-import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
-
-import java.awt.event.ActionEvent;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class MG_ViewService {

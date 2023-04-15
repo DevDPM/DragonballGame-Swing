@@ -1,56 +1,43 @@
 package nl.pokemon.game.controller;
 
-import nl.pokemon.game.model.CurrentPlayer;
 import nl.pokemon.game.enums.Direction;
+import nl.pokemon.game.service.MoveService;
+import nl.pokemon.game.service.PlayerService;
 import org.dpmFramework.annotation.Controller;
 import org.dpmFramework.annotation.Inject;
-import nl.pokemon.game.service.ViewService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.util.Stack;
 
 @Controller
 public class RpgController implements KeyListener {
 
-    @Inject
-    CurrentPlayer player;
+    private final Logger log = LoggerFactory.getLogger(RpgController.class);
 
     @Inject
-    ViewService viewService;
-
-    boolean isNotMoving = true;
-    Stack<Direction> moveStack = new Stack<>();
-
+    MoveService moveService;
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
 
         boolean validKey;
         validKey = switch (keyEvent.getKeyChar()) {
-            case 'w' -> addDirectionToStack(Direction.NORTH);
-            case 'a' -> addDirectionToStack(Direction.WEST);
-            case 's' -> addDirectionToStack(Direction.SOUTH);
-            case 'd' -> addDirectionToStack(Direction.EAST);
+            case 'w' -> moveService.addOrReplaceFutureDirection(Direction.NORTH);
+            case 'a' -> moveService.addOrReplaceFutureDirection(Direction.WEST);
+            case 's' -> moveService.addOrReplaceFutureDirection(Direction.SOUTH);
+            case 'd' -> moveService.addOrReplaceFutureDirection(Direction.EAST);
             default -> false;
         };
 
-        if (isNotMoving && validKey) {
-            isNotMoving = false;
+        if (moveService.isNotMoving() && validKey) {
+            moveService.setNotMoving(false);
 
-            if (!moveStack.isEmpty())
-                viewService.startViewXYSmoothWalking(moveStack.pop());
+            if (!moveService.getMoveStack().isEmpty())
+                moveService.move(moveService.getMoveStack().pop());
         }
 
-    }
-    private boolean addDirectionToStack(Direction direction) {
-
-        if ((moveStack.isEmpty())) {
-            return moveStack.add(direction);
-        } else {
-            moveStack.pop();
-            return moveStack.add(direction);
-        }
     }
 
     @Override
@@ -61,13 +48,5 @@ public class RpgController implements KeyListener {
     @Override
     public void keyTyped(KeyEvent keyEvent) {
 
-    }
-
-    public void setNotMoving(boolean notMoving) {
-        isNotMoving = notMoving;
-    }
-
-    public Stack<Direction> getMoveStack() {
-        return moveStack;
     }
 }

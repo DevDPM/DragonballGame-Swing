@@ -1,9 +1,8 @@
 package nl.pokemon.mapGenerator.model;
 
-import nl.pokemon.game.model.BaseSQM;
+import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.mapGenerator.view.SelectedPanel;
 import org.dpmFramework.Kickstarter;
-import org.dpmFramework.annotation.Inject;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
