@@ -29,7 +29,6 @@ public class PlayerService {
                 player.setFDMIndexX(player.getFDMIndexX() - 1);
             }
         }
-        System.gc();
     }
 
     public void moveDirection(Direction direction) {

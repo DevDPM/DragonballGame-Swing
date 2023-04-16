@@ -6,6 +6,7 @@ import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.CurrentPlayer;
 import nl.pokemon.game.model.View.GridMap;
 import nl.pokemon.game.model.View.ViewMap;
+import nl.pokemon.game.service.PlayerService;
 import nl.pokemon.game.service.ViewMapService;
 import nl.pokemon.game.util.SQMObjects;
 import org.dpmFramework.Kickstarter;
@@ -27,20 +28,20 @@ public class Console extends JFrame {
         this.addKeyListener(Kickstarter.getInstanceOf(RpgController.class));
         this.setLocationRelativeTo(null);
         this.setLayout(null);
-        this.add(Kickstarter.getInstanceOf(CurrentPlayer.class));
+        CurrentPlayer player = Kickstarter.getInstanceOf(CurrentPlayer.class);
+        this.add(player);
 
         SQMObjects.bootstrap();
         SQMObjects.printSQMList();
 
         ViewMap view = Kickstarter.getInstanceOf(ViewMap.class);
         ViewMapService viewMapService = Kickstarter.getInstanceOf(ViewMapService.class);
+
         viewMapService.updateView();
 
-
-        view.getViewMap().forEach(((integer, surfaceGridMapMap) -> {
             Map<Integer, Map<AreaType, GridMap>> fullMap = view.getViewMap();
             List<Integer> elevations = new ArrayList<>(fullMap.keySet());
-            Collections.sort(elevations);
+            Collections.reverse(elevations);
 
             for (int elevation : elevations) {
                 Map<AreaType, GridMap> layerMap = view.getViewMap().get(elevation);
@@ -52,12 +53,14 @@ public class Console extends JFrame {
                     for (int y = 0; y < areaMap.getGridMap()[0].length; y++) {
                         for (int x = 0; x < areaMap.getGridMap().length; x++) {
                             BaseSQM sqm = areaMap.getGridMap()[y][x];
+                            sqm.setVisible(false);
+                            if (elevation == player.getFDMIndexZ())
+                                sqm.setVisible(true);
                             this.add(sqm);
                         }
                     }
                 }
             }
-        }));
 
         this.setVisible(true);
     }

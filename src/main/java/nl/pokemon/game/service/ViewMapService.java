@@ -3,7 +3,6 @@ package nl.pokemon.game.service;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.CurrentPlayer;
-import nl.pokemon.game.model.SQMs.MapSQM;
 import nl.pokemon.game.model.SQMs.VoidSQM;
 import nl.pokemon.game.model.View.GridMap;
 import nl.pokemon.game.model.View.ViewMap;
@@ -11,8 +10,8 @@ import nl.pokemon.game.util.FULL_MAP;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
-import java.util.Arrays;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class ViewMapService {
@@ -22,6 +21,9 @@ public class ViewMapService {
 
     @Inject
     SQMService sqmService;
+
+    @Inject
+    MoveService moveService;
 
     @Inject
     CurrentPlayer player;
@@ -35,11 +37,15 @@ public class ViewMapService {
         int START_Y_MAP = player.getFDMIndexY() - ((GridMap.MAX_Y - 1)/2);
         int START_Z_MAP = player.getFDMIndexZ();
 
-        viewMap.getViewMap().keySet().parallelStream().forEach((z) -> {
+        Map<Integer, Map<AreaType, GridMap>> fullMap = viewMap.getViewMap();
+        List<Integer> elevations = new ArrayList<>(fullMap.keySet());
+        Collections.sort(elevations);
+
+        for (int z : elevations) {
             Map<AreaType, GridMap> viewSurfaceGridMap = viewMap.getViewMap().get(z);
             Map<AreaType, int[][]> storageSurfaceGridMap = FULL_MAP.getViewMap().get(z);
 
-            Arrays.stream(AreaType.values()).parallel().forEach(area -> {
+            Arrays.stream(AreaType.values()).sorted().forEach(area -> {
                 BaseSQM[][] viewGridMap = viewSurfaceGridMap.get(area).getGridMap();
                 int[][] storageGridMap = storageSurfaceGridMap.get(area);
 
@@ -54,16 +60,26 @@ public class ViewMapService {
 
                         BaseSQM viewSQM = viewGridMap[y][x];
                         viewSQM.setImageIcon(storedSQM.getImageIcon());
-                        viewSQM.updateSQM();
-                        if (z == START_Z_MAP) {
-                            viewSQM.setVisible(true);
-                        } else {
-                            viewSQM.setVisible(false);
+
+                        if (moveService.isElevating()) {
+                            setElevationToSQM(START_Z_MAP, z, area, y, x, viewSQM);
                         }
+                        viewSQM.updateSQM();
                     }
                 }
             });
-        });
+        }
+    }
+
+    private void setElevationToSQM(int START_Z_MAP, int z, AreaType area, int y, int x, BaseSQM viewSQM) {
+        if (z <= START_Z_MAP) {
+            viewSQM.setVisible(true);
+        } else {
+            viewSQM.setVisible(false);
+        }
+        if (z >= 1 && x == GridMap.MAX_X - 1 && y == GridMap.MAX_Y - 1 && area.equals(AreaType.MAP)) {
+            moveService.setElevating(false);
+        }
     }
 
     public Map<Integer, Map<AreaType, GridMap>> getFullViewMap() {

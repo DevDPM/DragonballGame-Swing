@@ -38,6 +38,7 @@ public class MoveService {
 
     Stack<Direction> moveStack = new Stack<>();
     boolean notMoving = true;
+    boolean elevating = false;
 
 
     public void move(Direction direction) {
@@ -60,10 +61,10 @@ public class MoveService {
         AtomicReference<Direction> movedDirection = new AtomicReference<>(direction);
         AtomicInteger pixelCounter = new AtomicInteger(0);
         Timer smoothMoving = new Timer(speedTimerDelay, actionEvent -> {
-            viewMapService.getFullViewMap().keySet().parallelStream().forEach((z) -> {
+            viewMapService.getFullViewMap().keySet().forEach((z) -> {
                 Map<AreaType, GridMap> viewSurfaceGridMap = viewMapService.getViewGridMapLayerLevel(z);
 
-                Arrays.stream(AreaType.values()).parallel().forEach(area -> {
+                Arrays.stream(AreaType.values()).forEach(area -> {
                     BaseSQM[][] viewGridMap = viewSurfaceGridMap.get(area).getGridMap();
 
                     for (int y = 0; y < GridMap.MAX_Y; y++) {
@@ -88,9 +89,11 @@ public class MoveService {
     private void finalizeMovement(AtomicReference<Direction> movedDirection, AtomicInteger pixelCounter, ActionEvent actionEvent) {
         if (moveStack.isEmpty()) {
             if (sqmService.isElevatable(sqmService.getSQMByPlayerPosition())) {
+                viewMapService.updateView();
                 performElevation((Elevatable) sqmService.getSQMByPlayerPosition());
                 stopMovement(movedDirection, actionEvent);
                 notMoving = false;
+                elevating = true;
                 move(movedDirection.get());
             } else {
                 stopMovement(movedDirection, actionEvent);
@@ -102,6 +105,10 @@ public class MoveService {
             } else {
                 if (sqmService.isElevatable(sqmService.getSQMByPlayerPosition())) {
                     performElevation((Elevatable) sqmService.getSQMByPlayerPosition());
+                    stopMovement(movedDirection, actionEvent);
+                    notMoving = false;
+                    elevating = true;
+                    move(movedDirection.get());
                 }
                 viewMapService.updateView();
                 pixelCounter.set(0);
@@ -120,9 +127,9 @@ public class MoveService {
     private void stopMovement(AtomicReference<Direction> lastDirection, ActionEvent e) {
         Timer timer = (Timer) e.getSource();
         timer.stop();
-        setNotMoving(true);
         viewMapService.updateView();
         playerService.standStill(lastDirection.get());
+        notMoving = true;
     }
 
     public boolean addOrReplaceFutureDirection(Direction direction) {
@@ -162,5 +169,13 @@ public class MoveService {
 
     public void setNotMoving(boolean notMoving) {
         this.notMoving = notMoving;
+    }
+
+    public boolean isElevating() {
+        return elevating;
+    }
+
+    public void setElevating(boolean elevating) {
+        this.elevating = elevating;
     }
 }
