@@ -11,6 +11,7 @@ import nl.pokemon.game.util.FULL_MAP;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
+import java.util.Arrays;
 import java.util.Map;
 
 @Service
@@ -34,11 +35,11 @@ public class ViewMapService {
         int START_Y_MAP = player.getFDMIndexY() - ((GridMap.MAX_Y - 1)/2);
         int START_Z_MAP = player.getFDMIndexZ();
 
-        for (int z = ViewMap.START_Z; z <= ViewMap.MAX_Z; z++) {
+        viewMap.getViewMap().keySet().parallelStream().forEach((z) -> {
             Map<AreaType, GridMap> viewSurfaceGridMap = viewMap.getViewMap().get(z);
             Map<AreaType, int[][]> storageSurfaceGridMap = FULL_MAP.getViewMap().get(z);
 
-            for (AreaType area : AreaType.values()) {
+            Arrays.stream(AreaType.values()).parallel().forEach(area -> {
                 BaseSQM[][] viewGridMap = viewSurfaceGridMap.get(area).getGridMap();
                 int[][] storageGridMap = storageSurfaceGridMap.get(area);
 
@@ -61,8 +62,8 @@ public class ViewMapService {
                         }
                     }
                 }
-            }
-        }
+            });
+        });
     }
 
     public Map<Integer, Map<AreaType, GridMap>> getFullViewMap() {

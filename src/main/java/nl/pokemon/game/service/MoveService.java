@@ -12,6 +12,7 @@ import org.dpmFramework.annotation.Service;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.Stack;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -20,7 +21,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class MoveService {
 
-    private final int speedPixelPerIterate = 10; // 50 = max
+    private final int speedPixelPerIterate = 5; // 50 = max
     private final int speedTimerDelay = 20;
 
     private int smoothMovePosX = 0;
@@ -37,7 +38,6 @@ public class MoveService {
 
     Stack<Direction> moveStack = new Stack<>();
     boolean notMoving = true;
-    boolean delayedStairWalking = false;
 
 
     public void move(Direction direction) {
@@ -52,13 +52,6 @@ public class MoveService {
         playerService.moveDirection(direction);
         playerService.setCoordinationByDirection(direction);
 
-//        int speedDelay = speedTimerDelay;
-//
-//        if (delayedStairWalking) {
-//            delayedStairWalking = false;
-//            speedDelay = speedDelay * 100;
-//        }
-
         performMovement(direction);
     }
 
@@ -67,10 +60,10 @@ public class MoveService {
         AtomicReference<Direction> movedDirection = new AtomicReference<>(direction);
         AtomicInteger pixelCounter = new AtomicInteger(0);
         Timer smoothMoving = new Timer(speedTimerDelay, actionEvent -> {
-            for (int z = ViewMap.START_Z; z <= ViewMap.MAX_Z; z++) {
+            viewMapService.getFullViewMap().keySet().parallelStream().forEach((z) -> {
                 Map<AreaType, GridMap> viewSurfaceGridMap = viewMapService.getViewGridMapLayerLevel(z);
 
-                for (AreaType area : AreaType.values()) {
+                Arrays.stream(AreaType.values()).parallel().forEach(area -> {
                     BaseSQM[][] viewGridMap = viewSurfaceGridMap.get(area).getGridMap();
 
                     for (int y = 0; y < GridMap.MAX_Y; y++) {
@@ -82,8 +75,8 @@ public class MoveService {
                             viewSQM.moveSQM(newPixelPosX, newPixelPosY);
                         }
                     }
-                }
-            }
+                });
+            });
 
             if (pixelCounter.getAndIncrement() >= (MapSQM.SQM_PIXEL_WIDTH_X/speedPixelPerIterate)) {
                 finalizeMovement(movedDirection, pixelCounter, actionEvent);
