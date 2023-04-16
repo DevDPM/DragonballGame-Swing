@@ -45,7 +45,7 @@ public class SQMObjects {
             for (File fileName : fileArray) {
 
                 System.out.println(fileName.getName());
-                if (!fileName.getName().contains(".") && fileName.getName().equals("_elevate")) {
+                if (!fileName.getName().contains(".") && fileName.getName().equals("elevate")) {
 
                     File elevationFilePath = new File(fileName.getPath());
                     File[] elevationFileArray = elevationFilePath.listFiles();
@@ -61,7 +61,7 @@ public class SQMObjects {
                             sqm = new FloorDownSQM();
                             sqm.setImageIcon(new ImageIcon(elevationFile.getPath()));
                         }
-                        SQMMap.put(ID_SQM.getAndIncrement(), sqm);
+                        SQMMap.put(Integer.valueOf(elevationFile.getName().replaceAll("\\D+","")), sqm);
                     }
                     continue;
                 }
@@ -69,7 +69,7 @@ public class SQMObjects {
                 BaseSQM sqm = SQMFactory.getSQMBySurface(area);
                 sqm.setImageIcon(new ImageIcon(fileName.getPath()));
                 sqm.updateSQM();
-                SQMMap.put(ID_SQM.getAndIncrement(), sqm);
+                SQMMap.put(Integer.valueOf(fileName.getName().replaceAll("\\D+","")), sqm);
             }
             SQMByArea.put(area, SQMMap);
         }
