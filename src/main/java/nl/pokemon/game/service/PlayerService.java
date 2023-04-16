@@ -57,5 +57,6 @@ public class PlayerService {
 
     public void addElevation(int elevation) {
         player.setFDMIndexZ(player.getFDMIndexZ()+elevation);
+        System.out.println(player.getFDMIndexZ());
     }
 }

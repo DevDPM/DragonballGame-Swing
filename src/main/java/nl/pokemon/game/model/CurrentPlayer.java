@@ -8,7 +8,7 @@ public class CurrentPlayer extends JLabel {
     int x = 380;
     int y = 330;
 
-    int FDMIndexZ = -1;
+    int FDMIndexZ = 0;
     int FDMIndexX = 3;
     int FDMIndexY = 3;
 

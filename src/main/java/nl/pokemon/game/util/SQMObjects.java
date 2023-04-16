@@ -45,7 +45,7 @@ public class SQMObjects {
             for (File fileName : fileArray) {
 
                 System.out.println(fileName.getName());
-                if (!fileName.getName().contains(".") && fileName.getName().equals("elevate")) {
+                if (!fileName.getName().contains(".") && fileName.getName().equals("_elevate")) {
 
                     File elevationFilePath = new File(fileName.getPath());
                     File[] elevationFileArray = elevationFilePath.listFiles();

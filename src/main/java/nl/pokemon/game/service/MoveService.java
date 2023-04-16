@@ -20,8 +20,8 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class MoveService {
 
-    private final int speedPixelPerIterate = 2; // 50 = max
-    private final int speedTimerDelay = 5;
+    private final int speedPixelPerIterate = 10; // 50 = max
+    private final int speedTimerDelay = 20;
 
     private int smoothMovePosX = 0;
     private int smoothMovePosY = 0;
