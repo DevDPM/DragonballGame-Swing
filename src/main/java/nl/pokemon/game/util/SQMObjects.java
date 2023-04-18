@@ -25,7 +25,9 @@ public class SQMObjects {
     private static String getRootFolderByArea(AreaType area) {
         return switch(area) {
             case MAP -> "src/main/resources/images/map/";
+            case PLAYER_BOTTOM -> "src/main/resources/images/userWalk/";
             case TERRAIN -> "src/main/resources/images/terrain/";
+            case PLAYER_TOP -> "src/main/resources/images/userWalk/";
         };
     }
 
@@ -44,7 +46,6 @@ public class SQMObjects {
             SQMMap.put(0, new MapSQM());
             for (File fileName : fileArray) {
 
-                System.out.println(fileName.getName());
                 if (!fileName.getName().contains(".") && fileName.getName().equals("elevate")) {
 
                     File elevationFilePath = new File(fileName.getPath());
@@ -56,16 +57,19 @@ public class SQMObjects {
                         String fileStringName = elevationFile.getName();
 
                         BaseSQM sqm;
-
+                        ImageIcon icon;
                         if (elevationFile.getName().contains("up")) {
                             sqm = new FloorUpSQM();
-                            sqm.setImageIcon(new ImageIcon(elevationFile.getPath()));
                         } else {
                             sqm = new FloorDownSQM();
-                            sqm.setImageIcon(new ImageIcon(elevationFile.getPath()));
                         }
 
-                        SQMMap.put(Integer.valueOf(fileStringName.substring(0, fileStringName.indexOf("_")).replaceAll("\\D+","")), sqm);
+                        icon = new ImageIcon(elevationFile.getPath());
+                        sqm.setSqmSizeX(icon.getIconWidth()/BaseSQM.SQM_PIXEL_WIDTH_X);
+                        sqm.setSqmSizeY(icon.getIconHeight()/BaseSQM.SQM_PIXEL_HEIGHT_Y);
+                        sqm.setImageIcon(icon);
+                        int id = Integer.parseInt(fileStringName.substring(0, fileStringName.indexOf("_")).replaceAll("\\D+",""));
+                        SQMMap.put(id, sqm);
                     }
                     continue;
                 }

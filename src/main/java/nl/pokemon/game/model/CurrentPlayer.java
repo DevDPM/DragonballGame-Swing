@@ -14,8 +14,7 @@ public class CurrentPlayer extends JLabel {
 
     public CurrentPlayer() {
         this.setBounds(x, y,50,50);
-        this.setBackground(Color.CYAN);
-        ImageIcon icon = new ImageIcon("src/main/resources/images/userWalk/stand-south.png");
+        ImageIcon icon = new ImageIcon("src/main/resources/images/userWalk/3_stand-south.png");
         this.setIcon(icon);
         this.setVisible(true);
     }

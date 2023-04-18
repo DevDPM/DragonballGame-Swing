@@ -32,13 +32,21 @@ public abstract class BaseSQM extends JLabel {
         setPixelPosXByIndex(this.indexX);
         setPixelPosYByIndex(this.indexY);
         this.setIcon(this.imageIcon);
-        this.setBounds(this.pixelX, this.pixelY, SQM_PIXEL_WIDTH_X*sqmSizeX, SQM_PIXEL_HEIGHT_Y*sqmSizeY);
+        this.setBounds((this.pixelX + (SQM_PIXEL_WIDTH_X*(1-sqmSizeX))), (this.pixelY + (SQM_PIXEL_HEIGHT_Y*(1-sqmSizeY))), SQM_PIXEL_WIDTH_X*sqmSizeX, (SQM_PIXEL_HEIGHT_Y*sqmSizeY));
     }
 
     public void moveSQM(int pixelX, int pixelY) {
         setPixelPosX(pixelX);
         setPixelPosY(pixelY);
-        this.setBounds(pixelX, pixelY, SQM_PIXEL_WIDTH_X, SQM_PIXEL_HEIGHT_Y);
+        this.setBounds((this.pixelX + (SQM_PIXEL_WIDTH_X*(1-sqmSizeX))), (this.pixelY + (SQM_PIXEL_HEIGHT_Y*(1-sqmSizeY))), SQM_PIXEL_WIDTH_X*sqmSizeX, SQM_PIXEL_HEIGHT_Y*sqmSizeY);
+    }
+
+    public int getSqmSizeX() {
+        return sqmSizeX;
+    }
+
+    public int getSqmSizeY() {
+        return sqmSizeY;
     }
 
     public void setSqmSizeX(int sqmSizeX) {

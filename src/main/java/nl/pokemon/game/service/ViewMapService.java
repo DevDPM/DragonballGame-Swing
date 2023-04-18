@@ -11,7 +11,6 @@ import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Service
 public class ViewMapService {
@@ -60,7 +59,8 @@ public class ViewMapService {
 
                         BaseSQM viewSQM = viewGridMap[y][x];
                         viewSQM.setImageIcon(storedSQM.getImageIcon());
-
+                        viewSQM.setSqmSizeY(storedSQM.getSqmSizeY());
+                        viewSQM.setSqmSizeX(storedSQM.getSqmSizeX());
                         if (moveService.isElevating()) {
                             setElevationToSQM(START_Z_MAP, z, area, y, x, viewSQM);
                         }

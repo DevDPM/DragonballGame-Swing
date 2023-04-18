@@ -94,7 +94,10 @@ public class MoveService {
                 stopMovement(movedDirection, actionEvent);
                 notMoving = false;
                 elevating = true;
-                move(movedDirection.get());
+                playerService.setCoordinationByDirection(movedDirection.get());
+                viewMapService.updateView();
+                elevating = false;
+                stopMovement(movedDirection, actionEvent);
             } else {
                 stopMovement(movedDirection, actionEvent);
             }

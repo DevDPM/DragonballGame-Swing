@@ -35,10 +35,10 @@ public class PlayerService {
         ImageIcon icon;
 
         icon = switch (direction) {
-            case NORTH -> new ImageIcon("src/main/resources/images/userWalk/walk-north.gif");
-            case EAST -> new ImageIcon("src/main/resources/images/userWalk/walk-east.gif");
-            case SOUTH -> new ImageIcon("src/main/resources/images/userWalk/walk-south.gif");
-            case WEST -> new ImageIcon("src/main/resources/images/userWalk/walk-west.gif");
+            case NORTH -> new ImageIcon("src/main/resources/images/userWalk/6_walk-north.gif");
+            case EAST -> new ImageIcon("src/main/resources/images/userWalk/5_walk-east.gif");
+            case SOUTH -> new ImageIcon("src/main/resources/images/userWalk/7_walk-south.gif");
+            case WEST -> new ImageIcon("src/main/resources/images/userWalk/8_walk-west.gif");
         };
         player.setIcon(icon);
     }
@@ -47,10 +47,10 @@ public class PlayerService {
         ImageIcon icon;
 
         icon = switch (direction) {
-            case NORTH -> new ImageIcon("src/main/resources/images/userWalk/stand-north.png");
-            case EAST -> new ImageIcon("src/main/resources/images/userWalk/stand-east.png");
-            case SOUTH -> new ImageIcon("src/main/resources/images/userWalk/stand-south.png");
-            case WEST -> new ImageIcon("src/main/resources/images/userWalk/stand-west.png");
+            case NORTH -> new ImageIcon("src/main/resources/images/userWalk/2_stand-north.png");
+            case EAST -> new ImageIcon("src/main/resources/images/userWalk/1_stand-east.png");
+            case SOUTH -> new ImageIcon("src/main/resources/images/userWalk/3_stand-south.png");
+            case WEST -> new ImageIcon("src/main/resources/images/userWalk/4_stand-west.png");
         };
         player.setIcon(icon);
     }
