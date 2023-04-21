@@ -9,7 +9,7 @@ import nl.pokemon.game.model.players.Ash;
 import nl.pokemon.game.model.View.GridMap;
 import nl.pokemon.game.model.View.ViewMap;
 import nl.pokemon.game.repository.UserRepository;
-import nl.pokemon.game.service.FullMapService;
+import nl.pokemon.game.service.FullMapManager;
 import nl.pokemon.game.service.PlayerService;
 import nl.pokemon.game.service.ClientViewMap;
 import nl.pokemon.game.util.FullMap;
@@ -57,8 +57,8 @@ public class Console extends JFrame {
 
                 for (AreaType areaType : areaTypes) {
                     GridMap areaMap = layerMap.get(areaType);
-                    for (int y = 0; y < areaMap.getGridMap()[0].length; y++) {
-                        for (int x = 0; x < areaMap.getGridMap().length; x++) {
+                    for (int y = areaMap.getGridMap()[0].length-1; y >= 0; y--) {
+                        for (int x = areaMap.getGridMap().length-1; x >= 0; x--) {
                             BaseSQM sqm = areaMap.getGridMap()[y][x];
                             sqm.setVisible(false);
                             if (elevation == user.getPlayerZ())
@@ -91,9 +91,9 @@ public class Console extends JFrame {
         user1.setAreaType(AreaType.PLAYER_BOTTOM);
         Kickstarter.getInstanceOf(UserRepository.class).getUserDataBase().put(user.getId(), user);
         Kickstarter.getInstanceOf(UserRepository.class).getUserDataBase().put(user1.getId(), user1);
-        FullMapService fullMapService = Kickstarter.getInstanceOf(FullMapService.class);
+        FullMapManager fullMapManager = Kickstarter.getInstanceOf(FullMapManager.class);
 
-        fullMapService.moveUserByDirection(user, Direction.EAST);
-        fullMapService.moveUserByDirection(user1, Direction.EAST);
+        fullMapManager.moveUserByDirection(user, Direction.EAST);
+        fullMapManager.moveUserByDirection(user1, Direction.EAST);
     }
 }

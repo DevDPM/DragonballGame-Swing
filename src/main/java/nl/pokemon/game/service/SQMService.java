@@ -15,7 +15,7 @@ public class SQMService {
     PlayerService playerService;
 
     @Inject
-    FullMapService fullMapService;
+    FullMapManager fullMapManager;
 
 
     public BaseSQM getSQMByIntAndArea(AreaType area, int sqmId) {
@@ -48,7 +48,7 @@ public class SQMService {
                 x = playerService.getPlayerX() - 1;
             }
         }
-        BaseSQM sqm = fullMapService.getBaseSQMByPosition(AreaType.TERRAIN, x, y, z);
+        BaseSQM sqm = fullMapManager.getBaseSQMByPosition(AreaType.TERRAIN, x, y, z);
         return sqm;
     }
 
@@ -57,6 +57,6 @@ public class SQMService {
     }
 
     public BaseSQM getSQMByPlayerPosition() {
-        return fullMapService.getBaseSQMByPosition(AreaType.TERRAIN, playerService.getPlayerX(), playerService.getPlayerY(), playerService.getPlayerZ());
+        return fullMapManager.getBaseSQMByPosition(AreaType.TERRAIN, playerService.getPlayerX(), playerService.getPlayerY(), playerService.getPlayerZ());
     }
 }

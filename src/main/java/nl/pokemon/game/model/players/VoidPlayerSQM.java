@@ -12,7 +12,7 @@ public class VoidPlayerSQM extends BaseEntity{
 
     @Override
     public boolean isNotWalkable() {
-        return false;
+        return true;
     }
 
     @Override

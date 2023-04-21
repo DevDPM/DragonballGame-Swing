@@ -30,8 +30,11 @@ public class ClientViewMap implements PropertyChangeListener {
 
     @Inject
     VoidSQM voidSQM;
-
     public void updateView() {
+        updateView(null);
+    }
+
+    public void updateView(Integer visibilityUntilZ) {
 
         int START_X_MAP = playerService.getPlayerX() - ((GridMap.MAX_X - 1)/2);
         int START_Y_MAP = playerService.getPlayerY() - ((GridMap.MAX_Y - 1)/2);
@@ -45,57 +48,50 @@ public class ClientViewMap implements PropertyChangeListener {
             Map<AreaType, GridMap> viewSurfaceGridMap = viewMap.getViewMap().get(z);
             Map<AreaType, int[][]> storageSurfaceGridMap = FullMap.getViewMap().get(z);
 
-            Arrays.stream(AreaType.values()).sorted().forEach(area -> {
+            for (AreaType area : AreaType.values()) {
 
-                    BaseSQM[][] viewGridMap = viewSurfaceGridMap.get(area).getGridMap();
-                    int[][] storageGridMap = storageSurfaceGridMap.get(area);
+                BaseSQM[][] viewGridMap = viewSurfaceGridMap.get(area).getGridMap();
+                int[][] storageGridMap = storageSurfaceGridMap.get(area);
 
-                    for (int y = 0, intY = START_Y_MAP; y < GridMap.MAX_Y; y++, intY++) {
-                        for (int x = 0, intX = START_X_MAP; x < GridMap.MAX_X; x++, intX++) {
-                            BaseSQM storedSQM;
+                for (int y = 0, intY = START_Y_MAP; y < GridMap.MAX_Y; y++, intY++) {
+                    for (int x = 0, intX = START_X_MAP; x < GridMap.MAX_X; x++, intX++) {
+                        BaseSQM storedSQM;
 
-                            if (intY < 0 || intX < 0 || intY >= FullMap.fullMapHeight() || intX >= FullMap.fullMapWidth()) {
-                                storedSQM = voidSQM;
-                            } else {
-                                if (area.equals(AreaType.PLAYER_BOTTOM) || area.equals(AreaType.PLAYER_TOP)) {
-                                    if (storageGridMap[intY][intX] == 0) {
-                                        storedSQM = sqmService.getSQMByIntAndArea(area, storageGridMap[intY][intX]);
-                                    } else {
-                                        storedSQM = playerService.getPlayerSQMByUserId(storageGridMap[intY][intX]);
-                                    }
-                                } else {
+                        if (intY < 0 || intX < 0 || intY >= FullMap.fullMapHeight() || intX >= FullMap.fullMapWidth()) {
+                            storedSQM = voidSQM;
+                        } else {
+                            if (area.equals(AreaType.PLAYER_BOTTOM) || area.equals(AreaType.PLAYER_TOP)) {
+                                if (storageGridMap[intY][intX] == 0) {
                                     storedSQM = sqmService.getSQMByIntAndArea(area, storageGridMap[intY][intX]);
+                                } else {
+                                    storedSQM = playerService.getPlayerSQMByUserId(storageGridMap[intY][intX]);
                                 }
+                            } else {
+                                storedSQM = sqmService.getSQMByIntAndArea(area, storageGridMap[intY][intX]);
                             }
-                            BaseSQM viewSQM = viewGridMap[y][x];
-                            viewSQM.setImageIcon(storedSQM.getImageIcon());
-                            viewSQM.setSqmSizeY(storedSQM.getSqmSizeY());
-                            viewSQM.setSqmSizeX(storedSQM.getSqmSizeX());
-                            if (moveService.isElevating()) {
-                                setVisibilityByElevation(START_Z_MAP, z, area, y, x, viewSQM);
-                            }
-                            viewSQM.updateSQM();
-
                         }
+                        BaseSQM viewSQM = viewGridMap[y][x];
+                        viewSQM.setImageIcon(storedSQM.getImageIcon());
+                        viewSQM.setSqmSizeY(storedSQM.getSqmSizeY());
+                        viewSQM.setSqmSizeX(storedSQM.getSqmSizeX());
+
+                        if (visibilityUntilZ != null) {
+                            if (z <= visibilityUntilZ) {
+                                setVisibility(viewSQM, true);
+                            } else {
+                                setVisibility(viewSQM, false);
+                            }
+                        }
+                        viewSQM.updateSQM();
+
                     }
-            });
+                }
+            }
         }
     }
 
-    public void changeSQMVisibility(AreaType areaType, int x, int y, int z) {
-        BaseSQM baseSQM = getViewSQM(areaType, x, y, z);
-        baseSQM.setVisible(!baseSQM.isVisible());
-    }
-
-    private void setVisibilityByElevation(int playerZ, int currentZ, AreaType area, int y, int x, BaseSQM viewSQM) {
-        if (currentZ <= playerZ) {
-            viewSQM.setVisible(true);
-        } else {
-            viewSQM.setVisible(false);
-        }
-        if (currentZ >= 1 && x == GridMap.MAX_X - 1 && y == GridMap.MAX_Y - 1 && area.equals(AreaType.MAP)) {
-            moveService.setElevating(false);
-        }
+    private void setVisibility(BaseSQM viewSQM, boolean visibility) {
+        viewSQM.setVisible(visibility);
     }
 
     public Map<Integer, Map<AreaType, GridMap>> getFullViewMap() {
@@ -118,6 +114,10 @@ public class ClientViewMap implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-        System.out.println("adjust view visibility");
+
+        switch (evt.getPropertyName()) {
+            case "changeElevation" -> updateView((Integer) evt.getNewValue());
+            case "playerMoved", "playerVisibilityChange" -> updateView();
+        }
     }
 }

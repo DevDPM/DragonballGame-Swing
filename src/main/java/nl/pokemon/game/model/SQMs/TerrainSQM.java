@@ -11,7 +11,7 @@ public class TerrainSQM extends BaseSQM {
 
     @Override
     public boolean isNotWalkable() {
-        return false;
+        return true;
     }
 
     @Override

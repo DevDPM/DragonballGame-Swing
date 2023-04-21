@@ -15,7 +15,7 @@ public class PlayerService {
     private UserRepository userRepository;
 
     @Inject
-    private FullMapService fullMapService; // The full map with all details
+    private FullMapManager fullMapManager; // The full map with all details
 
     @Inject
     private ClientViewMap clientViewMap; // The visible view screen
@@ -93,5 +93,18 @@ public class PlayerService {
     public AreaType getPlayerArea() {
         User user = userRepository.getUserDataBase().get(1);
         return user.getAreaType();
+    }
+
+    public AreaType setPlayerArea(AreaType areaType) {
+        User user = userRepository.getUserDataBase().get(1);
+        user.setAreaType(areaType);
+        return user.getAreaType();
+    }
+
+    public void setNewPosition(User user, int x, int y, int z, AreaType areaType) {
+        user.setX(x);
+        user.setY(y);
+        user.setZ(z);
+        user.setAreaType(areaType);
     }
 }
