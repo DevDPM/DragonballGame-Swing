@@ -1,14 +1,19 @@
 package nl.pokemon.game.view;
 
 import nl.pokemon.game.controller.RpgController;
+import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
+import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.SQMs.BaseSQM;
-import nl.pokemon.game.model.CurrentPlayer;
+import nl.pokemon.game.model.players.Ash;
 import nl.pokemon.game.model.View.GridMap;
 import nl.pokemon.game.model.View.ViewMap;
+import nl.pokemon.game.repository.UserRepository;
+import nl.pokemon.game.service.FullMapService;
 import nl.pokemon.game.service.PlayerService;
-import nl.pokemon.game.service.ViewMapService;
-import nl.pokemon.game.util.SQMObjects;
+import nl.pokemon.game.service.ClientViewMap;
+import nl.pokemon.game.util.FullMap;
+import nl.pokemon.game.util.TilesetImageContainer;
 import org.dpmFramework.Kickstarter;
 
 import javax.swing.*;
@@ -28,16 +33,18 @@ public class Console extends JFrame {
         this.addKeyListener(Kickstarter.getInstanceOf(RpgController.class));
         this.setLocationRelativeTo(null);
         this.setLayout(null);
-        CurrentPlayer player = Kickstarter.getInstanceOf(CurrentPlayer.class);
-        this.add(player);
 
-        SQMObjects.bootstrap();
-        SQMObjects.printSQMList();
+
+        PlayerService user = Kickstarter.getInstanceOf(PlayerService.class);
+
+        TilesetImageContainer.bootstrap();
+        TilesetImageContainer.printSQMList();
+        bootstrap();
 
         ViewMap view = Kickstarter.getInstanceOf(ViewMap.class);
-        ViewMapService viewMapService = Kickstarter.getInstanceOf(ViewMapService.class);
+        ClientViewMap clientViewMap = Kickstarter.getInstanceOf(ClientViewMap.class);
 
-        viewMapService.updateView();
+        clientViewMap.updateView();
 
             Map<Integer, Map<AreaType, GridMap>> fullMap = view.getViewMap();
             List<Integer> elevations = new ArrayList<>(fullMap.keySet());
@@ -54,7 +61,7 @@ public class Console extends JFrame {
                         for (int x = 0; x < areaMap.getGridMap().length; x++) {
                             BaseSQM sqm = areaMap.getGridMap()[y][x];
                             sqm.setVisible(false);
-                            if (elevation == player.getFDMIndexZ())
+                            if (elevation == user.getPlayerZ())
                                 sqm.setVisible(true);
                             this.add(sqm);
                         }
@@ -63,5 +70,30 @@ public class Console extends JFrame {
             }
 
         this.setVisible(true);
+    }
+
+    private void bootstrap() {
+        FullMap.createMap();
+        User user = new User();
+        user.setId(1);
+        user.setX(1);
+        user.setY(1);
+        user.setZ(0);
+        user.setBaseEntity(new Ash());
+        user.setAreaType(AreaType.PLAYER_BOTTOM);
+
+        User user1 = new User();
+        user1.setId(2);
+        user1.setX(5);
+        user1.setY(5);
+        user1.setZ(0);
+        user1.setBaseEntity(new Ash());
+        user1.setAreaType(AreaType.PLAYER_BOTTOM);
+        Kickstarter.getInstanceOf(UserRepository.class).getUserDataBase().put(user.getId(), user);
+        Kickstarter.getInstanceOf(UserRepository.class).getUserDataBase().put(user1.getId(), user1);
+        FullMapService fullMapService = Kickstarter.getInstanceOf(FullMapService.class);
+
+        fullMapService.moveUserByDirection(user, Direction.EAST);
+        fullMapService.moveUserByDirection(user1, Direction.EAST);
     }
 }

@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class SQMObjects {
+public class TilesetImageContainer {
 
     private static Map<AreaType, Map<Integer, BaseSQM>> SQMByArea = new HashMap<>();
     private static AtomicInteger ID_SQM;
@@ -25,9 +25,9 @@ public class SQMObjects {
     private static String getRootFolderByArea(AreaType area) {
         return switch(area) {
             case MAP -> "src/main/resources/images/map/";
-            case PLAYER_BOTTOM -> "src/main/resources/images/userWalk/";
+            case PLAYER_BOTTOM -> "src/main/resources/images/entity/ash/";
             case TERRAIN -> "src/main/resources/images/terrain/";
-            case PLAYER_TOP -> "src/main/resources/images/userWalk/";
+            case PLAYER_TOP -> "src/main/resources/images/entity/ash/";
         };
     }
 
@@ -88,7 +88,7 @@ public class SQMObjects {
     }
 
     public static void printSQMList() {
-        SQMObjects.getSQMByArea().forEach((key, value) -> {
+        TilesetImageContainer.getSQMByArea().forEach((key, value) -> {
             System.out.println(key.name());
             value.forEach((keyy, valuee) -> {
                 System.out.println(keyy +" -> " + valuee.getClass().getName() + " / " + valuee.getImageIcon());

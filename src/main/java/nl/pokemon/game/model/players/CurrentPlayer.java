@@ -1,4 +1,4 @@
-package nl.pokemon.game.model;
+package nl.pokemon.game.model.players;
 
 import javax.swing.*;
 import java.awt.*;

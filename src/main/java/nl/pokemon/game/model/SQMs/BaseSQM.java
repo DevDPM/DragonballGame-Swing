@@ -1,6 +1,5 @@
 package nl.pokemon.game.model.SQMs;
 
-import nl.pokemon.game.enums.Classify;
 import nl.pokemon.game.enums.AreaType;
 
 import javax.swing.*;
@@ -25,7 +24,6 @@ public abstract class BaseSQM extends JLabel {
 
     public abstract int getObjectNumber();
     public abstract boolean isNotWalkable();
-    public abstract Classify getClassify();
     public abstract AreaType getAreaType();
 
     public void updateSQM() {

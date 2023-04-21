@@ -6,7 +6,6 @@ import nl.pokemon.game.model.Elevatable;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.SQMs.MapSQM;
 import nl.pokemon.game.model.View.GridMap;
-import nl.pokemon.game.model.View.ViewMap;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
@@ -34,7 +33,10 @@ public class MoveService {
     PlayerService playerService;
 
     @Inject
-    ViewMapService viewMapService;
+    ClientViewMap clientViewMap;
+
+    @Inject
+    FullMapService fullMapService;
 
     Stack<Direction> moveStack = new Stack<>();
     boolean notMoving = true;
@@ -49,9 +51,13 @@ public class MoveService {
             return;
         }
 
+
         setPixelMovement(direction);
-        playerService.moveDirection(direction);
-        playerService.setCoordinationByDirection(direction);
+        playerService.setWalkingImage(direction);
+//        viewMapService.updateView();
+
+        fullMapService.moveUserByDirection(playerService.getPlayerById(1), direction);
+        playerService.moveEntity(direction);
 
         performMovement(direction);
     }
@@ -61,8 +67,8 @@ public class MoveService {
         AtomicReference<Direction> movedDirection = new AtomicReference<>(direction);
         AtomicInteger pixelCounter = new AtomicInteger(0);
         Timer smoothMoving = new Timer(speedTimerDelay, actionEvent -> {
-            viewMapService.getFullViewMap().keySet().forEach((z) -> {
-                Map<AreaType, GridMap> viewSurfaceGridMap = viewMapService.getViewGridMapLayerLevel(z);
+            clientViewMap.getFullViewMap().keySet().forEach((z) -> {
+                Map<AreaType, GridMap> viewSurfaceGridMap = clientViewMap.getViewGridMapLayerLevel(z);
 
                 Arrays.stream(AreaType.values()).forEach(area -> {
                     BaseSQM[][] viewGridMap = viewSurfaceGridMap.get(area).getGridMap();
@@ -71,9 +77,15 @@ public class MoveService {
                         for (int x = 0; x < GridMap.MAX_X; x++) {
 
                             BaseSQM viewSQM = viewGridMap[y][x];
-                            int newPixelPosX = viewSQM.getPixelPosXByIndex() + smoothMovePosX;
-                            int newPixelPosY = viewSQM.getPixelPosYByIndex() + smoothMovePosY;
-                            viewSQM.moveSQM(newPixelPosX, newPixelPosY);
+
+                            if (!((x == 10 && y == 10 && z == playerService.getPlayerZ()) &&
+                                    area.equals(playerService.getPlayerArea()))) {
+                                int newPixelPosX;
+                                int newPixelPosY;
+                                newPixelPosX = viewSQM.getPixelPosXByIndex() + smoothMovePosX;
+                                newPixelPosY = viewSQM.getPixelPosYByIndex() + smoothMovePosY;
+                                viewSQM.moveSQM(newPixelPosX, newPixelPosY);
+                            }
                         }
                     }
                 });
@@ -89,13 +101,13 @@ public class MoveService {
     private void finalizeMovement(AtomicReference<Direction> movedDirection, AtomicInteger pixelCounter, ActionEvent actionEvent) {
         if (moveStack.isEmpty()) {
             if (sqmService.isElevatable(sqmService.getSQMByPlayerPosition())) {
-                viewMapService.updateView();
-                performElevation((Elevatable) sqmService.getSQMByPlayerPosition());
+                Elevatable elevatable = (Elevatable) sqmService.getSQMByPlayerPosition();
+                playerService.moveEntity(movedDirection.get(), elevatable.getElevateZ());
+                clientViewMap.updateView();
                 stopMovement(movedDirection, actionEvent);
                 notMoving = false;
                 elevating = true;
-                playerService.setCoordinationByDirection(movedDirection.get());
-                viewMapService.updateView();
+                clientViewMap.updateView();
                 elevating = false;
                 stopMovement(movedDirection, actionEvent);
             } else {
@@ -107,35 +119,36 @@ public class MoveService {
                 stopMovement(movedDirection, actionEvent);
             } else {
                 if (sqmService.isElevatable(sqmService.getSQMByPlayerPosition())) {
-                    performElevation((Elevatable) sqmService.getSQMByPlayerPosition());
+                    Elevatable elevatable = (Elevatable) sqmService.getSQMByPlayerPosition();
+                    playerService.moveEntity(movedDirection.get(), elevatable.getElevateZ());
                     stopMovement(movedDirection, actionEvent);
+                    clientViewMap.updateView();
                     notMoving = false;
                     elevating = true;
                     move(movedDirection.get());
                 }
-                viewMapService.updateView();
+                clientViewMap.updateView();
                 pixelCounter.set(0);
                 movedDirection.set(nextDirection);
                 setPixelMovement(movedDirection.get());
-                playerService.moveDirection(nextDirection);
-                playerService.setCoordinationByDirection(movedDirection.get());
+
+                playerService.setWalkingImage(nextDirection);
+                clientViewMap.updateView();
+                fullMapService.moveUserByDirection(playerService.getPlayerById(1), nextDirection);
+                playerService.moveEntity(nextDirection);
             }
         }
-    }
-
-    private void performElevation(Elevatable elevatable) {
-        playerService.addElevation(elevatable.getElevateZ());
     }
 
     private void stopMovement(AtomicReference<Direction> lastDirection, ActionEvent e) {
         Timer timer = (Timer) e.getSource();
         timer.stop();
-        viewMapService.updateView();
         playerService.standStill(lastDirection.get());
+        clientViewMap.updateView();
         notMoving = true;
     }
 
-    public boolean addOrReplaceFutureDirection(Direction direction) {
+    public boolean addOrUpdateDirection(Direction direction) {
         if (!moveStack.isEmpty()) {
             moveStack.pop();
         }

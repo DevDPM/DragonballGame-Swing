@@ -2,7 +2,6 @@ package nl.pokemon.game.controller;
 
 import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.service.MoveService;
-import nl.pokemon.game.service.PlayerService;
 import org.dpmFramework.annotation.Controller;
 import org.dpmFramework.annotation.Inject;
 import org.slf4j.Logger;
@@ -24,10 +23,10 @@ public class RpgController implements KeyListener {
 
         boolean validKey;
         validKey = switch (keyEvent.getKeyChar()) {
-            case 'w' -> moveService.addOrReplaceFutureDirection(Direction.NORTH);
-            case 'a' -> moveService.addOrReplaceFutureDirection(Direction.WEST);
-            case 's' -> moveService.addOrReplaceFutureDirection(Direction.SOUTH);
-            case 'd' -> moveService.addOrReplaceFutureDirection(Direction.EAST);
+            case 'w' -> moveService.addOrUpdateDirection(Direction.NORTH);
+            case 'a' -> moveService.addOrUpdateDirection(Direction.WEST);
+            case 's' -> moveService.addOrUpdateDirection(Direction.SOUTH);
+            case 'd' -> moveService.addOrUpdateDirection(Direction.EAST);
             default -> false;
         };
 

@@ -4,8 +4,7 @@ import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.Elevatable;
 import nl.pokemon.game.model.SQMs.BaseSQM;
-import nl.pokemon.game.model.CurrentPlayer;
-import nl.pokemon.game.util.SQMObjects;
+import nl.pokemon.game.util.TilesetImageContainer;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
@@ -13,14 +12,14 @@ import org.dpmFramework.annotation.Service;
 public class SQMService {
 
     @Inject
-    CurrentPlayer player;
+    PlayerService playerService;
 
     @Inject
     FullMapService fullMapService;
 
 
     public BaseSQM getSQMByIntAndArea(AreaType area, int sqmId) {
-        return SQMObjects.getSQMByIntAndArea(area, sqmId);
+        return TilesetImageContainer.getSQMByIntAndArea(area, sqmId);
     }
 
     public boolean isNotWalkable(Direction direction) {
@@ -31,25 +30,25 @@ public class SQMService {
     }
 
     public BaseSQM getBaseSQMByDirection(Direction direction) {
-        int x = player.getFDMIndexX();
-        int y = player.getFDMIndexY();
-        int z = player.getFDMIndexZ();
+        int x = playerService.getPlayerX();
+        int y = playerService.getPlayerY();
+        int z = playerService.getPlayerZ();
 
         switch (direction) {
             case NORTH -> {
-                y = player.getFDMIndexY() - 1;
+                y = playerService.getPlayerY() - 1;
             }
             case EAST -> {
-                x = player.getFDMIndexX() + 1;
+                x = playerService.getPlayerX() + 1;
             }
             case SOUTH -> {
-                y = player.getFDMIndexY() + 1;
+                y = playerService.getPlayerY() + 1;
             }
             case WEST -> {
-                x = player.getFDMIndexX() - 1;
+                x = playerService.getPlayerX() - 1;
             }
         }
-        BaseSQM sqm = fullMapService.getFullMapSQM(AreaType.TERRAIN, x, y, z);
+        BaseSQM sqm = fullMapService.getBaseSQMByPosition(AreaType.TERRAIN, x, y, z);
         return sqm;
     }
 
@@ -58,6 +57,6 @@ public class SQMService {
     }
 
     public BaseSQM getSQMByPlayerPosition() {
-        return fullMapService.getFullMapSQM(AreaType.TERRAIN, player.getFDMIndexX(), player.getFDMIndexY(), player.getFDMIndexZ());
+        return fullMapService.getBaseSQMByPosition(AreaType.TERRAIN, playerService.getPlayerX(), playerService.getPlayerY(), playerService.getPlayerZ());
     }
 }

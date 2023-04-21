@@ -1,7 +1,6 @@
 package nl.pokemon.game.model.SQMs;
 
 import nl.pokemon.game.enums.AreaType;
-import nl.pokemon.game.enums.Classify;
 import nl.pokemon.game.model.Elevatable;
 
 public class FloorDownSQM extends BaseSQM implements Elevatable {
@@ -14,11 +13,6 @@ public class FloorDownSQM extends BaseSQM implements Elevatable {
     @Override
     public boolean isNotWalkable() {
         return false;
-    }
-
-    @Override
-    public Classify getClassify() {
-        return Classify.OBSTACLE;
     }
 
     @Override

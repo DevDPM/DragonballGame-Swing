@@ -1,62 +1,97 @@
 package nl.pokemon.game.service;
 
+import nl.pokemon.game.domain.User;
+import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
-import nl.pokemon.game.model.CurrentPlayer;
+import nl.pokemon.game.model.players.BaseEntity;
+import nl.pokemon.game.repository.UserRepository;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
-
-import javax.swing.*;
 
 @Service
 public class PlayerService {
 
     @Inject
-    CurrentPlayer player;
+    private UserRepository userRepository;
 
-    public void setCoordinationByDirection(Direction direction) {
+    @Inject
+    private FullMapService fullMapService; // The full map with all details
 
-        switch (direction) {
-            case NORTH -> {
-                player.setFDMIndexY(player.getFDMIndexY() - 1);
-            }
-            case EAST -> {
-                player.setFDMIndexX(player.getFDMIndexX() + 1);
-            }
-            case SOUTH -> {
-                player.setFDMIndexY(player.getFDMIndexY() + 1);
-            }
-            case WEST -> {
-                player.setFDMIndexX(player.getFDMIndexX() - 1);
-            }
-        }
+    @Inject
+    private ClientViewMap clientViewMap; // The visible view screen
+
+    public void moveEntity(Direction direction) {
+        moveEntity(direction, 0);
     }
 
-    public void moveDirection(Direction direction) {
-        ImageIcon icon;
+    public void moveEntity(Direction direction, int z) {
+        User user = userRepository.getUserDataBase().get(1);
 
-        icon = switch (direction) {
-            case NORTH -> new ImageIcon("src/main/resources/images/userWalk/6_walk-north.gif");
-            case EAST -> new ImageIcon("src/main/resources/images/userWalk/5_walk-east.gif");
-            case SOUTH -> new ImageIcon("src/main/resources/images/userWalk/7_walk-south.gif");
-            case WEST -> new ImageIcon("src/main/resources/images/userWalk/8_walk-west.gif");
-        };
-        player.setIcon(icon);
+        if (z != 0) {
+            performElevation(z, user);
+        }
+
+        switch (direction) {
+            case NORTH -> user.setY(user.getY() - 1);
+            case EAST -> user.setX(user.getX() + 1);
+            case SOUTH -> user.setY(user.getY() + 1);
+            case WEST -> user.setX(user.getX() - 1);
+        }
+
+        // performDirection
+    }
+
+    private void performElevation(int z, User user) {
+        int oldZ = user.getZ();
+        int newZ = oldZ + z;
+
+        user.setZ(newZ);
+
+//        fullMapService.setElevationZ(user.getAreaType(), user.getX(), user.getY(), oldZ, 0);
+//        fullMapService.setElevationZ(user.getAreaType(), user.getX(), user.getY(), oldZ, user.getId());
+//
+//        clientViewMap.changeSQMVisibility(user.getAreaType(), user.getX(), user.getY(), oldZ);
+//        clientViewMap.changeSQMVisibility(user.getAreaType(), user.getX(), user.getY(), user.getZ());
+    }
+
+    // moveDirection by
+
+    public void setWalkingImage(Direction direction) {
+        User user = userRepository.getUserDataBase().get(1);
+        user.getBaseEntity().setWalkingImage(direction);
+//        clientViewMap.updateSQM(user.getAreaType(), user.getX(), user.getY(), user.getZ());
     }
 
     public void standStill(Direction direction) {
-        ImageIcon icon;
-
-        icon = switch (direction) {
-            case NORTH -> new ImageIcon("src/main/resources/images/userWalk/2_stand-north.png");
-            case EAST -> new ImageIcon("src/main/resources/images/userWalk/1_stand-east.png");
-            case SOUTH -> new ImageIcon("src/main/resources/images/userWalk/3_stand-south.png");
-            case WEST -> new ImageIcon("src/main/resources/images/userWalk/4_stand-west.png");
-        };
-        player.setIcon(icon);
+        User user = userRepository.getUserDataBase().get(1);
+        user.getBaseEntity().setStandingImage(direction);
     }
 
-    public void addElevation(int elevation) {
-        player.setFDMIndexZ(player.getFDMIndexZ()+elevation);
-        System.out.println(player.getFDMIndexZ());
+    public int getPlayerX() {
+        User user = userRepository.getUserDataBase().get(1);
+        return user.getX();
+    }
+
+    public int getPlayerY() {
+        User user = userRepository.getUserDataBase().get(1);
+        return user.getY();
+    }
+
+    public int getPlayerZ() {
+        User user = userRepository.getUserDataBase().get(1);
+        return user.getZ();
+    }
+
+    public User getPlayerById(int id) {
+        return userRepository.getUserDataBase().get(id);
+    }
+
+    public BaseEntity getPlayerSQMByUserId(int id) {
+        return userRepository.getUserDataBase().get(id).getBaseEntity();
+    }
+
+    public AreaType getPlayerArea() {
+        User user = userRepository.getUserDataBase().get(1);
+        return user.getAreaType();
     }
 }
