@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         Kickstarter.ignite(Main.class);
         new Console();
-//        new MapGenerator();
+//        new MapConsole();
 
     }
 }

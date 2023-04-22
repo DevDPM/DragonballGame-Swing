@@ -7,7 +7,7 @@ import javax.swing.*;
 public class VoidSQM extends BaseSQM {
 
     public VoidSQM() {
-        this.setImageIcon(new ImageIcon("src/main/resources/images/emptySpot.png"));
+        this.setImageIcon(null);
     }
 
     @Override

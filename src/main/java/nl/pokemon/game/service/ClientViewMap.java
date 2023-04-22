@@ -1,5 +1,6 @@
 package nl.pokemon.game.service;
 
+import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.SQMs.VoidSQM;
@@ -30,6 +31,7 @@ public class ClientViewMap implements PropertyChangeListener {
 
     @Inject
     VoidSQM voidSQM;
+
     public void updateView() {
         updateView(null);
     }
@@ -75,6 +77,9 @@ public class ClientViewMap implements PropertyChangeListener {
                         viewSQM.setSqmSizeY(storedSQM.getSqmSizeY());
                         viewSQM.setSqmSizeX(storedSQM.getSqmSizeX());
 
+                        // if z below player.z then change offset. player.z = z => standard offset, increment higher aswell just in case
+                        changeSQMOffsetByZ(z, viewSQM, START_Z_MAP);
+
                         if (visibilityUntilZ != null) {
                             if (z <= visibilityUntilZ) {
                                 setVisibility(viewSQM, true);
@@ -88,6 +93,21 @@ public class ClientViewMap implements PropertyChangeListener {
                 }
             }
         }
+    }
+
+    private void changeSQMOffsetByZ(int currentZ, BaseSQM viewSQM, int playerZ) {
+        // if z below player.z then change offset. player.z = z => standard offset, increment higher as well just in case
+        int OFFSET_PIXEL_Y = -170;
+        int newOffSetY;
+
+        if (currentZ < playerZ) {
+            newOffSetY = ((playerZ - currentZ) * 60) + OFFSET_PIXEL_Y;
+        } else if (currentZ == playerZ) {
+            newOffSetY = OFFSET_PIXEL_Y;
+        } else {
+            newOffSetY = ((currentZ - playerZ) * 60) + OFFSET_PIXEL_Y;
+        }
+        viewSQM.setOFFSET_PIXEL_Y(newOffSetY);
     }
 
     private void setVisibility(BaseSQM viewSQM, boolean visibility) {

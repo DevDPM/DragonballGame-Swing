@@ -76,9 +76,9 @@ public class Console extends JFrame {
         FullMap.createMap();
         User user = new User();
         user.setId(1);
-        user.setX(1);
-        user.setY(1);
-        user.setZ(0);
+        user.setX(5);
+        user.setY(5);
+        user.setZ(-1);
         user.setBaseEntity(new Ash());
         user.setAreaType(AreaType.PLAYER_BOTTOM);
 

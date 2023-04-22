@@ -65,8 +65,8 @@ public class TilesetImageContainer {
                         }
 
                         icon = new ImageIcon(elevationFile.getPath());
-                        sqm.setSqmSizeX(icon.getIconWidth()/BaseSQM.SQM_PIXEL_WIDTH_X);
-                        sqm.setSqmSizeY(icon.getIconHeight()/BaseSQM.SQM_PIXEL_HEIGHT_Y);
+                        sqm.setSqmSizeX((int) Math.ceil((1.0*icon.getIconWidth())/(1.0*BaseSQM.SQM_PIXEL_WIDTH_X)));
+                        sqm.setSqmSizeY((int) Math.ceil((1.0*icon.getIconHeight())/(1.0*BaseSQM.SQM_PIXEL_HEIGHT_Y)));
                         sqm.setImageIcon(icon);
                         int id = Integer.parseInt(fileStringName.substring(0, fileStringName.indexOf("_")).replaceAll("\\D+",""));
                         SQMMap.put(id, sqm);
@@ -75,7 +75,10 @@ public class TilesetImageContainer {
                 }
 
                 BaseSQM sqm = SQMFactory.getSQMBySurface(area);
-                sqm.setImageIcon(new ImageIcon(fileName.getPath()));
+                ImageIcon icon = new ImageIcon(fileName.getPath());
+                sqm.setSqmSizeX(icon.getIconWidth()/BaseSQM.SQM_PIXEL_WIDTH_X);
+                sqm.setSqmSizeY(icon.getIconHeight()/BaseSQM.SQM_PIXEL_HEIGHT_Y);
+                sqm.setImageIcon(icon);
                 sqm.updateSQM();
                 SQMMap.put(Integer.valueOf(fileName.getName().replaceAll("\\D+","")), sqm);
             }

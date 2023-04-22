@@ -19,8 +19,8 @@ public abstract class BaseSQM extends JLabel {
     public static final int SQM_PIXEL_WIDTH_X = 50;
     public static final int SQM_PIXEL_HEIGHT_Y = 50;
 
-    private static final int OFFSET_PIXEL_X = -120;
-    private static final int OFFSET_PIXEL_Y = -170;
+    private int OFFSET_PIXEL_X = -120;
+    private int OFFSET_PIXEL_Y = -170;
 
     public abstract int getObjectNumber();
     public abstract boolean isNotWalkable();
@@ -93,5 +93,13 @@ public abstract class BaseSQM extends JLabel {
 
     public void setPixelPosY(int pixel) {
         this.pixelY = pixel;
+    }
+
+    public void setOFFSET_PIXEL_X(int OFFSET_PIXEL_X) {
+        this.OFFSET_PIXEL_X = OFFSET_PIXEL_X;
+    }
+
+    public void setOFFSET_PIXEL_Y(int OFFSET_PIXEL_Y) {
+        this.OFFSET_PIXEL_Y = OFFSET_PIXEL_Y;
     }
 }
