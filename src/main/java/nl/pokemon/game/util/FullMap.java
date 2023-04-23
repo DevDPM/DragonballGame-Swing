@@ -1,14 +1,22 @@
 package nl.pokemon.game.util;
 
+import com.fasterxml.jackson.annotation.JsonRootName;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import nl.pokemon.game.enums.AreaType;
-import nl.pokemon.game.model.View.ViewMap;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@JsonRootName("full_map")
 public class FullMap {
 
     private static final Map<Integer, Map<AreaType, int[][]>> viewMap = new HashMap<>();
+
+    private List<Map<Integer, List<Map<AreaType, int[][]>>>> fullMapLayers;
 
     public static Map<Integer, Map<AreaType, int[][]>> getViewMap() {
         return viewMap;
@@ -25,192 +33,40 @@ public class FullMap {
         return false;
     }
 
-    public static int getValueFromPosition(AreaType areaType, int x, int y, int z) {
-        Map<AreaType, int[][]> firstMap = viewMap.get(z);
-        int[][] intMap = firstMap.get(areaType);
-        return intMap[y][x];
+    public void convertIntermediateToViewMap(List<Map<Integer, List<Map<AreaType, int[][]>>>> deserializedFullMap) {
+
+        Map<Integer, List<Map<AreaType, int[][]>>> deserializedMap = deserializedFullMap.get(0);
+
+        for (Map.Entry<Integer, List<Map<AreaType, int[][]>>> key : deserializedMap.entrySet()) {
+            viewMap.put(key.getKey(), key.getValue().get(0));
+        }
+
+        for (Map.Entry<Integer, Map<AreaType, int[][]>> integer : viewMap.entrySet()) {
+            for (Map.Entry<AreaType, int[][]> areatype : integer.getValue().entrySet()) {
+                for (int y = 0; y < areatype.getValue()[0].length; y++) {
+                    for (int x = 0; x < areatype.getValue().length; x++) {
+                    }
+                }
+            };
+        }
     }
 
-    public static void createMap() {
-        for (int z = ViewMap.START_Z; z <= ViewMap.MAX_Z; z++) {
-            Map<AreaType, int[][]> surfaceMap = new HashMap<>();
-            for (AreaType area : AreaType.values()) {
-                surfaceMap.put(area, getMapByAreaAndElevation(area, z));
-            }
-            viewMap.put(z, surfaceMap);
+    public static void deserializeJsonMapToIntermediate() {
+
+        File jsonFile = new File("./src/main/resources/fullmap/fullmap.json");
+
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.enable(DeserializationFeature.UNWRAP_ROOT_VALUE);
+        try {
+            FullMap resultData = mapper.readValue(jsonFile, FullMap.class);
+            resultData.convertIntermediateToViewMap(resultData.getFullMapLayers());
+        } catch (IOException e) {
+            e.getMessage();
         }
     }
 
-    private static int[][] getMapByAreaAndElevation(AreaType areaType, int z) {
-        if (areaType.equals(AreaType.MAP) && z == -1) {
-            return new int[][]{
-                    {2, 2, 2, 2, 2, 2, 2, 2, 2, 2},
-                    {2, 1, 1, 1, 1, 1, 1, 1, 1, 2},
-                    {2, 1, 1, 1, 1, 1, 1, 1, 1, 2},
-                    {2, 1, 1, 1, 1, 1, 1, 1, 1, 2},
-                    {2, 1, 1, 1, 1, 1, 1, 1, 1, 2},
-                    {2, 1, 1, 1, 1, 1, 1, 1, 1, 2},
-                    {2, 1, 1, 1, 1, 1, 1, 1, 1, 2},
-                    {2, 1, 1, 1, 1, 1, 1, 1, 1, 2},
-                    {2, 1, 1, 1, 1, 1, 1, 1, 1, 2},
-                    {2, 1, 1, 1, 1, 1, 1, 1, 1, 2}
-            };
-        }
-        if (areaType.equals(AreaType.PLAYER_BOTTOM) && z == -1) {
-            return new int[][]{
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-            };
-        }
-        if (areaType.equals(AreaType.TERRAIN) && z == -1) {
-            return new int[][]{
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 5, 5, 5, 5, 5, 5, 5, 5, 0},
-                    {11, 0, 3, 0, 0, 0, 0, 0, 3, 12},
-                    {6, 0, 0, 0, 0, 0, 0, 0, 0, 7},
-                    {6, 0, 0, 0, 0, 0, 0, 0, 0, 7},
-                    {6, 0, 0, 0, 0, 3, 0, 0, 0, 7},
-                    {6, 0, 0, 0, 0, 0, 0, 0, 0, 7},
-                    {6, 0, 0, 0, 0, 0, 0, 0, 0, 7},
-                    {6, 0, 3, 0, 0, 0, 0, 0, 0, 7},
-                    {6, 5, 5, 5, 0, 0, 5, 5, 5, 7},
-            };
-        }
-        if (areaType.equals(AreaType.PLAYER_TOP) && z == -1) {
-            return new int[][]{
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-            };
-        }
-        if (areaType.equals(AreaType.MAP) && z == 0) {
-            return new int[][]{
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 0},
-                    {0, 1, 1, 1, 1, 1, 1, 1, 1, 0}
-            };
-        }
-        if (areaType.equals(AreaType.PLAYER_BOTTOM) && z == 0) {
-            return new int[][]{
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-            };
-        }
-        if (areaType.equals(AreaType.TERRAIN) && z == 0) {
-            return new int[][]{
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 5, 5, 5, 5, 5, 5, 5, 5, 0},
-                    {6, 0, 4, 0, 0, 0, 0, 0, 0, 7},
-                    {6, 0, 0, 0, 0, 3, 0, 0, 4, 7},
-                    {6, 0, 0, 0, 0, 0, 0, 0, 4, 7},
-                    {6, 0, 0, 0, 0, 0, 0, 0, 4, 7},
-                    {6, 0, 0, 0, 0, 0, 0, 0, 4, 7},
-                    {6, 0, 0, 0, 0, 0, 0, 3, 4, 7},
-                    {6, 0, 4, 0, 0, 0, 0, 0, 4, 7},
-                    {6, 5, 5, 5, 5, 5, 5, 5, 5, 7},
-            };
-        }
-        if (areaType.equals(AreaType.PLAYER_TOP) && z == 0) {
-            return new int[][]{
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-            };
-        }
-        if (areaType.equals(AreaType.MAP) && z == 1) {
-            return new int[][]{
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1},
-                    {1, 1, 1, 1, 1, 1, 1, 1, 1, 1}
-            };
-        }
-        if (areaType.equals(AreaType.PLAYER_BOTTOM) && z == 1) {
-            return new int[][]{
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-            };
-        }
-        if (areaType.equals(AreaType.TERRAIN) && z == 1) {
-            return new int[][]{
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 4, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 4, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-            };
-        }
-        if (areaType.equals(AreaType.PLAYER_TOP) && z == 1) {
-            return new int[][]{
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
-                    {0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-            };
-        }
-        return new int[][] {{}};
+    public List<Map<Integer, List<Map<AreaType, int[][]>>>> getFullMapLayers() {
+        return fullMapLayers;
     }
 
     public static int fullMapWidth() {
@@ -220,5 +76,4 @@ public class FullMap {
     public static int fullMapHeight() {
         return viewMap.get(0).get(AreaType.MAP).length;
     }
-
 }

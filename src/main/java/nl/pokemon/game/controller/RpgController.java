@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
 @Controller
 public class RpgController implements KeyListener {
 
-    private final Logger log = LoggerFactory.getLogger(RpgController.class);
+//    private final Logger log = LoggerFactory.getLogger(RpgController.class);
 
     @Inject
     MoveService moveService;

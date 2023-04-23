@@ -73,7 +73,7 @@ public class Console extends JFrame {
     }
 
     private void bootstrap() {
-        FullMap.createMap();
+        FullMap.deserializeJsonMapToIntermediate();
         User user = new User();
         user.setId(1);
         user.setX(5);

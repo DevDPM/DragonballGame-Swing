@@ -6,8 +6,9 @@ import org.dpmFramework.Kickstarter;
 public class Main {
     public static void main(String[] args) {
         Kickstarter.ignite(Main.class);
+
         new Console();
-//        new MapConsole();
+//        new MapGenerator();
 
     }
 }
