@@ -2,9 +2,7 @@ package nl.pokemon.mapGenerator.view;
 
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.model.SQMs.BaseSQM;
-import nl.pokemon.game.util.JsonDeserialize;
 import nl.pokemon.game.util.TilesetImageContainer;
-import nl.pokemon.mapGenerator.model.Selected_SQM;
 import nl.pokemon.mapGenerator.model.View.MG_ViewMap;
 import nl.pokemon.mapGenerator.util.JsonSerialize;
 import nl.pokemon.mapGenerator.util.MapConverter;
@@ -34,6 +32,8 @@ public class OptionPanel extends JPanel {
     private int currentZ = 1;
     private AreaType curentAreaType = AreaType.PLAYER_TOP;
     private int lastSelectedSqmId = 0;
+    private boolean isAutoFill = false;
+    private boolean isFillAll = false;
 
     public void init() {
 
@@ -48,7 +48,7 @@ public class OptionPanel extends JPanel {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         int newZ = currentZ+1;
-                        if (newZ <= 1) {
+                        if (newZ <= MG_ViewMap.MAX_Z) {
                             viewPanel.changeElevation(newZ);
                             currentZ = newZ;
                             elevationLevel.setText(elevationLevelText + currentZ);
@@ -67,7 +67,7 @@ public class OptionPanel extends JPanel {
             @Override
             public void actionPerformed(ActionEvent e) {
                 int newZ = currentZ-1;
-                if (newZ >= -1) {
+                if (newZ >= MG_ViewMap.START_Z) {
                     viewPanel.changeElevation(newZ);
                     currentZ = newZ;
                     elevationLevel.setText(elevationLevelText + currentZ);
@@ -104,18 +104,9 @@ public class OptionPanel extends JPanel {
             this.add(areaTypeButton);
         }
 
-        JLabel selectedItem = new JLabel();
-        selectedItem.setBounds(0,600,100,100);
-        selectedItem.setVisible(true);
-        selectedItem.setHorizontalAlignment(SwingConstants.LEFT);
-        selectedItem.setVerticalAlignment(SwingConstants.CENTER);
-        this.add(selectedItem);
-
-        addSelectableObjectsByArea(selectedItem);
-
         JButton saveButton = new JButton();
         saveButton.setText("Save");
-        saveButton.setBounds(0,400,250,25);
+        saveButton.setBounds(0,240,250,25);
         saveButton.setVisible(true);
         saveButton.setFocusable(false);
         saveButton.addActionListener(new ActionListener() {
@@ -125,19 +116,58 @@ public class OptionPanel extends JPanel {
             }
         });
         this.add(saveButton);
+
+        JButton autoFill = new JButton();
+        autoFill.setText("fill 4 x 4: " + isAutoFill);
+        autoFill.setBounds(0,270,250,25);
+        autoFill.setVisible(true);
+        autoFill.setFocusable(false);
+        autoFill.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isAutoFill = !isAutoFill;
+                autoFill.setText("fill 4 x 4: " + isAutoFill);
+            }
+        });
+        this.add(autoFill);
+
+        JButton fillAll = new JButton();
+        fillAll.setText("fill all: " + isFillAll);
+        fillAll.setBounds(0,295,250,25);
+        fillAll.setVisible(true);
+        fillAll.setFocusable(false);
+        fillAll.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isFillAll = !isFillAll;
+                fillAll.setText("fill all: " + isFillAll);
+            }
+        });
+        this.add(fillAll);
+
+        JLabel selectedItem = new JLabel();
+        selectedItem.setBounds(50,330,100,100);
+        selectedItem.setVisible(true);
+        selectedItem.setHorizontalAlignment(SwingConstants.LEFT);
+        selectedItem.setVerticalAlignment(SwingConstants.CENTER);
+        this.add(selectedItem);
+
+        addSelectableObjectsByArea(selectedItem);
     }
 
     private Map<AreaType, List<JButton>> selectableAreaContainer = new HashMap<>();
 
     private void addSelectableObjectsByArea(JLabel selectedItem) {
-        AtomicInteger selectableViewY = new AtomicInteger(250);
-        for (Map.Entry<AreaType, Map<Integer, BaseSQM>> selectableArea : TilesetImageContainer.getSQMByArea().entrySet()) {
+        AtomicInteger selectableViewY = new AtomicInteger(500);
 
+        TilesetImageContainer.bootstrap();
+        for (Map.Entry<AreaType, Map<Integer, BaseSQM>> selectableArea : TilesetImageContainer.getSQMByArea().entrySet()) {
             List<JButton> selectableButtons = new ArrayList<>();
 
             AtomicInteger selectableViewX = new AtomicInteger(0);
             for (Map.Entry<Integer, BaseSQM> selectableSQMId : selectableArea.getValue().entrySet()) {
-                JButton selectableButton = new Selected_SQM(selectableSQMId.getKey(), selectableSQMId.getValue());
+                JButton selectableButton = new JButton();
+                selectableButton.setIcon(selectableSQMId.getValue().getImageIcon());
                 selectableButton.setBounds(selectableViewX.get(), selectableViewY.get(), 50, 50);
 
                 if (curentAreaType == selectableArea.getKey()) {
@@ -183,7 +213,7 @@ public class OptionPanel extends JPanel {
                 });
                 selectableButtons.add(selectableButton);
             }
-            selectableViewY.set(250);
+            selectableViewY.set(500);
             selectableViewX.set(0);
             selectableAreaContainer.put(selectableArea.getKey(), selectableButtons);
         }
@@ -223,4 +253,14 @@ public class OptionPanel extends JPanel {
     public void setLastSelectedSqmId(int lastSelectedSqmId) {
         this.lastSelectedSqmId = lastSelectedSqmId;
     }
+
+    public boolean isAutoFill() {
+        return isAutoFill;
+    }
+
+    public boolean isFillAll() {
+        return isFillAll;
+    }
+
+
 }

@@ -1,13 +1,8 @@
 package nl.pokemon.mapGenerator.view;
 
-import nl.pokemon.mapGenerator.model.Selection;
-import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
 import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 @Service
 public class SelectedPanel extends JPanel {

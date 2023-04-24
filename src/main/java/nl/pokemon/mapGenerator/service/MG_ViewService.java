@@ -3,20 +3,15 @@ package nl.pokemon.mapGenerator.service;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.util.FullMap;
-import nl.pokemon.game.util.TilesetImageContainer;
-import nl.pokemon.mapGenerator.controller.MG_Controller;
-import nl.pokemon.mapGenerator.model.Editable_SQM;
 import nl.pokemon.mapGenerator.model.SQMs.MG_BaseSQM;
 import nl.pokemon.mapGenerator.model.View.MG_ViewMap;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class MG_ViewService {

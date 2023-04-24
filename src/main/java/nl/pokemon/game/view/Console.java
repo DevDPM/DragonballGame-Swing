@@ -76,7 +76,7 @@ public class Console extends JFrame {
         user.setId(1);
         user.setX(5);
         user.setY(5);
-        user.setZ(1);
+        user.setZ(0);
         user.setBaseEntity(new Ash());
         user.setAreaType(AreaType.PLAYER_BOTTOM);
 

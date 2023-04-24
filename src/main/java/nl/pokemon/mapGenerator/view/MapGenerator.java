@@ -1,5 +1,6 @@
 package nl.pokemon.mapGenerator.view;
 
+import nl.pokemon.game.util.TilesetImageContainer;
 import nl.pokemon.mapGenerator.controller.MG_Controller;
 import org.dpmFramework.Kickstarter;
 

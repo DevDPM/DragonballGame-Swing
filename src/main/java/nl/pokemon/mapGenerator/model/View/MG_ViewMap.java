@@ -8,7 +8,7 @@ import java.util.Map;
 public class MG_ViewMap {
 
     public static final int START_Z = -1;
-    public static final int MAX_Z = 1;
+    public static final int MAX_Z = 4;
 
     private Map<Integer, Map<AreaType, MG_GridMap>> viewMap = new HashMap<>();
 
