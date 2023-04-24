@@ -35,4 +35,19 @@ public class FullMap {
     public static int fullMapHeight() {
         return viewMap.get(0).get(AreaType.MAP).length;
     }
+
+    public static void print() {
+        for (Map.Entry<Integer, Map<AreaType, int[][]>> integerMapEntry : viewMap.entrySet()) {
+            System.out.println(integerMapEntry.getKey());
+            for (Map.Entry<AreaType, int[][]> areaTypeEntry : integerMapEntry.getValue().entrySet()) {
+                System.out.println(areaTypeEntry.getKey());
+                for (int y = 0; y < areaTypeEntry.getValue()[0].length; y++) {
+                    for (int x = 0; x < areaTypeEntry.getValue().length; x++) {
+                        System.out.print(areaTypeEntry.getValue()[y][x] + ", ");
+                    }
+                }
+                System.out.println();
+            }
+        }
+    }
 }

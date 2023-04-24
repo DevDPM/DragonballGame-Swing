@@ -9,8 +9,8 @@ import nl.pokemon.mapGenerator.model.SQMs.MG_BaseSQM;
 
 public final class MG_GridMap {
 
-    public static final int MAX_X = 21;
-    public static final int MAX_Y = 21;
+    public static final int MAX_X = 130;
+    public static final int MAX_Y = 130;
     private MG_BaseSQM[][] gridMap;
 
     public MG_GridMap(AreaType area) {

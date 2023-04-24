@@ -1,15 +1,10 @@
 package nl.pokemon.mapGenerator.view;
 
 import nl.pokemon.game.enums.AreaType;
-import nl.pokemon.game.model.SQMs.BaseSQM;
-import nl.pokemon.game.model.View.GridMap;
-import nl.pokemon.game.model.View.ViewMap;
 import nl.pokemon.game.util.FullMap;
 import nl.pokemon.game.util.TilesetImageContainer;
-import nl.pokemon.mapGenerator.model.Editable_SQM;
 import nl.pokemon.mapGenerator.model.SQMs.MG_BaseSQM;
 import nl.pokemon.mapGenerator.model.View.MG_ViewMap;
-import org.dpmFramework.Kickstarter;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
@@ -34,6 +29,7 @@ public class ViewPanel extends JPanel {
 
     public void init() {
         FullMap.bootstrapFullMap();
+//        FullMap.print();
         TilesetImageContainer.bootstrap();
 
         List<Integer> elevations = new ArrayList<>(FullMap.getViewMap().keySet());

@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class JsonDeserialize {
 
-    private static final String FILE_PATH = "./src/main/resources/fullmap/fullmap.json";
+    private static final String FILE_PATH = "./src/main/resources/fullmap/test_map.json";
 
 //    public static void main(String[] args) throws IOException {
 //        Map<Integer, Map<AreaType, int[][]>> viewMap = new HashMap<>();
