@@ -16,17 +16,14 @@ public class Selected_SQM extends JButton implements ActionListener {
     private BaseSQM baseSQM;
 
 
-    public Selected_SQM(ImageIcon icon) {
-        this.icon = icon;
+    public Selected_SQM(int sqmId, BaseSQM baseSQM) {
+        this.icon = baseSQM.getImageIcon();
+        this.objectId = sqmId;
         this.setIcon(icon);
     }
 
     public BaseSQM getBaseSQM() {
         return baseSQM;
-    }
-
-    public void setBaseSQM(BaseSQM baseSQM) {
-        this.baseSQM = baseSQM;
     }
 
     @Override
@@ -35,14 +32,10 @@ public class Selected_SQM extends JButton implements ActionListener {
         selection.setId(objectId);
         selection.setImageIcon(icon);
         selection.setBaseSQM(baseSQM);
-        Kickstarter.getInstanceOf(SelectedPanel.class).updateSelection();
+//        Kickstarter.getInstanceOf(SelectedPanel.class).updateSelection();
     }
 
     public int getObjectId() {
         return objectId;
-    }
-
-    public void setObjectId(int objectId) {
-        this.objectId = objectId;
     }
 }

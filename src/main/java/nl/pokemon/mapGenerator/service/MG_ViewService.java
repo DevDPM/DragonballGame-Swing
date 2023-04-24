@@ -1,38 +1,31 @@
 package nl.pokemon.mapGenerator.service;
 
+import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
+import nl.pokemon.game.util.FullMap;
+import nl.pokemon.game.util.TilesetImageContainer;
 import nl.pokemon.mapGenerator.controller.MG_Controller;
 import nl.pokemon.mapGenerator.model.Editable_SQM;
-import nl.pokemon.mapGenerator.model.MG_BaseSQM;
+import nl.pokemon.mapGenerator.model.SQMs.MG_BaseSQM;
+import nl.pokemon.mapGenerator.model.View.MG_ViewMap;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
 import java.awt.event.ActionEvent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class MG_ViewService {
 
-    private MG_BaseSQM[][] viewMap;
+    @Inject
+    MG_ViewMap viewMap;
+
     private final int MAX_X = 50;
     private final int MAX_Y = 50;
-
-    public MG_ViewService() {
-        viewMap = new MG_BaseSQM[MAX_Y][MAX_X];
-        for (int viewY = 0; viewY < MAX_Y; viewY++) {
-            for (int viewX = 0; viewX < MAX_X; viewX++) {
-                MG_BaseSQM sqm = new Editable_SQM(viewX, viewY);
-                sqm.addActionListener(sqm);
-                sqm.updateBounds();
-
-                viewMap[viewY][viewX] = sqm;
-            }
-        }
-    }
-
-    public MG_BaseSQM[][] getViewMap() {
-        return this.viewMap;
-    }
 
     public void moveView(Direction direction) {
 
@@ -46,12 +39,25 @@ public class MG_ViewService {
             case WEST -> incrementIndexX++;
         }
 
-        for (int viewY = 0; viewY < MAX_Y; viewY++) {
-            for (int viewX = 0; viewX < MAX_X; viewX++) {
-                MG_BaseSQM sqm = viewMap[viewY][viewX];
-                sqm.setPixelPosXByIndex(sqm.getIndexX() + incrementIndexX);
-                sqm.setPixelPosYByIndex(sqm.getIndexY() + incrementIndexY);
-                sqm.updateBounds();
+        List<Integer> elevations = new ArrayList<>(viewMap.getViewMap().keySet());
+        Collections.reverse(elevations);
+
+        for (int elevation : elevations) {
+            Map<AreaType, int[][]> layerMap = FullMap.getViewMap().get(elevation);
+            List<AreaType> areaTypes = new ArrayList<>(layerMap.keySet());
+            Collections.sort(areaTypes);
+
+            for (AreaType areaType : areaTypes) {
+                int[][] areaMap = layerMap.get(areaType);
+                for (int y = 0; y < areaMap[0].length; y++) {
+                    for (int x = 0; x < areaMap.length; x++) {
+                        MG_BaseSQM sqm = viewMap.getViewMap().get(elevation).get(areaType).getGridMap()[y][x];
+                        sqm.setIndexX(sqm.getIndexX() + incrementIndexX);
+                        sqm.setIndexY(sqm.getIndexY() + incrementIndexY);
+
+                        sqm.updateSQM();
+                    }
+                }
             }
         }
     }

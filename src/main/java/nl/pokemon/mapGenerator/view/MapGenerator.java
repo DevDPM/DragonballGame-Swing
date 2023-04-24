@@ -19,14 +19,14 @@ public class MapGenerator extends JFrame {
         this.setFocusable(true);
         this.addKeyListener(Kickstarter.getInstanceOf(MG_Controller.class));
 
-//        JPanel panelLeft = new JPanel();
-//            panelLeft.setPreferredSize(new Dimension(300,100));
-//            panelLeft.setLayout(new BorderLayout());
-//            panelLeft.addKeyListener(Kickstarter.getInstanceOf(MG_Controller.class));
-//
-//            panelLeft.add(Kickstarter.getInstanceOf(SelectedPanel.class), BorderLayout.NORTH);
-//            panelLeft.add(Kickstarter.getInstanceOf(OptionPanel.class), BorderLayout.CENTER);
-//        this.add(panelLeft, BorderLayout.WEST);
+        JPanel panelLeft = new JPanel();
+            panelLeft.setPreferredSize(new Dimension(300,100));
+            panelLeft.setLayout(new BorderLayout());
+            panelLeft.addKeyListener(Kickstarter.getInstanceOf(MG_Controller.class));
+
+            panelLeft.add(Kickstarter.getInstanceOf(SelectedPanel.class), BorderLayout.NORTH);
+            panelLeft.add(Kickstarter.getInstanceOf(OptionPanel.class), BorderLayout.CENTER);
+        this.add(panelLeft, BorderLayout.WEST);
 
 
         this.add(Kickstarter.getInstanceOf(ViewPanel.class), BorderLayout.CENTER);

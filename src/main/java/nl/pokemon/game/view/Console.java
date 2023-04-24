@@ -36,7 +36,7 @@ public class Console extends JFrame {
 
 
         PlayerService user = Kickstarter.getInstanceOf(PlayerService.class);
-
+        FullMap.bootstrapFullMap();
         TilesetImageContainer.bootstrap();
         TilesetImageContainer.printSQMList();
         bootstrap();
@@ -44,41 +44,39 @@ public class Console extends JFrame {
         ViewMap view = Kickstarter.getInstanceOf(ViewMap.class);
         ClientViewMap clientViewMap = Kickstarter.getInstanceOf(ClientViewMap.class);
 
-        clientViewMap.updateView();
+        Map<Integer, Map<AreaType, GridMap>> fullMap = view.getViewMap();
+        List<Integer> elevations = new ArrayList<>(fullMap.keySet());
+        Collections.reverse(elevations);
 
-            Map<Integer, Map<AreaType, GridMap>> fullMap = view.getViewMap();
-            List<Integer> elevations = new ArrayList<>(fullMap.keySet());
-            Collections.reverse(elevations);
+        for (int elevation : elevations) {
+            Map<AreaType, GridMap> layerMap = view.getViewMap().get(elevation);
+            List<AreaType> areaTypes = new ArrayList<>(layerMap.keySet());
+            Collections.sort(areaTypes);
 
-            for (int elevation : elevations) {
-                Map<AreaType, GridMap> layerMap = view.getViewMap().get(elevation);
-                List<AreaType> areaTypes = new ArrayList<>(layerMap.keySet());
-                Collections.sort(areaTypes);
-
-                for (AreaType areaType : areaTypes) {
-                    GridMap areaMap = layerMap.get(areaType);
-                    for (int y = areaMap.getGridMap()[0].length-1; y >= 0; y--) {
-                        for (int x = areaMap.getGridMap().length-1; x >= 0; x--) {
-                            BaseSQM sqm = areaMap.getGridMap()[y][x];
-                            sqm.setVisible(false);
-                            if (elevation == user.getPlayerZ())
-                                sqm.setVisible(true);
-                            this.add(sqm);
-                        }
+            for (AreaType areaType : areaTypes) {
+                GridMap areaMap = layerMap.get(areaType);
+                for (int y = areaMap.getGridMap()[0].length-1; y >= 0; y--) {
+                    for (int x = areaMap.getGridMap().length-1; x >= 0; x--) {
+                        BaseSQM sqm = areaMap.getGridMap()[y][x];
+                        sqm.setVisible(false);
+                        if (elevation == user.getPlayerZ())
+                            sqm.setVisible(true);
+                        this.add(sqm);
                     }
                 }
             }
+        }
+        clientViewMap.updateView(user.getPlayerZ());
 
         this.setVisible(true);
     }
 
     private void bootstrap() {
-        FullMap.deserializeJsonMapToIntermediate();
         User user = new User();
         user.setId(1);
         user.setX(5);
         user.setY(5);
-        user.setZ(-1);
+        user.setZ(1);
         user.setBaseEntity(new Ash());
         user.setAreaType(AreaType.PLAYER_BOTTOM);
 
