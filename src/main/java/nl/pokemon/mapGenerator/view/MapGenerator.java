@@ -1,6 +1,5 @@
 package nl.pokemon.mapGenerator.view;
 
-import nl.pokemon.game.util.TilesetImageContainer;
 import nl.pokemon.mapGenerator.controller.MG_Controller;
 import org.dpmFramework.Kickstarter;
 
@@ -13,8 +12,8 @@ public class MapGenerator extends JFrame {
 
         this.setTitle("Pokemon Map Generator!");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setResizable(false);
-        this.setSize(1200, 1200);
+//        this.setResizable(false);
+        this.setSize(1300, 1000);
         this.setLocationRelativeTo(null);
         this.setLayout(new BorderLayout());
         this.setFocusable(true);
@@ -25,7 +24,6 @@ public class MapGenerator extends JFrame {
             panelLeft.setLayout(new BorderLayout());
             panelLeft.addKeyListener(Kickstarter.getInstanceOf(MG_Controller.class));
 
-            panelLeft.add(Kickstarter.getInstanceOf(SelectedPanel.class), BorderLayout.NORTH);
             panelLeft.add(Kickstarter.getInstanceOf(OptionPanel.class), BorderLayout.CENTER);
         this.add(panelLeft, BorderLayout.WEST);
 

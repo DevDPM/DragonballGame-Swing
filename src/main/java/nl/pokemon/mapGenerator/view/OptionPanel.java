@@ -4,6 +4,7 @@ import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.util.TilesetImageContainer;
 import nl.pokemon.mapGenerator.model.View.MG_ViewMap;
+import nl.pokemon.mapGenerator.service.MG_ViewService;
 import nl.pokemon.mapGenerator.util.JsonSerialize;
 import nl.pokemon.mapGenerator.util.MapConverter;
 import org.dpmFramework.annotation.Inject;
@@ -24,10 +25,11 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class OptionPanel extends JPanel {
 
     @Inject
-    ViewPanel viewPanel;
+    MG_ViewService viewService;
 
-    @Inject
-    MG_ViewMap viewMap;
+    @Inject(name = "fullMap")
+    MG_ViewMap fullMap;
+
 
     private int currentZ = 1;
     private AreaType curentAreaType = AreaType.PLAYER_TOP;
@@ -49,7 +51,7 @@ public class OptionPanel extends JPanel {
                     public void actionPerformed(ActionEvent e) {
                         int newZ = currentZ+1;
                         if (newZ <= MG_ViewMap.MAX_Z) {
-                            viewPanel.changeElevation(newZ);
+                            viewService.changeElevation(newZ);
                             currentZ = newZ;
                             elevationLevel.setText(elevationLevelText + currentZ);
                         }
@@ -68,7 +70,7 @@ public class OptionPanel extends JPanel {
             public void actionPerformed(ActionEvent e) {
                 int newZ = currentZ-1;
                 if (newZ >= MG_ViewMap.START_Z) {
-                    viewPanel.changeElevation(newZ);
+                    viewService.changeElevation(newZ);
                     currentZ = newZ;
                     elevationLevel.setText(elevationLevelText + currentZ);
                 }
@@ -93,7 +95,7 @@ public class OptionPanel extends JPanel {
                 @Override
                 public void actionPerformed(ActionEvent e) {
                     curentAreaType = areaType;
-                    viewPanel.changeAreaType(areaType);
+                    viewService.changeAreaType(areaType);
                     AreaTypeLevel.setText(AreaTypeLevelText + curentAreaType);
                     lastSelectedSqmId = 0;
                     repaintButtons();
@@ -112,7 +114,7 @@ public class OptionPanel extends JPanel {
         saveButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                JsonSerialize.serializeFullMapToJson(MapConverter.convertBaseSQMMapToIntMap(viewMap.getViewMap()));
+                JsonSerialize.serializeFullMapToJson(MapConverter.convertBaseSQMMapToIntMap(fullMap.getViewMap()));
             }
         });
         this.add(saveButton);

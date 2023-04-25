@@ -102,7 +102,7 @@ public class TilesetImageContainer {
                 String fileStringName = elevationFile.getName();
 
                 ImageIcon icon;
-                BaseSQM sqm = new MapSQM();
+                BaseSQM sqm = new LowTerrainSQM();
 
                 icon = new ImageIcon(elevationFile.getPath());
                 sqm.setSqmSizeX((int) Math.ceil((1.0*icon.getIconWidth())/(1.0*BaseSQM.SQM_PIXEL_WIDTH_X)));

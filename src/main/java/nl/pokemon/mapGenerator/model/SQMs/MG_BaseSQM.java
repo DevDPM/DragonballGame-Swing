@@ -12,6 +12,9 @@ public abstract class MG_BaseSQM extends JButton implements ActionListener {
     private int indexY;
     private ImageIcon imageIcon;
 
+    private int coordinateX;
+    private int coordinateY;
+
     private int sqmSizeX = 1;
     private int sqmSizeY = 1;
 
@@ -129,5 +132,19 @@ public abstract class MG_BaseSQM extends JButton implements ActionListener {
         this.areaType = areaType;
     }
 
+    public int getCoordinateX() {
+        return coordinateX;
+    }
 
+    public void setCoordinateX(int coordinateX) {
+        this.coordinateX = coordinateX;
+    }
+
+    public int getCoordinateY() {
+        return coordinateY;
+    }
+
+    public void setCoordinateY(int coordinateY) {
+        this.coordinateY = coordinateY;
+    }
 }

@@ -16,6 +16,8 @@ public final class MG_GridMap {
             for (int x = 0; x < gridMap.length; x++) {
                 MG_BaseSQM sqm = new Editable_SQM();
                 sqm.addActionListener(sqm);
+                sqm.setCoordinateX(x);
+                sqm.setCoordinateY(y);
                 sqm.setIndexX(x);
                 sqm.setIndexY(y);
                 sqm.updateSQM();

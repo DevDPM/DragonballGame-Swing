@@ -3,7 +3,6 @@ package nl.pokemon.game.service;
 import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
-import nl.pokemon.game.model.Elevatable;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.SQMs.MapSQM;
 import nl.pokemon.game.model.View.GridMap;
@@ -51,9 +50,10 @@ public class MoveService {
         }
 
         playerService.setWalkingImage(direction);
+        clientViewMap.adjustPlayerToTopLayerByElevation(direction, player);
+        clientViewMap.adjustPlayerToTopLayerByTerrain(direction, player);
         clientViewMap.updateView();
         setPixelMovement(direction);
-        adjustForElevation(direction, player);
 
         performMovement(direction);
     }
@@ -99,6 +99,8 @@ public class MoveService {
         fullMapManager.moveUserByDirection(playerService.getPlayerById(1), movedDirection.get());
 
         if (moveStack.isEmpty()) {
+            clientViewMap.adjustPlayerToTopLayerByElevation(movedDirection.get(), playerService.getPlayerById(1));
+            clientViewMap.adjustPlayerToTopLayerByTerrain(movedDirection.get(), playerService.getPlayerById(1));
                 stopMovement(movedDirection, actionEvent);
         } else {
             Direction nextDirection = moveStack.pop();
@@ -106,7 +108,8 @@ public class MoveService {
             if (!fullMapManager.isWalkableSQM(playerService.getPlayerById(1), nextDirection)) {
                 stopMovement(movedDirection, actionEvent);
             } else {
-                adjustForElevation(nextDirection, playerService.getPlayerById(1));
+                clientViewMap.adjustPlayerToTopLayerByElevation(nextDirection, playerService.getPlayerById(1));
+                clientViewMap.adjustPlayerToTopLayerByTerrain(nextDirection, playerService.getPlayerById(1));
                 playerService.setWalkingImage(nextDirection);
                 clientViewMap.updateView();
                 pixelCounter.set(0);
@@ -114,13 +117,6 @@ public class MoveService {
                 setPixelMovement(movedDirection.get());
 
             }
-        }
-    }
-
-    private void adjustForElevation(Direction direction, User player) {
-        Elevatable elv;
-        if ((elv = fullMapManager.isElevatingSQM(player, direction)) != null) {
-            fullMapManager.moveToTopLayer(player);
         }
     }
 

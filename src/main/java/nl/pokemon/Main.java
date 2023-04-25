@@ -7,9 +7,9 @@ import org.dpmFramework.Kickstarter;
 public class Main {
     public static void main(String[] args) {
         Kickstarter.ignite(Main.class);
-
-//        new Console();
-        new MapGenerator();
+//        Kickstarter.printContext();
+        new Console();
+//        new MapGenerator();
 
     }
 }

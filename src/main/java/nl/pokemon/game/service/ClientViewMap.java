@@ -2,6 +2,8 @@ package nl.pokemon.game.service;
 
 import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
+import nl.pokemon.game.enums.Direction;
+import nl.pokemon.game.model.Elevatable;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.SQMs.VoidSQM;
 import nl.pokemon.game.model.View.GridMap;
@@ -24,13 +26,13 @@ public class ClientViewMap implements PropertyChangeListener {
     SQMService sqmService;
 
     @Inject
-    MoveService moveService;
-
-    @Inject
     PlayerService playerService;
 
     @Inject
     VoidSQM voidSQM;
+
+    @Inject
+    FullMapManager fullMapManager;
 
     public void updateView() {
         updateView(null);
@@ -81,17 +83,40 @@ public class ClientViewMap implements PropertyChangeListener {
                         changeSQMOffsetByZ(z, viewSQM, START_Z_MAP);
 
                         if (visibilityUntilZ != null) {
-                            if (z <= visibilityUntilZ) {
-                                setVisibility(viewSQM, true);
-                            } else {
-                                setVisibility(viewSQM, false);
-                            }
+                            setVisibility(viewSQM, z <= visibilityUntilZ);
                         }
                         viewSQM.updateSQM();
 
                     }
                 }
             }
+        }
+    }
+
+    public void adjustPlayerToTopLayerByElevation(Direction direction, User player) {
+        Elevatable elv = fullMapManager.isElevatingSQM(player, direction);
+        if (elv != null) {
+            fullMapManager.moveToTopLayer(player);
+            return;
+        }
+
+    }
+
+    public void adjustPlayerToTopLayerByTerrain(Direction direction, User player) {
+        BaseSQM stepOnbaseSQM = fullMapManager.isWalkableTerrain(player, direction);
+        BaseSQM currentlyOnbaseSQM = fullMapManager.isWalkableTerrain(player);
+        if (stepOnbaseSQM != null || currentlyOnbaseSQM != null) {
+            fullMapManager.moveToTopLayer(player);
+            return;
+        }
+    }
+
+    public void adjustPlayerToTopLayerByTerrain(User player) {
+        BaseSQM currentlyOnbaseSQM = fullMapManager.isWalkableTerrain(player);
+        if (currentlyOnbaseSQM != null) {
+            fullMapManager.moveToTopLayer(player);
+        } else {
+            fullMapManager.moveToBottomLayer(player);
         }
     }
 
@@ -120,16 +145,6 @@ public class ClientViewMap implements PropertyChangeListener {
 
     public Map<AreaType, GridMap> getViewGridMapLayerLevel(int z) {
         return getFullViewMap().get(z);
-    }
-
-    public GridMap getViewGridMap(AreaType areaType, int z) {
-        return getViewGridMapLayerLevel(z).get(areaType);
-    }
-
-    public BaseSQM getViewSQM(AreaType areaType, int x, int y, int z) {
-        if (x < 0 || y < 0 || x >= GridMap.MAX_X || y >= GridMap.MAX_Y)
-            return null;
-        return getViewGridMap(areaType, z).getGridMap()[y][x];
     }
 
     @Override
