@@ -1,4 +1,4 @@
-package nl.pokemon.game.model.View;
+package nl.pokemon.game.model.clientViewMap;
 
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.model.SQMs.BaseSQM;

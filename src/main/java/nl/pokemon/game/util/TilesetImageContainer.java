@@ -51,6 +51,7 @@ public class TilesetImageContainer {
                 if (isNatureImage(SQMMap, fileName)) continue;
                 if (isTreeImage(SQMMap, fileName, area)) continue;
                 if (isUnwalkableImage(SQMMap, fileName, area)) continue;
+                if (isGrabbableImage(SQMMap, fileName)) continue;
 
                 BaseSQM sqm = SQMFactory.getSQMBySurface(area);
                 ImageIcon icon = new ImageIcon(fileName.getPath());
@@ -58,32 +59,52 @@ public class TilesetImageContainer {
                 sqm.setSqmSizeY(icon.getIconHeight()/BaseSQM.SQM_PIXEL_HEIGHT_Y);
                 sqm.setImageIcon(icon);
                 sqm.updateSQM();
-                SQMMap.put(Integer.valueOf(fileName.getName().replaceAll("\\D+","")), sqm);
+
+                int id = Integer.parseInt(fileName.getName().replaceAll("\\D+",""));
+                sqm.setSqmId(id);
+                SQMMap.put(id, sqm);
             }
             SQMByArea.put(area, SQMMap);
         }
     }
 
-    private static boolean isUnwalkableImage(Map<Integer, BaseSQM> SQMMap, File fileName, AreaType area) {
-        if (!fileName.getName().contains(".") && fileName.getName().equals("unwalkable")) {
+    private static void insertFileImageIntoSqmContainer(File file, BaseSQM sqm, Map<Integer, BaseSQM> SQMMap) {
 
-            File elevationFilePath = new File(fileName.getPath());
-            File[] elevationFileArray = elevationFilePath.listFiles();
+        String fileStringName = file.getName();
+        ImageIcon icon = new ImageIcon(file.getPath());
 
+        sqm.setSqmSizeX((int) Math.ceil((1.0 * icon.getIconWidth()) / (1.0 * BaseSQM.SQM_PIXEL_WIDTH_X)));
+        sqm.setSqmSizeY((int) Math.ceil((1.0 * icon.getIconHeight()) / (1.0 * BaseSQM.SQM_PIXEL_HEIGHT_Y)));
+        sqm.setImageIcon(icon);
+
+        int id = Integer.parseInt(fileStringName.substring(0, fileStringName.indexOf("_")).replaceAll("\\D+", ""));
+        sqm.setSqmId(id);
+
+        SQMMap.put(id, sqm);
+    }
+
+    private static boolean isGrabbableImage(Map<Integer, BaseSQM> SQMMap, File fileName) {
+        if (!fileName.getName().contains(".") && fileName.getName().equals("grabbable")) {
+            File[] elevationFileArray = getFiles(fileName);
             assert elevationFileArray != null;
             SQMMap.put(0, new MapSQM());
             for (File elevationFile : elevationFileArray) {
-                String fileStringName = elevationFile.getName();
+                BaseSQM sqm = new ItemSQM();
+                insertFileImageIntoSqmContainer(elevationFile, sqm, SQMMap);
+            }
+            return true;
+        }
+        return false;
+    }
 
-                ImageIcon icon;
+    private static boolean isUnwalkableImage(Map<Integer, BaseSQM> SQMMap, File fileName, AreaType area) {
+        if (!fileName.getName().contains(".") && fileName.getName().equals("unwalkable")) {
+            File[] elevationFileArray = getFiles(fileName);
+            assert elevationFileArray != null;
+            SQMMap.put(0, new MapSQM());
+            for (File elevationFile : elevationFileArray) {
                 BaseSQM sqm = SQMFactory.getSQMBySurface(area);
-
-                icon = new ImageIcon(elevationFile.getPath());
-                sqm.setSqmSizeX((int) Math.ceil((1.0*icon.getIconWidth())/(1.0*BaseSQM.SQM_PIXEL_WIDTH_X)));
-                sqm.setSqmSizeY((int) Math.ceil((1.0*icon.getIconHeight())/(1.0*BaseSQM.SQM_PIXEL_HEIGHT_Y)));
-                sqm.setImageIcon(icon);
-                int id = Integer.parseInt(fileStringName.substring(0, fileStringName.indexOf("_")).replaceAll("\\D+",""));
-                SQMMap.put(id, sqm);
+                insertFileImageIntoSqmContainer(elevationFile, sqm, SQMMap);
             }
             return true;
         }
@@ -92,24 +113,12 @@ public class TilesetImageContainer {
 
     private static boolean isNatureImage(Map<Integer, BaseSQM> SQMMap, File fileName) {
         if (!fileName.getName().contains(".") && fileName.getName().equals("walkable")) {
-
-            File elevationFilePath = new File(fileName.getPath());
-            File[] elevationFileArray = elevationFilePath.listFiles();
-
+            File[] elevationFileArray = getFiles(fileName);
             assert elevationFileArray != null;
             SQMMap.put(0, new MapSQM());
             for (File elevationFile : elevationFileArray) {
-                String fileStringName = elevationFile.getName();
-
-                ImageIcon icon;
                 BaseSQM sqm = new LowTerrainSQM();
-
-                icon = new ImageIcon(elevationFile.getPath());
-                sqm.setSqmSizeX((int) Math.ceil((1.0*icon.getIconWidth())/(1.0*BaseSQM.SQM_PIXEL_WIDTH_X)));
-                sqm.setSqmSizeY((int) Math.ceil((1.0*icon.getIconHeight())/(1.0*BaseSQM.SQM_PIXEL_HEIGHT_Y)));
-                sqm.setImageIcon(icon);
-                int id = Integer.parseInt(fileStringName.substring(0, fileStringName.indexOf("_")).replaceAll("\\D+",""));
-                SQMMap.put(id, sqm);
+                insertFileImageIntoSqmContainer(elevationFile, sqm, SQMMap);
             }
             return true;
         }
@@ -118,24 +127,12 @@ public class TilesetImageContainer {
 
     private static boolean isTreeImage(Map<Integer, BaseSQM> SQMMap, File fileName, AreaType area) {
         if (!fileName.getName().contains(".") && fileName.getName().equals("tree")) {
-
-            File elevationFilePath = new File(fileName.getPath());
-            File[] elevationFileArray = elevationFilePath.listFiles();
-
+            File[] elevationFileArray = getFiles(fileName);
             assert elevationFileArray != null;
             SQMMap.put(0, new MapSQM());
             for (File elevationFile : elevationFileArray) {
-                String fileStringName = elevationFile.getName();
-
-                ImageIcon icon;
                 BaseSQM sqm = SQMFactory.getSQMBySurface(area);
-
-                icon = new ImageIcon(elevationFile.getPath());
-                sqm.setSqmSizeX((int) Math.ceil((1.0*icon.getIconWidth())/(1.0*BaseSQM.SQM_PIXEL_WIDTH_X)));
-                sqm.setSqmSizeY((int) Math.ceil((1.0*icon.getIconHeight())/(1.0*BaseSQM.SQM_PIXEL_HEIGHT_Y)));
-                sqm.setImageIcon(icon);
-                int id = Integer.parseInt(fileStringName.substring(0, fileStringName.indexOf("_")).replaceAll("\\D+",""));
-                SQMMap.put(id, sqm);
+                insertFileImageIntoSqmContainer(elevationFile, sqm, SQMMap);
             }
             return true;
         }
@@ -144,24 +141,12 @@ public class TilesetImageContainer {
 
     private static boolean isHouseImage(Map<Integer, BaseSQM> SQMMap, File fileName, AreaType area) {
         if (!fileName.getName().contains(".") && fileName.getName().equals("house")) {
-
-            File elevationFilePath = new File(fileName.getPath());
-            File[] elevationFileArray = elevationFilePath.listFiles();
-
+            File[] elevationFileArray = getFiles(fileName);
             assert elevationFileArray != null;
             SQMMap.put(0, new MapSQM());
             for (File elevationFile : elevationFileArray) {
-                String fileStringName = elevationFile.getName();
-
-                ImageIcon icon;
                 BaseSQM sqm = SQMFactory.getSQMBySurface(area);
-
-                icon = new ImageIcon(elevationFile.getPath());
-                sqm.setSqmSizeX((int) Math.ceil((1.0*icon.getIconWidth())/(1.0*BaseSQM.SQM_PIXEL_WIDTH_X)));
-                sqm.setSqmSizeY((int) Math.ceil((1.0*icon.getIconHeight())/(1.0*BaseSQM.SQM_PIXEL_HEIGHT_Y)));
-                sqm.setImageIcon(icon);
-                int id = Integer.parseInt(fileStringName.substring(0, fileStringName.indexOf("_")).replaceAll("\\D+",""));
-                SQMMap.put(id, sqm);
+                insertFileImageIntoSqmContainer(elevationFile, sqm, SQMMap);
             }
             return true;
         }
@@ -170,34 +155,30 @@ public class TilesetImageContainer {
 
     private static boolean isElevationImage(Map<Integer, BaseSQM> SQMMap, File fileName) {
         if (!fileName.getName().contains(".") && fileName.getName().equals("elevate")) {
-
-            File elevationFilePath = new File(fileName.getPath());
-            File[] elevationFileArray = elevationFilePath.listFiles();
-
+            File[] elevationFileArray = getFiles(fileName);
             assert elevationFileArray != null;
             SQMMap.put(0, new MapSQM());
             for (File elevationFile : elevationFileArray) {
-                String fileStringName = elevationFile.getName();
-
                 BaseSQM sqm;
-                ImageIcon icon;
                 if (elevationFile.getName().contains("up")) {
                     sqm = new FloorUpSQM();
                 } else {
                     sqm = new FloorDownSQM();
                 }
-
-                icon = new ImageIcon(elevationFile.getPath());
-                sqm.setSqmSizeX((int) Math.ceil((1.0*icon.getIconWidth())/(1.0*BaseSQM.SQM_PIXEL_WIDTH_X)));
-                sqm.setSqmSizeY((int) Math.ceil((1.0*icon.getIconHeight())/(1.0*BaseSQM.SQM_PIXEL_HEIGHT_Y)));
-                sqm.setImageIcon(icon);
-                int id = Integer.parseInt(fileStringName.substring(0, fileStringName.indexOf("_")).replaceAll("\\D+",""));
-                SQMMap.put(id, sqm);
+                insertFileImageIntoSqmContainer(elevationFile, sqm, SQMMap);
             }
             return true;
         }
         return false;
     }
+
+    private static File[] getFiles(File fileName) {
+        File elevationFilePath = new File(fileName.getPath());
+        File[] elevationFileArray = elevationFilePath.listFiles();
+        return elevationFileArray;
+    }
+
+
 
     public static Map<Integer, BaseSQM> getSQMByArea(AreaType area) {
         return SQMByArea.get(area);

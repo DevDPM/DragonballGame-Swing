@@ -1,4 +1,4 @@
-package nl.pokemon.game.model.View;
+package nl.pokemon.game.model.clientViewMap;
 
 import nl.pokemon.game.enums.AreaType;
 
@@ -14,23 +14,23 @@ public class ViewMap {
 
     public ViewMap() {
         for (int z = START_Z; z <= MAX_Z; z++) {
-            viewMap.putAll(createGridLayerFloor(z));
+            viewMap.putAll(createElevationLayer(z));
         }
     }
 
-    private Map<Integer, Map<AreaType, GridMap>> createGridLayerFloor(int z) {
-        Map<Integer, Map<AreaType, GridMap>> gridLayerFloor = new HashMap<>();
-        gridLayerFloor.put(z, createGridLayer());
-        return gridLayerFloor;
+    private Map<Integer, Map<AreaType, GridMap>> createElevationLayer(int z) {
+        Map<Integer, Map<AreaType, GridMap>> elevationLayer = new HashMap<>();
+        elevationLayer.put(z, createAreaLayer());
+        return elevationLayer;
     }
 
-    private Map<AreaType, GridMap> createGridLayer() {
-        Map<AreaType, GridMap> gridLayer = new HashMap<>();
+    private Map<AreaType, GridMap> createAreaLayer() {
+        Map<AreaType, GridMap> areaLayer = new HashMap<>();
 
         for (AreaType area : AreaType.values()) {
-            gridLayer.put(area, new GridMap(area));
+            areaLayer.put(area, new GridMap(area));
         }
-        return gridLayer;
+        return areaLayer;
     }
 
     public Map<Integer, Map<AreaType, GridMap>> getViewMap() {

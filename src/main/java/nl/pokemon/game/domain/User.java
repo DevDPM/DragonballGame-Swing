@@ -3,10 +3,14 @@ package nl.pokemon.game.domain;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.model.players.BaseEntity;
 
+import java.time.LocalDateTime;
+
 public class User {
 
     private int id;
     private String name;
+    private int points;
+    private LocalDateTime time;
 
     private BaseEntity baseEntity;
 
@@ -69,5 +73,21 @@ public class User {
 
     public void setBaseEntity(BaseEntity baseEntity) {
         this.baseEntity = baseEntity;
+    }
+
+    public int getPoints() {
+        return points;
+    }
+
+    public void setPoints(int points) {
+        this.points = points;
+    }
+
+    public LocalDateTime getTime() {
+        return time;
+    }
+
+    public void setTime(LocalDateTime time) {
+        this.time = time;
     }
 }

@@ -6,9 +6,10 @@ import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.players.Ash;
-import nl.pokemon.game.model.View.GridMap;
-import nl.pokemon.game.model.View.ViewMap;
+import nl.pokemon.game.model.clientViewMap.GridMap;
+import nl.pokemon.game.model.clientViewMap.ViewMap;
 import nl.pokemon.game.repository.UserRepository;
+import nl.pokemon.game.service.DragonBallService;
 import nl.pokemon.game.service.FullMapManager;
 import nl.pokemon.game.service.PlayerService;
 import nl.pokemon.game.service.ClientViewMap;
@@ -91,7 +92,8 @@ public class Console extends JFrame {
         Kickstarter.getInstanceOf(UserRepository.class).getUserDataBase().put(user1.getId(), user1);
         FullMapManager fullMapManager = Kickstarter.getInstanceOf(FullMapManager.class);
 
-        fullMapManager.moveUserByDirection(user, Direction.EAST);
-        fullMapManager.moveUserByDirection(user1, Direction.EAST);
+        fullMapManager.moveUser(user, Direction.EAST);
+        fullMapManager.moveUser(user1, Direction.EAST);
+        Kickstarter.getInstanceOf(DragonBallService.class).generateLocationForDragonBall();
     }
 }

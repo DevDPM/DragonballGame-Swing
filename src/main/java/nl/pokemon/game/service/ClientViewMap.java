@@ -6,8 +6,8 @@ import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.Elevatable;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.SQMs.VoidSQM;
-import nl.pokemon.game.model.View.GridMap;
-import nl.pokemon.game.model.View.ViewMap;
+import nl.pokemon.game.model.clientViewMap.GridMap;
+import nl.pokemon.game.model.clientViewMap.ViewMap;
 import nl.pokemon.game.util.FullMap;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
@@ -94,7 +94,7 @@ public class ClientViewMap implements PropertyChangeListener {
     }
 
     public void adjustPlayerToTopLayerByElevation(Direction direction, User player) {
-        Elevatable elv = fullMapManager.isElevatingSQM(player, direction);
+        Elevatable elv = sqmService.isElevatingSQM(player, direction);
         if (elv != null) {
             fullMapManager.moveToTopLayer(player);
         }
@@ -102,15 +102,15 @@ public class ClientViewMap implements PropertyChangeListener {
     }
 
     public void adjustPlayerToTopLayerByTerrain(Direction direction, User player) {
-        BaseSQM stepOnbaseSQM = fullMapManager.isWalkableTerrain(player, direction);
-        BaseSQM currentlyOnbaseSQM = fullMapManager.isWalkableTerrain(player);
+        BaseSQM stepOnbaseSQM = sqmService.isWalkableTerrain(player, direction);
+        BaseSQM currentlyOnbaseSQM = sqmService.isWalkableTerrain(player);
         if (stepOnbaseSQM != null || currentlyOnbaseSQM != null) {
             fullMapManager.moveToTopLayer(player);
         }
     }
 
     public void adjustPlayerToTopLayerByTerrain(User player) {
-        BaseSQM currentlyOnbaseSQM = fullMapManager.isWalkableTerrain(player);
+        BaseSQM currentlyOnbaseSQM = sqmService.isWalkableTerrain(player);
         if (currentlyOnbaseSQM != null) {
             fullMapManager.moveToTopLayer(player);
         } else {

@@ -34,11 +34,6 @@ public class Ash extends BaseEntity{
     }
 
     @Override
-    public int getObjectNumber() {
-        return 0;
-    }
-
-    @Override
     public boolean isNotWalkable() {
         return true;
     }

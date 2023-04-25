@@ -5,10 +5,6 @@ import nl.pokemon.game.model.Elevatable;
 
 public class FloorDownSQM extends BaseSQM implements Elevatable {
 
-    @Override
-    public int getObjectNumber() {
-        return 0;
-    }
 
     @Override
     public boolean isNotWalkable() {
@@ -21,7 +17,7 @@ public class FloorDownSQM extends BaseSQM implements Elevatable {
     }
 
     @Override
-    public int getElevateZ() {
+    public int incrementElevationNumber() {
         return -1;
     }
 }

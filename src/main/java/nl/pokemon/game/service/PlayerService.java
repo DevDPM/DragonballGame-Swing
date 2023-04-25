@@ -107,4 +107,9 @@ public class PlayerService {
         user.setZ(z);
         user.setAreaType(areaType);
     }
+
+    public void addPoint(int receivePoints) {
+        User user = userRepository.getUserDataBase().get(1);
+        user.setPoints(user.getPoints()+receivePoints);
+    }
 }

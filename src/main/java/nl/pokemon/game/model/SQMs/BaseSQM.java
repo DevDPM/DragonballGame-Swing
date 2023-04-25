@@ -22,7 +22,8 @@ public abstract class BaseSQM extends JLabel {
     private int OFFSET_PIXEL_X = -120;
     private int OFFSET_PIXEL_Y = -170;
 
-    public abstract int getObjectNumber();
+    private int sqmId;
+
     public abstract boolean isNotWalkable();
     public abstract AreaType getAreaType();
 
@@ -95,11 +96,15 @@ public abstract class BaseSQM extends JLabel {
         this.pixelY = pixel;
     }
 
-    public void setOFFSET_PIXEL_X(int OFFSET_PIXEL_X) {
-        this.OFFSET_PIXEL_X = OFFSET_PIXEL_X;
-    }
-
     public void setOFFSET_PIXEL_Y(int OFFSET_PIXEL_Y) {
         this.OFFSET_PIXEL_Y = OFFSET_PIXEL_Y;
+    }
+
+    public int getSqmId() {
+        return sqmId;
+    }
+
+    public void setSqmId(int sqmId) {
+        this.sqmId = sqmId;
     }
 }

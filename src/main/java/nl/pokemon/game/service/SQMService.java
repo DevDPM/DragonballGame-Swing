@@ -1,9 +1,13 @@
 package nl.pokemon.game.service;
 
+import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.Elevatable;
 import nl.pokemon.game.model.SQMs.BaseSQM;
+import nl.pokemon.game.model.SQMs.ItemSQM;
+import nl.pokemon.game.model.SQMs.LowTerrainSQM;
+import nl.pokemon.game.util.FullMap;
 import nl.pokemon.game.util.TilesetImageContainer;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
@@ -17,9 +21,72 @@ public class SQMService {
     @Inject
     FullMapManager fullMapManager;
 
+    @Inject
+    DragonBallService dragonBallService;
+
+    public ItemSQM stepOnDragonBall() {
+        ItemSQM item = dragonBallService.isDragonBallSQMOrNull(playerService.getPlayerById(1));
+        if (item != null) {
+            return item;
+        }
+        return null;
+    }
 
     public BaseSQM getSQMByIntAndArea(AreaType area, int sqmId) {
         return TilesetImageContainer.getSQMByIntAndArea(area, sqmId);
+    }
+
+    public BaseSQM isWalkableTerrain(User user, Direction direction) {
+        return isWalkableTerrain(user.getX() + direction.getX(), user.getY() + direction.getY(), user.getZ());
+    }
+
+    public BaseSQM isWalkableTerrain(User user) {
+        return isWalkableTerrain(user.getX(), user.getY(), user.getZ());
+    }
+
+    private BaseSQM isWalkableTerrain(int x, int y, int z) {
+        if (x < 0 || y < 0 || x >= FullMap.fullMapWidth() || y >= FullMap.fullMapHeight())
+            return null;
+
+        BaseSQM baseSQM = fullMapManager.getBaseSQMByPosition(AreaType.TERRAIN, x, y, z);
+        if (baseSQM instanceof LowTerrainSQM && !baseSQM.isNotWalkable()) {
+            return baseSQM;
+        }
+
+        return null;
+    }
+
+    public Elevatable isElevatingSQM(User user, Direction direction) {
+        return isElevatingSQM(user.getX() + direction.getX(), user.getY() + direction.getY(), user.getZ());
+    }
+
+    private Elevatable isElevatingSQM(int x, int y, int z) {
+        if (x < 0 || y < 0 || x >= FullMap.fullMapWidth() || y >= FullMap.fullMapHeight())
+            return null;
+
+        for (AreaType areaType : AreaType.values()) {
+            BaseSQM baseSQM = fullMapManager.getBaseSQMByPosition(areaType, x, y, z);
+            if (baseSQM instanceof Elevatable elevation)
+                return elevation;
+        }
+        return null;
+    }
+
+    public boolean isWalkableSQM(User user, Direction direction) {
+        return isWalkableSQM(user.getX() + direction.getX(), user.getY() + direction.getY(), user.getZ());
+    }
+
+    private boolean isWalkableSQM(int x, int y, int z) {
+        if (x < 0 || y < 0 || x >= FullMap.fullMapWidth() || y >= FullMap.fullMapHeight())
+            return false;
+
+        for (AreaType areaType : AreaType.values()) {
+            BaseSQM baseSQM = fullMapManager.getBaseSQMByPosition(areaType, x, y, z);
+
+            if (baseSQM.isNotWalkable())
+                return false;
+        }
+        return true;
     }
 
     public boolean isNotWalkable(Direction direction) {

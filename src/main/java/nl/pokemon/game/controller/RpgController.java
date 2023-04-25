@@ -1,11 +1,9 @@
 package nl.pokemon.game.controller;
 
 import nl.pokemon.game.enums.Direction;
-import nl.pokemon.game.service.MoveService;
+import nl.pokemon.game.service.MoveViewMap;
 import org.dpmFramework.annotation.Controller;
 import org.dpmFramework.annotation.Inject;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -16,25 +14,25 @@ public class RpgController implements KeyListener {
 //    private final Logger log = LoggerFactory.getLogger(RpgController.class);
 
     @Inject
-    MoveService moveService;
+    MoveViewMap moveViewMap;
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
 
         boolean validKey;
         validKey = switch (keyEvent.getKeyChar()) {
-            case 'w' -> moveService.addOrUpdateDirection(Direction.NORTH);
-            case 'a' -> moveService.addOrUpdateDirection(Direction.WEST);
-            case 's' -> moveService.addOrUpdateDirection(Direction.SOUTH);
-            case 'd' -> moveService.addOrUpdateDirection(Direction.EAST);
+            case 'w' -> moveViewMap.addOrUpdateDirection(Direction.NORTH);
+            case 'a' -> moveViewMap.addOrUpdateDirection(Direction.WEST);
+            case 's' -> moveViewMap.addOrUpdateDirection(Direction.SOUTH);
+            case 'd' -> moveViewMap.addOrUpdateDirection(Direction.EAST);
             default -> false;
         };
 
-        if (moveService.isNotMoving() && validKey) {
-            moveService.setNotMoving(false);
+        if (moveViewMap.isNotMoving() && validKey) {
+            moveViewMap.setNotMoving(false);
 
-            if (!moveService.getMoveStack().isEmpty())
-                moveService.move(moveService.getMoveStack().pop());
+            if (!moveViewMap.getMoveStack().isEmpty())
+                moveViewMap.move(moveViewMap.getMoveStack().pop());
         }
 
     }

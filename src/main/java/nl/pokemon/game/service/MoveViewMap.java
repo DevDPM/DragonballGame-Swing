@@ -4,8 +4,9 @@ import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.SQMs.BaseSQM;
+import nl.pokemon.game.model.SQMs.ItemSQM;
 import nl.pokemon.game.model.SQMs.MapSQM;
-import nl.pokemon.game.model.View.GridMap;
+import nl.pokemon.game.model.clientViewMap.GridMap;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
@@ -17,9 +18,9 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 @Service
-public class MoveService {
+public class MoveViewMap {
 
-    private final int speedPixelPerIterate = 5; // 50 = max
+    private final int speedPixelPerIterate = 25; // 50 = max
     private final int speedTimerDelay = 10;
 
     private int smoothMovePosX = 0;
@@ -34,6 +35,9 @@ public class MoveService {
     @Inject
     FullMapManager fullMapManager;
 
+    @Inject
+    SQMService sqmService;
+
     Stack<Direction> moveStack = new Stack<>();
     boolean notMoving = true;
 
@@ -42,7 +46,7 @@ public class MoveService {
 
         User player = playerService.getPlayerById(1);
 
-        if (!fullMapManager.isWalkableSQM(player, direction)) {
+        if (!sqmService.isWalkableSQM(player, direction)) {
             playerService.standStill(direction);
             clientViewMap.updateView();
             notMoving = true;
@@ -96,7 +100,7 @@ public class MoveService {
     }
 
     private void finalizeMovement(AtomicReference<Direction> movedDirection, AtomicInteger pixelCounter, ActionEvent actionEvent) {
-        fullMapManager.moveUserByDirection(playerService.getPlayerById(1), movedDirection.get());
+        fullMapManager.moveUser(playerService.getPlayerById(1), movedDirection.get());
 
         if (moveStack.isEmpty()) {
             clientViewMap.adjustPlayerToTopLayerByTerrain(playerService.getPlayerById(1));
@@ -104,7 +108,7 @@ public class MoveService {
         } else {
             Direction nextDirection = moveStack.pop();
 
-            if (!fullMapManager.isWalkableSQM(playerService.getPlayerById(1), nextDirection)) {
+            if (!sqmService.isWalkableSQM(playerService.getPlayerById(1), nextDirection)) {
                 stopMovement(movedDirection, actionEvent);
             } else {
                 clientViewMap.adjustPlayerToTopLayerByElevation(nextDirection, playerService.getPlayerById(1));
