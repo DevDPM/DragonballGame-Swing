@@ -99,9 +99,8 @@ public class MoveService {
         fullMapManager.moveUserByDirection(playerService.getPlayerById(1), movedDirection.get());
 
         if (moveStack.isEmpty()) {
-            clientViewMap.adjustPlayerToTopLayerByElevation(movedDirection.get(), playerService.getPlayerById(1));
-            clientViewMap.adjustPlayerToTopLayerByTerrain(movedDirection.get(), playerService.getPlayerById(1));
-                stopMovement(movedDirection, actionEvent);
+            clientViewMap.adjustPlayerToTopLayerByTerrain(playerService.getPlayerById(1));
+            stopMovement(movedDirection, actionEvent);
         } else {
             Direction nextDirection = moveStack.pop();
 

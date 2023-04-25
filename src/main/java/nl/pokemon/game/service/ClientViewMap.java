@@ -97,7 +97,6 @@ public class ClientViewMap implements PropertyChangeListener {
         Elevatable elv = fullMapManager.isElevatingSQM(player, direction);
         if (elv != null) {
             fullMapManager.moveToTopLayer(player);
-            return;
         }
 
     }
@@ -107,7 +106,6 @@ public class ClientViewMap implements PropertyChangeListener {
         BaseSQM currentlyOnbaseSQM = fullMapManager.isWalkableTerrain(player);
         if (stepOnbaseSQM != null || currentlyOnbaseSQM != null) {
             fullMapManager.moveToTopLayer(player);
-            return;
         }
     }
 
