@@ -19,6 +19,8 @@ import nl.pokemon.game.util.TilesetImageContainer;
 import org.dpmFramework.Kickstarter;
 
 import javax.swing.*;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -42,6 +44,8 @@ public class Console extends JFrame {
         TilesetImageContainer.bootstrap();
         TilesetImageContainer.printSQMList();
         bootstrap();
+
+        this.add(new TimeBox(user.getPlayerById(1)));
 
         ViewMap view = Kickstarter.getInstanceOf(ViewMap.class);
         ClientViewMap clientViewMap = Kickstarter.getInstanceOf(ClientViewMap.class);
@@ -79,6 +83,7 @@ public class Console extends JFrame {
         user.setX(45);
         user.setY(63);
         user.setZ(0);
+        user.setTime(LocalTime.now());
         user.setBaseEntity(new Goku());
         user.setAreaType(AreaType.PLAYER_BOTTOM);
 
