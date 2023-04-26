@@ -8,6 +8,7 @@ import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.SQMs.ConvertToSQM;
 import nl.pokemon.game.model.SQMs.ItemSQM;
 import nl.pokemon.game.util.FullMap;
+import nl.pokemon.game.view.DragonBallCounter;
 import org.dpmFramework.Kickstarter;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
@@ -28,6 +29,9 @@ public class FullMapManager {
 
     @Inject
     DragonBallService dragonBallService;
+
+    @Inject
+    DragonBallCounter dragonBallCounter;
 
     private void init() {
         this.updateElevation = new PropertyChangeSupport(Kickstarter.getInstanceOf(FullMapManager.class));
@@ -66,6 +70,7 @@ public class FullMapManager {
                     playerService.addPoint(itemSQM.receivePoints());
                     FullMap.setNewValueToPosition(AreaType.TERRAIN, newX, newY, currentZ, 0);
                     dragonBallService.generateLocationForDragonBall();
+                    dragonBallCounter.addDragonBall(itemSQM);
                 }
                 updateElevation.firePropertyChange("playerMoved", null, null);
                 return FullMap.setNewValueToPosition(areaType, newX, newY, currentZ, userId);

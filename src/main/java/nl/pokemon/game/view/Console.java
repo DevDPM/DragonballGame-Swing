@@ -46,6 +46,7 @@ public class Console extends JFrame {
         bootstrap();
 
         this.add(new TimeBox(user.getPlayerById(1)));
+        this.add(Kickstarter.getInstanceOf(DragonBallCounter.class));
 
         ViewMap view = Kickstarter.getInstanceOf(ViewMap.class);
         ClientViewMap clientViewMap = Kickstarter.getInstanceOf(ClientViewMap.class);

@@ -4,6 +4,7 @@ import nl.pokemon.game.model.DragonBallContainer;
 import nl.pokemon.game.model.SQMs.VoidSQM;
 import nl.pokemon.game.model.clientViewMap.ViewMap;
 import nl.pokemon.game.repository.UserRepository;
+import nl.pokemon.game.view.DragonBallCounter;
 import org.dpmFramework.annotation.Configurations;
 import org.dpmFramework.annotation.Enable;
 
@@ -24,4 +25,6 @@ public class RpgConfig {
     @Enable
     UserRepository userRepository;
 
+    @Enable
+    DragonBallCounter dragonBallCounter;
 }
