@@ -4,6 +4,7 @@ import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.Elevatable;
+import nl.pokemon.game.model.MapCoordination;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.SQMs.ItemSQM;
 import nl.pokemon.game.model.SQMs.LowTerrainSQM;
@@ -16,56 +17,55 @@ import org.dpmFramework.annotation.Service;
 public class SQMService {
 
     @Inject
-    PlayerService playerService;
-
-    @Inject
     FullMapManager fullMapManager;
 
-    @Inject
-    DragonBallService dragonBallService;
+    public ItemSQM isDragonBallSQMOrNull(User user) {
+        MapCoordination mapCoordination = user.getMapCoordination();
+        MapCoordination newMapCoordination = new MapCoordination(mapCoordination.getX(), mapCoordination.getY(), mapCoordination.getZ(), AreaType.TERRAIN);
 
-    public ItemSQM stepOnDragonBall() {
-        ItemSQM item = dragonBallService.isDragonBallSQMOrNull(playerService.getPlayerById(1));
-        if (item != null) {
+        BaseSQM baseSQM = fullMapManager.getBaseSQMByPosition(newMapCoordination);
+        if (baseSQM instanceof ItemSQM item) {
             return item;
+        } else {
+            return null;
         }
-        return null;
     }
 
-    public BaseSQM getSQMByIntAndArea(AreaType area, int sqmId) {
+    public BaseSQM getSQMByIntAndAreaOrNull(AreaType area, int sqmId) {
         return TilesetImageContainer.getSQMByIntAndArea(area, sqmId);
     }
 
-    public BaseSQM isWalkableTerrain(User user, Direction direction) {
-        return isWalkableTerrain(user.getX() + direction.getX(), user.getY() + direction.getY(), user.getZ());
+    public BaseSQM isWalkableTerrainOrNull(User user) {
+        return isWalkableTerrainOrNull(user.getMapCoordination());
     }
 
-    public BaseSQM isWalkableTerrain(User user) {
-        return isWalkableTerrain(user.getX(), user.getY(), user.getZ());
+    public BaseSQM isWalkableTerrainOrNull(User user, Direction direction) {
+        return isWalkableTerrainOrNull(getMapCoordinationByDirection(user, direction));
     }
 
-    private BaseSQM isWalkableTerrain(int x, int y, int z) {
-        if (x < 0 || y < 0 || x >= FullMap.fullMapWidth() || y >= FullMap.fullMapHeight())
+    private BaseSQM isWalkableTerrainOrNull(MapCoordination mapCoordination) {
+        if (validateMapOutOfRange(mapCoordination))
             return null;
 
-        BaseSQM baseSQM = fullMapManager.getBaseSQMByPosition(AreaType.TERRAIN, x, y, z);
+        MapCoordination newMapCoordination = new MapCoordination(mapCoordination.getX(), mapCoordination.getY(), mapCoordination.getZ(), AreaType.TERRAIN);
+        BaseSQM baseSQM = fullMapManager.getBaseSQMByPosition(newMapCoordination);
         if (baseSQM instanceof LowTerrainSQM && !baseSQM.isNotWalkable()) {
             return baseSQM;
         }
-
         return null;
     }
 
-    public Elevatable isElevatingSQM(User user, Direction direction) {
-        return isElevatingSQM(user.getX() + direction.getX(), user.getY() + direction.getY(), user.getZ());
+    public Elevatable isElevatingSQMOrNull(User user, Direction direction) {
+        return isElevatingSQMOrNull(getMapCoordinationByDirection(user, direction));
     }
 
-    private Elevatable isElevatingSQM(int x, int y, int z) {
-        if (x < 0 || y < 0 || x >= FullMap.fullMapWidth() || y >= FullMap.fullMapHeight())
+    private Elevatable isElevatingSQMOrNull(MapCoordination mapCoordination) {
+        if (validateMapOutOfRange(mapCoordination))
             return null;
 
         for (AreaType areaType : AreaType.values()) {
-            BaseSQM baseSQM = fullMapManager.getBaseSQMByPosition(areaType, x, y, z);
+            mapCoordination.setAreaType(areaType);
+            BaseSQM baseSQM = fullMapManager.getBaseSQMByPosition(mapCoordination);
             if (baseSQM instanceof Elevatable elevation)
                 return elevation;
         }
@@ -73,15 +73,19 @@ public class SQMService {
     }
 
     public boolean isWalkableSQM(User user, Direction direction) {
-        return isWalkableSQM(user.getX() + direction.getX(), user.getY() + direction.getY(), user.getZ());
+        return isWalkableSQM(getMapCoordinationByDirection(user, direction));
     }
 
-    private boolean isWalkableSQM(int x, int y, int z) {
-        if (x < 0 || y < 0 || x >= FullMap.fullMapWidth() || y >= FullMap.fullMapHeight())
+    private boolean isWalkableSQM(MapCoordination mapCoordination) {
+        int x = mapCoordination.getX();
+        int y = mapCoordination.getY();
+
+        if (validateMapOutOfRange(mapCoordination))
             return false;
 
         for (AreaType areaType : AreaType.values()) {
-            BaseSQM baseSQM = fullMapManager.getBaseSQMByPosition(areaType, x, y, z);
+            mapCoordination.setAreaType(areaType);
+            BaseSQM baseSQM = fullMapManager.getBaseSQMByPosition(mapCoordination);
 
             if (baseSQM.isNotWalkable())
                 return false;
@@ -89,41 +93,24 @@ public class SQMService {
         return true;
     }
 
-    public boolean isNotWalkable(Direction direction) {
-        BaseSQM sqm = getBaseSQMByDirection(direction);
-        if (sqm == null)
+    private boolean validateMapOutOfRange(MapCoordination mapCoordination) {
+        int x = mapCoordination.getX();
+        int y = mapCoordination.getY();
+        if (x < 0 || y < 0 || x >= FullMap.fullMapWidth() || y >= FullMap.fullMapHeight())
             return true;
-        return sqm.isNotWalkable();
+        return false;
     }
 
-    public BaseSQM getBaseSQMByDirection(Direction direction) {
-        int x = playerService.getPlayerX();
-        int y = playerService.getPlayerY();
-        int z = playerService.getPlayerZ();
+    private MapCoordination getMapCoordinationByDirection(User user, Direction direction) {
+        MapCoordination mapCoordination = user.getMapCoordination();
+        int x = mapCoordination.getX();
+        int y = mapCoordination.getY();
+        int z = mapCoordination.getZ();
 
-        switch (direction) {
-            case NORTH -> {
-                y = playerService.getPlayerY() - 1;
-            }
-            case EAST -> {
-                x = playerService.getPlayerX() + 1;
-            }
-            case SOUTH -> {
-                y = playerService.getPlayerY() + 1;
-            }
-            case WEST -> {
-                x = playerService.getPlayerX() - 1;
-            }
+        if (direction != null) {
+            x += direction.getX();
+            y += direction.getY();
         }
-        BaseSQM sqm = fullMapManager.getBaseSQMByPosition(AreaType.TERRAIN, x, y, z);
-        return sqm;
-    }
-
-    public boolean isElevatable(BaseSQM sqm) {
-        return sqm instanceof Elevatable;
-    }
-
-    public BaseSQM getSQMByPlayerPosition() {
-        return fullMapManager.getBaseSQMByPosition(AreaType.TERRAIN, playerService.getPlayerX(), playerService.getPlayerY(), playerService.getPlayerZ());
+        return new MapCoordination(x, y, z, mapCoordination.getAreaType());
     }
 }

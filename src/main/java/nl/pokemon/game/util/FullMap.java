@@ -1,6 +1,9 @@
 package nl.pokemon.game.util;
 
+import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
+import nl.pokemon.game.model.MapCoordination;
+import nl.pokemon.game.model.SQMs.BaseSQM;
 
 import java.util.*;
 
@@ -16,17 +19,55 @@ public class FullMap {
         viewMap.putAll(JsonDeserialize.deserializeJsonFromFullMap(viewMap));
     }
 
-    public static boolean setNewValueToPosition(AreaType areaType, int x, int y, int z, int newValue) {
+    public static boolean setUserToPosition(MapCoordination mapCoordination, User user) {
+        int x = mapCoordination.getX();
+        int y = mapCoordination.getY();
+        int z = mapCoordination.getZ();
+        AreaType areaType = mapCoordination.getAreaType();
+        int userId = user.getId();
+
         Map<AreaType, int[][]> firstMap = viewMap.get(z);
         int[][] intMap = firstMap.get(areaType);
-        intMap[y][x] = newValue;
+        intMap[y][x] = userId;
 
-        if (intMap[y][x] == newValue)
+        if (intMap[y][x] == userId)
             return true;
 
         return false;
     }
 
+    public static boolean setItemToPosition(MapCoordination mapCoordination, BaseSQM item) {
+        int x = mapCoordination.getX();
+        int y = mapCoordination.getY();
+        int z = mapCoordination.getZ();
+        AreaType areaType = mapCoordination.getAreaType();
+        int itemId = item.getSqmId();
+
+        Map<AreaType, int[][]> firstMap = viewMap.get(z);
+        int[][] intMap = firstMap.get(areaType);
+        intMap[y][x] = itemId;
+
+        if (intMap[y][x] == itemId)
+            return true;
+
+        return false;
+    }
+
+    public static boolean erasePosition(MapCoordination mapCoordination) {
+        int x = mapCoordination.getX();
+        int y = mapCoordination.getY();
+        int z = mapCoordination.getZ();
+        AreaType areaType = mapCoordination.getAreaType();
+
+        Map<AreaType, int[][]> firstMap = viewMap.get(z);
+        int[][] intMap = firstMap.get(areaType);
+        intMap[y][x] = 0;
+
+        if (intMap[y][x] == 0)
+            return true;
+
+        return false;
+    }
 
     public static int fullMapWidth() {
         return viewMap.get(0).get(AreaType.MAP)[0].length;

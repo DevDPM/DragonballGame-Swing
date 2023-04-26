@@ -4,6 +4,7 @@ import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.Elevatable;
+import nl.pokemon.game.model.MapCoordination;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.SQMs.VoidSQM;
 import nl.pokemon.game.model.clientViewMap.GridMap;
@@ -26,7 +27,7 @@ public class ClientViewMap implements PropertyChangeListener {
     SQMService sqmService;
 
     @Inject
-    PlayerService playerService;
+    UserService userService;
 
     @Inject
     VoidSQM voidSQM;
@@ -39,10 +40,10 @@ public class ClientViewMap implements PropertyChangeListener {
     }
 
     public void updateView(Integer visibilityUntilZ) {
-
-        int START_X_MAP = playerService.getPlayerX() - ((GridMap.MAX_X - 1)/2);
-        int START_Y_MAP = playerService.getPlayerY() - ((GridMap.MAX_Y - 1)/2);
-        int START_Z_MAP = playerService.getPlayerZ();
+        MapCoordination userPosition = userService.getUserCoordination();
+        int START_X_MAP = userPosition.getX() - ((GridMap.MAX_X - 1)/2);
+        int START_Y_MAP = userPosition.getY() - ((GridMap.MAX_Y - 1)/2);
+        int START_Z_MAP = userPosition.getZ();
 
         Map<Integer, Map<AreaType, GridMap>> fullMap = viewMap.getViewMap();
         List<Integer> elevations = new ArrayList<>(fullMap.keySet());
@@ -66,12 +67,12 @@ public class ClientViewMap implements PropertyChangeListener {
                         } else {
                             if (area.equals(AreaType.PLAYER_BOTTOM) || area.equals(AreaType.PLAYER_TOP)) {
                                 if (storageGridMap[intY][intX] == 0) {
-                                    storedSQM = sqmService.getSQMByIntAndArea(area, storageGridMap[intY][intX]);
+                                    storedSQM = sqmService.getSQMByIntAndAreaOrNull(area, storageGridMap[intY][intX]);
                                 } else {
-                                    storedSQM = playerService.getPlayerSQMByUserId(storageGridMap[intY][intX]);
+                                    storedSQM = userService.getUserCharacter();
                                 }
                             } else {
-                                storedSQM = sqmService.getSQMByIntAndArea(area, storageGridMap[intY][intX]);
+                                storedSQM = sqmService.getSQMByIntAndAreaOrNull(area, storageGridMap[intY][intX]);
                             }
                         }
                         BaseSQM viewSQM = viewGridMap[y][x];
@@ -94,7 +95,7 @@ public class ClientViewMap implements PropertyChangeListener {
     }
 
     public void adjustPlayerToTopLayerByElevation(Direction direction, User player) {
-        Elevatable elv = sqmService.isElevatingSQM(player, direction);
+        Elevatable elv = sqmService.isElevatingSQMOrNull(player, direction);
         if (elv != null) {
             fullMapManager.moveToTopLayer(player);
         }
@@ -102,15 +103,15 @@ public class ClientViewMap implements PropertyChangeListener {
     }
 
     public void adjustPlayerToTopLayerByTerrain(Direction direction, User player) {
-        BaseSQM stepOnbaseSQM = sqmService.isWalkableTerrain(player, direction);
-        BaseSQM currentlyOnbaseSQM = sqmService.isWalkableTerrain(player);
+        BaseSQM stepOnbaseSQM = sqmService.isWalkableTerrainOrNull(player, direction);
+        BaseSQM currentlyOnbaseSQM = sqmService.isWalkableTerrainOrNull(player);
         if (stepOnbaseSQM != null || currentlyOnbaseSQM != null) {
             fullMapManager.moveToTopLayer(player);
         }
     }
 
     public void adjustPlayerToTopLayerByTerrain(User player) {
-        BaseSQM currentlyOnbaseSQM = sqmService.isWalkableTerrain(player);
+        BaseSQM currentlyOnbaseSQM = sqmService.isWalkableTerrainOrNull(player);
         if (currentlyOnbaseSQM != null) {
             fullMapManager.moveToTopLayer(player);
         } else {

@@ -1,94 +1,49 @@
 package nl.pokemon.game.domain;
 
-import nl.pokemon.game.enums.AreaType;
+import nl.pokemon.game.model.MapCoordination;
 import nl.pokemon.game.model.players.BaseEntity;
 
-import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class User {
 
+    private static AtomicInteger GENERATE_ID = new AtomicInteger(1);
     private int id;
     private String name;
-    private int points;
-    private LocalTime time;
+    private int points = 0;
 
-    private BaseEntity baseEntity;
+    private BaseEntity character;
+    private MapCoordination mapCoordination;
 
-    private int x;
-    private int y;
-    private int z;
-    private AreaType areaType;
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
+    public User(String name, BaseEntity character, MapCoordination mapCoordination) {
+        this.id = GENERATE_ID.getAndIncrement();
+        this.name = name;
+        this.character = character;
+        this.mapCoordination = mapCoordination;
     }
 
     public String getName() {
         return name;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public MapCoordination getMapCoordination() {
+        return mapCoordination;
     }
 
-    public int getX() {
-        return x;
+    public int getId() {
+        return id;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    public int getZ() {
-        return z;
-    }
-
-    public void setZ(int z) {
-        this.z = z;
-    }
-
-    public BaseEntity getBaseEntity() {
-        return baseEntity;
-    }
-
-    public AreaType getAreaType() {
-        return areaType;
-    }
-
-    public void setAreaType(AreaType areaType) {
-        this.areaType = areaType;
-    }
-
-    public void setBaseEntity(BaseEntity baseEntity) {
-        this.baseEntity = baseEntity;
+    public BaseEntity getCharacter() {
+        return character;
     }
 
     public int getPoints() {
         return points;
     }
 
-    public void setPoints(int points) {
-        this.points = points;
-    }
-
-    public LocalTime getTime() {
-        return time;
-    }
-
-    public void setTime(LocalTime time) {
-        this.time = time;
+    public void addToPoints(int points) {
+        this.points += points;
     }
 }

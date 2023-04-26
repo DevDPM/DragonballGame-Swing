@@ -4,9 +4,11 @@ import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.Elevatable;
+import nl.pokemon.game.model.MapCoordination;
 import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.SQMs.ConvertToSQM;
 import nl.pokemon.game.model.SQMs.ItemSQM;
+import nl.pokemon.game.model.dragonballs.DragonBallContainer;
 import nl.pokemon.game.util.FullMap;
 import nl.pokemon.game.view.DragonBallCounter;
 import org.dpmFramework.Kickstarter;
@@ -22,16 +24,16 @@ public class FullMapManager {
     private PropertyChangeSupport updateElevation;
 
     @Inject
-    SQMService sqmService;
+    private SQMService sqmService;
 
     @Inject
-    private PlayerService playerService;
+    private UserService userService;
 
     @Inject
-    DragonBallService dragonBallService;
+    private DragonBallContainer dragonBallContainer;
 
     @Inject
-    DragonBallCounter dragonBallCounter;
+    private DragonBallCounter dragonBallCounter;
 
     private void init() {
         this.updateElevation = new PropertyChangeSupport(Kickstarter.getInstanceOf(FullMapManager.class));
@@ -39,47 +41,52 @@ public class FullMapManager {
         this.updateElevation.addPropertyChangeListener(clientViewMap);
     }
 
-    public boolean moveUser(User user, Direction direction) {
+    public void moveUser(User user, Direction direction) {
         int userId = user.getId();
-        int currentX = user.getX();
-        int currentY = user.getY();
-        int currentZ = user.getZ();
-        AreaType areaType = user.getAreaType();
+        MapCoordination mapCoordination = user.getMapCoordination();
 
-        Elevatable elevation = sqmService.isElevatingSQM(user, direction);
+        Elevatable elevation = sqmService.isElevatingSQMOrNull(user, direction);
 
         if (elevation != null) {
-            if (FullMap.setNewValueToPosition(areaType, currentX, currentY, currentZ, 0)) {
-                int newX = currentX + (2 * direction.getX());
-                int newY = currentY + (2 * direction.getY());
-                int newZ = currentZ + elevation.incrementElevationNumber();
-                playerService.setNewPosition(user, newX, newY, newZ, AreaType.PLAYER_BOTTOM);
-                updateElevation.firePropertyChange("changeElevation", currentZ, newZ);
-                return FullMap.setNewValueToPosition(user.getAreaType(), newX, newY, newZ, userId);
+            if (FullMap.erasePosition(mapCoordination)) {
+                mapCoordination.setX(mapCoordination.getX() + (2 * direction.getX()));
+                mapCoordination.setY(mapCoordination.getY() + (2 * direction.getY()));
+                mapCoordination.setZ(mapCoordination.getZ() + elevation.incrementElevationNumber());
+                mapCoordination.setAreaType(AreaType.PLAYER_BOTTOM);
+                updateElevation.firePropertyChange("changeElevation", null, mapCoordination.getZ());
+                FullMap.setUserToPosition(mapCoordination, user);
             }
         } else if (sqmService.isWalkableSQM(user, direction)) {
-            if (FullMap.setNewValueToPosition(areaType, currentX, currentY, currentZ, 0)) {
-                int newX = currentX + direction.getX();
-                int newY = currentY + direction.getY();
-                if (sqmService.isWalkableTerrain(user) == null) {
-                    areaType = AreaType.PLAYER_BOTTOM;
+            if (FullMap.erasePosition(mapCoordination)) {
+                mapCoordination.setX(mapCoordination.getX() + direction.getX());
+                mapCoordination.setY(mapCoordination.getY() + direction.getY());
+
+                if (sqmService.isWalkableTerrainOrNull(user) == null) {
+                    mapCoordination.setAreaType(AreaType.PLAYER_BOTTOM);
                 }
-                playerService.setNewPosition(user, newX, newY, currentZ, areaType);
-                ItemSQM itemSQM = sqmService.stepOnDragonBall();
+
+                ItemSQM itemSQM = sqmService.isDragonBallSQMOrNull(user);
                 if (itemSQM != null) {
-                    playerService.addPoint(itemSQM.receivePoints());
-                    FullMap.setNewValueToPosition(AreaType.TERRAIN, newX, newY, currentZ, 0);
-                    dragonBallService.generateLocationForDragonBall();
+                    System.out.println("invoked");
+                    userService.addPoint(itemSQM.receivePoints());
+                    MapCoordination DBPosition = dragonBallContainer.getCurrentDragonball().getMapCoordination();
+                    FullMap.erasePosition(DBPosition);
+
+                    dragonBallContainer.getNextDragonBall();
                     dragonBallCounter.addDragonBall(itemSQM);
                 }
                 updateElevation.firePropertyChange("playerMoved", null, null);
-                return FullMap.setNewValueToPosition(areaType, newX, newY, currentZ, userId);
+                FullMap.setUserToPosition(mapCoordination, user);
             }
         }
-        return false;
     }
 
-    public BaseSQM getBaseSQMByPosition(AreaType areaType, int x, int y, int z) {
+    public BaseSQM getBaseSQMByPosition(MapCoordination mapCoordination) {
+        int x = mapCoordination.getX();
+        int y = mapCoordination.getY();
+        int z = mapCoordination.getZ();
+        AreaType areaType = mapCoordination.getAreaType();
+
         if (x < 0 || y < 0 || x >= FullMap.fullMapWidth() || y >= FullMap.fullMapHeight())
             return null;
 
@@ -87,7 +94,7 @@ public class FullMapManager {
             int userId = getFullMapGridInt(areaType, z)[y][x];
             if (userId == 0)
                 return ConvertToSQM.getSQM(areaType, userId);
-            return playerService.getPlayerSQMByUserId(userId);
+            return userService.getUserCharacter();
         }
 
         int sqmId = getFullMapGridInt(areaType, z)[y][x];
@@ -107,34 +114,27 @@ public class FullMapManager {
     }
 
     public void moveToTopLayer(User user) {
-        int userId = user.getId();
-        int currentX = user.getX();
-        int currentY = user.getY();
-        int currentZ = user.getZ();
+        MapCoordination mapCoordination = user.getMapCoordination();
 
-        if (FullMap.setNewValueToPosition(user.getAreaType(), currentX, currentY, currentZ, 0)) {
+        if (FullMap.erasePosition(mapCoordination)) {
             AreaType newAreaType = AreaType.PLAYER_TOP;
-            playerService.setPlayerArea(newAreaType);
-            FullMap.setNewValueToPosition(newAreaType, currentX, currentY, currentZ, userId);
+            mapCoordination.setAreaType(newAreaType);
+            FullMap.setUserToPosition(mapCoordination, user);
             updateElevation.firePropertyChange("playerVisibilityChange", null, null);
         }
     }
 
     public void moveToBottomLayer(User user) {
-        int userId = user.getId();
-        int currentX = user.getX();
-        int currentY = user.getY();
-        int currentZ = user.getZ();
+        MapCoordination mapCoordination = user.getMapCoordination();
 
-        if (FullMap.setNewValueToPosition(user.getAreaType(), currentX, currentY, currentZ, 0)) {
+        if (FullMap.erasePosition(mapCoordination)) {
             AreaType newAreaType = AreaType.PLAYER_BOTTOM;
-            playerService.setPlayerArea(newAreaType);
-            FullMap.setNewValueToPosition(newAreaType, currentX, currentY, currentZ, userId);
+            FullMap.setUserToPosition(mapCoordination, user);
             updateElevation.firePropertyChange("playerVisibilityChange", null, null);
         }
     }
 
-    public void setBaseSQMToPosition(AreaType area, int x, int y, int z, BaseSQM sqm) {
-        FullMap.setNewValueToPosition(area, x, y, z, sqm.getSqmId());               //////////////
+    public void setBaseSQMToPosition(MapCoordination mapCoordination, BaseSQM sqm) {
+        FullMap.setItemToPosition(mapCoordination, sqm);
     }
 }

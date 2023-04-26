@@ -2,6 +2,7 @@ package nl.pokemon.game.controller;
 
 import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.service.MoveViewMap;
+import nl.pokemon.game.view.DragonBallRadar;
 import org.dpmFramework.annotation.Controller;
 import org.dpmFramework.annotation.Inject;
 
@@ -16,8 +17,16 @@ public class RpgController implements KeyListener {
     @Inject
     MoveViewMap moveViewMap;
 
+    @Inject
+    DragonBallRadar dragonBallRadar;
+
     @Override
     public void keyPressed(KeyEvent keyEvent) {
+
+        switch (keyEvent.getKeyCode()) {
+//            case KeyEvent.VK_SPACE -> dragonBallRadar.useDragonBallRadar();
+            case KeyEvent.VK_ALT -> dragonBallRadar.useDragonBallRadar();
+        }
 
         boolean validKey;
         validKey = switch (keyEvent.getKeyChar()) {

@@ -1,26 +1,18 @@
 package nl.pokemon.game.view;
 
 import nl.pokemon.game.controller.RpgController;
-import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
-import nl.pokemon.game.enums.Direction;
 import nl.pokemon.game.model.SQMs.BaseSQM;
-import nl.pokemon.game.model.players.Ash;
+import nl.pokemon.game.model.Session;
 import nl.pokemon.game.model.clientViewMap.GridMap;
 import nl.pokemon.game.model.clientViewMap.ViewMap;
-import nl.pokemon.game.model.players.Goku;
-import nl.pokemon.game.repository.UserRepository;
-import nl.pokemon.game.service.DragonBallService;
-import nl.pokemon.game.service.FullMapManager;
-import nl.pokemon.game.service.PlayerService;
+import nl.pokemon.game.service.UserService;
 import nl.pokemon.game.service.ClientViewMap;
 import nl.pokemon.game.util.FullMap;
 import nl.pokemon.game.util.TilesetImageContainer;
 import org.dpmFramework.Kickstarter;
 
 import javax.swing.*;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -39,14 +31,15 @@ public class Console extends JFrame {
         this.setLayout(null);
 
 
-        PlayerService user = Kickstarter.getInstanceOf(PlayerService.class);
+        UserService user = Kickstarter.getInstanceOf(UserService.class);
         FullMap.bootstrapFullMap();
         TilesetImageContainer.bootstrap();
         TilesetImageContainer.printSQMList();
-        bootstrap();
+        Session session = Kickstarter.getInstanceOf(Session.class);
 
-        this.add(new TimeBox(user.getPlayerById(1)));
+        this.add(new TimeBox(user.getUserInstance()));
         this.add(Kickstarter.getInstanceOf(DragonBallCounter.class));
+        this.add(Kickstarter.getInstanceOf(DragonBallRadar.class));
 
         ViewMap view = Kickstarter.getInstanceOf(ViewMap.class);
         ClientViewMap clientViewMap = Kickstarter.getInstanceOf(ClientViewMap.class);
@@ -66,41 +59,15 @@ public class Console extends JFrame {
                     for (int x = areaMap.getGridMap().length-1; x >= 0; x--) {
                         BaseSQM sqm = areaMap.getGridMap()[y][x];
                         sqm.setVisible(false);
-                        if (elevation == user.getPlayerZ())
+                        if (elevation == session.getUser().getMapCoordination().getZ())
                             sqm.setVisible(true);
                         this.add(sqm);
                     }
                 }
             }
         }
-        clientViewMap.updateView(user.getPlayerZ());
+        clientViewMap.updateView(session.getUser().getMapCoordination().getZ());
 
         this.setVisible(true);
-    }
-
-    private void bootstrap() {
-        User user = new User();
-        user.setId(1);
-        user.setX(45);
-        user.setY(63);
-        user.setZ(0);
-        user.setTime(LocalTime.now());
-        user.setBaseEntity(new Goku());
-        user.setAreaType(AreaType.PLAYER_BOTTOM);
-
-        User user1 = new User();
-        user1.setId(2);
-        user1.setX(5);
-        user1.setY(5);
-        user1.setZ(0);
-        user1.setBaseEntity(new Ash());
-        user1.setAreaType(AreaType.PLAYER_BOTTOM);
-        Kickstarter.getInstanceOf(UserRepository.class).getUserDataBase().put(user.getId(), user);
-        Kickstarter.getInstanceOf(UserRepository.class).getUserDataBase().put(user1.getId(), user1);
-        FullMapManager fullMapManager = Kickstarter.getInstanceOf(FullMapManager.class);
-
-        fullMapManager.moveUser(user, Direction.EAST);
-        fullMapManager.moveUser(user1, Direction.EAST);
-        Kickstarter.getInstanceOf(DragonBallService.class).generateLocationForDragonBall();
     }
 }

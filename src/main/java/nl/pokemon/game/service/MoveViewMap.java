@@ -3,8 +3,8 @@ package nl.pokemon.game.service;
 import nl.pokemon.game.domain.User;
 import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.enums.Direction;
+import nl.pokemon.game.model.MapCoordination;
 import nl.pokemon.game.model.SQMs.BaseSQM;
-import nl.pokemon.game.model.SQMs.ItemSQM;
 import nl.pokemon.game.model.SQMs.MapSQM;
 import nl.pokemon.game.model.clientViewMap.GridMap;
 import org.dpmFramework.annotation.Inject;
@@ -27,7 +27,7 @@ public class MoveViewMap {
     private int smoothMovePosY = 0;
 
     @Inject
-    PlayerService playerService;
+    UserService userService;
 
     @Inject
     ClientViewMap clientViewMap;
@@ -44,26 +44,25 @@ public class MoveViewMap {
 
     public void move(Direction direction) {
 
-        User player = playerService.getPlayerById(1);
+        User user = userService.getUserInstance();
 
-        if (!sqmService.isWalkableSQM(player, direction)) {
-            playerService.standStill(direction);
+        if (!sqmService.isWalkableSQM(user, direction)) {
+            userService.standStill(direction);
             clientViewMap.updateView();
             notMoving = true;
             return;
         }
 
-        playerService.setWalkingImage(direction);
-        clientViewMap.adjustPlayerToTopLayerByElevation(direction, player);
-        clientViewMap.adjustPlayerToTopLayerByTerrain(direction, player);
+        userService.setWalkingImage(direction);
+        clientViewMap.adjustPlayerToTopLayerByElevation(direction, user);
+        clientViewMap.adjustPlayerToTopLayerByTerrain(direction, user);
         clientViewMap.updateView();
         setPixelMovement(direction);
 
-        performMovement(direction);
+        iterateScreenMovement(direction, user);
     }
 
-    private void performMovement(Direction direction) {
-
+    private void iterateScreenMovement(Direction direction, User user) {
         AtomicReference<Direction> movedDirection = new AtomicReference<>(direction);
         AtomicInteger pixelCounter = new AtomicInteger(0);
 
@@ -78,9 +77,9 @@ public class MoveViewMap {
                         for (int x = 0; x < GridMap.MAX_X; x++) {
 
                             BaseSQM viewSQM = viewGridMap[y][x];
-
-                            if (!((x == 10 && y == 10 && z == playerService.getPlayerZ()) &&
-                                    areaType.equals(playerService.getPlayerArea()))) {
+                            MapCoordination userCoordinate = user.getMapCoordination();
+                            if (!((x == 10 && y == 10 && z == userCoordinate.getZ()) &&
+                                    areaType.equals(userCoordinate.getAreaType()))) {
                                 int newPixelPosX;
                                 int newPixelPosY;
                                 newPixelPosX = viewSQM.getPixelPosXByIndex() + smoothMovePosX;
@@ -93,32 +92,31 @@ public class MoveViewMap {
             });
 
             if (pixelCounter.getAndIncrement() >= (MapSQM.SQM_PIXEL_WIDTH_X/speedPixelPerIterate)) {
-                finalizeMovement(movedDirection, pixelCounter, actionEvent);
+                finalizeMovement(user, movedDirection, pixelCounter, actionEvent);
             }
         });
         smoothMoving.start();
     }
 
-    private void finalizeMovement(AtomicReference<Direction> movedDirection, AtomicInteger pixelCounter, ActionEvent actionEvent) {
-        fullMapManager.moveUser(playerService.getPlayerById(1), movedDirection.get());
+    private void finalizeMovement(User user, AtomicReference<Direction> movedDirection, AtomicInteger pixelCounter, ActionEvent actionEvent) {
+        fullMapManager.moveUser(user, movedDirection.get());
 
         if (moveStack.isEmpty()) {
-            clientViewMap.adjustPlayerToTopLayerByTerrain(playerService.getPlayerById(1));
+            clientViewMap.adjustPlayerToTopLayerByTerrain(user);
             stopMovement(movedDirection, actionEvent);
         } else {
             Direction nextDirection = moveStack.pop();
 
-            if (!sqmService.isWalkableSQM(playerService.getPlayerById(1), nextDirection)) {
+            if (!sqmService.isWalkableSQM(user, nextDirection)) {
                 stopMovement(movedDirection, actionEvent);
             } else {
-                clientViewMap.adjustPlayerToTopLayerByElevation(nextDirection, playerService.getPlayerById(1));
-                clientViewMap.adjustPlayerToTopLayerByTerrain(nextDirection, playerService.getPlayerById(1));
-                playerService.setWalkingImage(nextDirection);
+                clientViewMap.adjustPlayerToTopLayerByElevation(nextDirection, user);
+                clientViewMap.adjustPlayerToTopLayerByTerrain(nextDirection, user);
+                userService.setWalkingImage(nextDirection);
                 clientViewMap.updateView();
                 pixelCounter.set(0);
                 movedDirection.set(nextDirection);
                 setPixelMovement(movedDirection.get());
-
             }
         }
     }
@@ -126,7 +124,7 @@ public class MoveViewMap {
     private void stopMovement(AtomicReference<Direction> lastDirection, ActionEvent e) {
         Timer timer = (Timer) e.getSource();
         timer.stop();
-        playerService.standStill(lastDirection.get());
+        userService.standStill(lastDirection.get());
         clientViewMap.updateView();
         notMoving = true;
     }
