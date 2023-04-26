@@ -8,6 +8,7 @@ import nl.pokemon.game.model.SQMs.BaseSQM;
 import nl.pokemon.game.model.players.Ash;
 import nl.pokemon.game.model.clientViewMap.GridMap;
 import nl.pokemon.game.model.clientViewMap.ViewMap;
+import nl.pokemon.game.model.players.Goku;
 import nl.pokemon.game.repository.UserRepository;
 import nl.pokemon.game.service.DragonBallService;
 import nl.pokemon.game.service.FullMapManager;
@@ -78,7 +79,7 @@ public class Console extends JFrame {
         user.setX(45);
         user.setY(63);
         user.setZ(0);
-        user.setBaseEntity(new Ash());
+        user.setBaseEntity(new Goku());
         user.setAreaType(AreaType.PLAYER_BOTTOM);
 
         User user1 = new User();

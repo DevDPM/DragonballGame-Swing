@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicReference;
 @Service
 public class MoveViewMap {
 
-    private final int speedPixelPerIterate = 25; // 50 = max
+    private final int speedPixelPerIterate = 10; // 50 = max
     private final int speedTimerDelay = 10;
 
     private int smoothMovePosX = 0;
