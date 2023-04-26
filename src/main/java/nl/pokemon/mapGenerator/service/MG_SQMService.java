@@ -1,8 +1,8 @@
 package nl.pokemon.mapGenerator.service;
 
-import nl.pokemon.game.util.TilesetImageContainer;
-import nl.pokemon.mapGenerator.model.SQMs.Editable_SQM;
-import nl.pokemon.mapGenerator.model.SQMs.MG_BaseSQM;
+import nl.pokemon.game.bootstrap.TilesetImageContainer;
+import nl.pokemon.mapGenerator.model.SQMs.Editable_Tile;
+import nl.pokemon.mapGenerator.model.SQMs.DevTool_BaseTile;
 import nl.pokemon.mapGenerator.model.View.MG_ViewMap;
 import nl.pokemon.mapGenerator.view.OptionPanel;
 import org.dpmFramework.annotation.Inject;
@@ -20,9 +20,9 @@ public class MG_SQMService {
     @Inject
     OptionPanel optionPanel;
 
-    public void performAutoFill(Editable_SQM sqm) {
-        MG_BaseSQM[][] storedSQMs = fullMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
-        MG_BaseSQM[][] clientViewSQMs = clientViewMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
+    public void performAutoFill(Editable_Tile sqm) {
+        DevTool_BaseTile[][] storedSQMs = fullMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
+        DevTool_BaseTile[][] clientViewSQMs = clientViewMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
         int currentX = sqm.getCoordinateX();
         int currentY = sqm.getCoordinateY();
 
@@ -44,8 +44,8 @@ public class MG_SQMService {
             for (int storedY = minY, viewY = minViewY; storedY <= maxY && viewY <= maxViewY; storedY++, viewY++) {
                 for (int storedX = minX, viewX = minViewX; storedX <= maxX && viewX <= maxViewX; storedX++, viewX++) {
 
-                    MG_BaseSQM editableSqm = storedSQMs[storedY][storedX];
-                    MG_BaseSQM clientViewSQM = clientViewSQMs[viewY][viewX];
+                    DevTool_BaseTile editableSqm = storedSQMs[storedY][storedX];
+                    DevTool_BaseTile clientViewSQM = clientViewSQMs[viewY][viewX];
 
                     editableSqm.setSqmId(optionPanel.getLastSelectedSqmId());
                     editableSqm.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
@@ -63,12 +63,12 @@ public class MG_SQMService {
         }
     }
 
-    public void performFillAll(Editable_SQM sqm) {
-        MG_BaseSQM[][] baseSQMS = fullMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
+    public void performFillAll(Editable_Tile sqm) {
+        DevTool_BaseTile[][] baseSQMS = fullMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
 
         for (int y = 0; y < baseSQMS.length; y++) {
             for (int x = 0; x < baseSQMS[0].length; x++) {
-                MG_BaseSQM editableSqm = baseSQMS[y][x];
+                DevTool_BaseTile editableSqm = baseSQMS[y][x];
                 editableSqm.setSqmId(optionPanel.getLastSelectedSqmId());
                 editableSqm.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
                 editableSqm.setSqmSizeX(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
@@ -77,8 +77,8 @@ public class MG_SQMService {
             }
         }
 
-        MG_BaseSQM[][] storedSQMs = fullMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
-        MG_BaseSQM[][] clientViewSQMs = clientViewMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
+        DevTool_BaseTile[][] storedSQMs = fullMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
+        DevTool_BaseTile[][] clientViewSQMs = clientViewMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
         int currentX = sqm.getCoordinateX();
         int currentY = sqm.getCoordinateY();
 
@@ -92,7 +92,7 @@ public class MG_SQMService {
             for (int y = 0; y < baseSQMS.length; y++) {
                 for (int x = 0; x < baseSQMS[0].length; x++) {
 
-                    MG_BaseSQM editableSqm = storedSQMs[y][x];
+                    DevTool_BaseTile editableSqm = storedSQMs[y][x];
 
                     editableSqm.setSqmId(optionPanel.getLastSelectedSqmId());
                     editableSqm.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
@@ -101,7 +101,7 @@ public class MG_SQMService {
                     editableSqm.updateSQM();
 
                     if (x <= 30 && y <= 30) {
-                        MG_BaseSQM clientViewSQM = clientViewSQMs[y][x];
+                        DevTool_BaseTile clientViewSQM = clientViewSQMs[y][x];
                         clientViewSQM.setSqmId(optionPanel.getLastSelectedSqmId());
                         clientViewSQM.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
                         clientViewSQM.setSqmSizeX(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
@@ -114,10 +114,10 @@ public class MG_SQMService {
 
     }
 
-    public void performTileSwitch(Editable_SQM editableSqm) {
+    public void performTileSwitch(Editable_Tile editableSqm) {
 
-        MG_BaseSQM[][] storedSQMs = fullMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
-        MG_BaseSQM[][] clientViewSQMs = clientViewMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
+        DevTool_BaseTile[][] storedSQMs = fullMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
+        DevTool_BaseTile[][] clientViewSQMs = clientViewMap.getViewMap().get(optionPanel.getCurrentZ()).get(optionPanel.getCurentAreaType()).getGridMap();
         int currentX = editableSqm.getCoordinateX();
         int currentY = editableSqm.getCoordinateY();
 
@@ -126,8 +126,8 @@ public class MG_SQMService {
 
         if (currentX >= 0 && currentX <= storedSQMs.length && currentY >= 0 && currentY <= storedSQMs[0].length) {
 
-            MG_BaseSQM storedSQM = storedSQMs[currentY][currentX];
-            MG_BaseSQM clientViewSQM = clientViewSQMs[clientY][clientX];
+            DevTool_BaseTile storedSQM = storedSQMs[currentY][currentX];
+            DevTool_BaseTile clientViewSQM = clientViewSQMs[clientY][clientX];
 
             storedSQM.setSqmId(optionPanel.getLastSelectedSqmId());
             storedSQM.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());

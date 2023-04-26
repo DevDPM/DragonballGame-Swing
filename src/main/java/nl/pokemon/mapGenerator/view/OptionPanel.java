@@ -1,8 +1,8 @@
 package nl.pokemon.mapGenerator.view;
 
-import nl.pokemon.game.enums.AreaType;
-import nl.pokemon.game.model.SQMs.BaseSQM;
-import nl.pokemon.game.util.TilesetImageContainer;
+import nl.pokemon.game.client.enums.AreaType;
+import nl.pokemon.game.core.model.Tiles.BaseTile;
+import nl.pokemon.game.bootstrap.TilesetImageContainer;
 import nl.pokemon.mapGenerator.model.View.MG_ViewMap;
 import nl.pokemon.mapGenerator.service.MG_ViewService;
 import nl.pokemon.mapGenerator.util.JsonSerialize;
@@ -108,7 +108,7 @@ public class OptionPanel extends JPanel {
 
         JButton saveButton = new JButton();
         saveButton.setText("Save");
-        saveButton.setBounds(0,240,250,25);
+        saveButton.setBounds(0,260,250,25);
         saveButton.setVisible(true);
         saveButton.setFocusable(false);
         saveButton.addActionListener(new ActionListener() {
@@ -121,7 +121,7 @@ public class OptionPanel extends JPanel {
 
         JButton autoFill = new JButton();
         autoFill.setText("fill 4 x 4: " + isAutoFill);
-        autoFill.setBounds(0,270,250,25);
+        autoFill.setBounds(0,290,250,25);
         autoFill.setVisible(true);
         autoFill.setFocusable(false);
         autoFill.addActionListener(new ActionListener() {
@@ -135,7 +135,7 @@ public class OptionPanel extends JPanel {
 
         JButton fillAll = new JButton();
         fillAll.setText("fill all: " + isFillAll);
-        fillAll.setBounds(0,295,250,25);
+        fillAll.setBounds(0,315,250,25);
         fillAll.setVisible(true);
         fillAll.setFocusable(false);
         fillAll.addActionListener(new ActionListener() {
@@ -163,11 +163,11 @@ public class OptionPanel extends JPanel {
         AtomicInteger selectableViewY = new AtomicInteger(500);
 
         TilesetImageContainer.bootstrap();
-        for (Map.Entry<AreaType, Map<Integer, BaseSQM>> selectableArea : TilesetImageContainer.getSQMByArea().entrySet()) {
+        for (Map.Entry<AreaType, Map<Integer, BaseTile>> selectableArea : TilesetImageContainer.getSQMByArea().entrySet()) {
             List<JButton> selectableButtons = new ArrayList<>();
 
             AtomicInteger selectableViewX = new AtomicInteger(0);
-            for (Map.Entry<Integer, BaseSQM> selectableSQMId : selectableArea.getValue().entrySet()) {
+            for (Map.Entry<Integer, BaseTile> selectableSQMId : selectableArea.getValue().entrySet()) {
                 JButton selectableButton = new JButton();
                 selectableButton.setIcon(selectableSQMId.getValue().getImageIcon());
                 selectableButton.setBounds(selectableViewX.get(), selectableViewY.get(), 50, 50);

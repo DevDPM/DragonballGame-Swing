@@ -1,6 +1,6 @@
 package nl.pokemon.mapGenerator.config;
 
-import nl.pokemon.mapGenerator.model.SQMs.MG_VoidSQM;
+import nl.pokemon.mapGenerator.model.SQMs.DevTool_VoidTile;
 import nl.pokemon.mapGenerator.model.View.MG_ViewMap;
 import org.dpmFramework.annotation.Configurations;
 import org.dpmFramework.annotation.Enable;
@@ -15,6 +15,6 @@ public class MapGeneratorConfig {
     MG_ViewMap clientViewMap;
 
     @Enable
-    MG_VoidSQM voidSQM;
+    DevTool_VoidTile voidSQM;
 
 }

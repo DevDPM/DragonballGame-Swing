@@ -1,16 +1,12 @@
 package nl.pokemon.mapGenerator.util;
 
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import nl.pokemon.game.enums.AreaType;
+import nl.pokemon.game.client.enums.AreaType;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.lang.reflect.Type;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.Map;
 
 public class JsonSerialize {

@@ -1,7 +1,7 @@
 package nl.pokemon.mapGenerator.util;
 
-import nl.pokemon.game.enums.AreaType;
-import nl.pokemon.mapGenerator.model.SQMs.MG_BaseSQM;
+import nl.pokemon.game.client.enums.AreaType;
+import nl.pokemon.mapGenerator.model.SQMs.DevTool_BaseTile;
 import nl.pokemon.mapGenerator.model.View.MG_GridMap;
 
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public class MapConverter {
 
                 for (int y = 0; y < areaTypeMGBaseSQMEntry.getValue().getGridMap()[0].length; y++) {
                     for (int x = 0; x < areaTypeMGBaseSQMEntry.getValue().getGridMap().length; x++) {
-                        MG_BaseSQM[][] baseSQMGrid = areaTypeMGBaseSQMEntry.getValue().getGridMap();
+                        DevTool_BaseTile[][] baseSQMGrid = areaTypeMGBaseSQMEntry.getValue().getGridMap();
                         gridInt[y][x] = baseSQMGrid[y][x].getSqmId();
                     }
                 }

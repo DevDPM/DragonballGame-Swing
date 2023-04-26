@@ -1,6 +1,6 @@
 package nl.pokemon.mapGenerator.model.View;
 
-import nl.pokemon.game.enums.AreaType;
+import nl.pokemon.game.client.enums.AreaType;
 
 import java.util.HashMap;
 import java.util.Map;

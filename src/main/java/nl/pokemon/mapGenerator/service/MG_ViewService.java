@@ -1,21 +1,15 @@
 package nl.pokemon.mapGenerator.service;
 
-import nl.pokemon.game.enums.AreaType;
-import nl.pokemon.game.enums.Direction;
-import nl.pokemon.game.util.FullMap;
-import nl.pokemon.game.util.TilesetImageContainer;
-import nl.pokemon.mapGenerator.model.SQMs.Editable_SQM;
-import nl.pokemon.mapGenerator.model.SQMs.MG_BaseSQM;
-import nl.pokemon.mapGenerator.model.SQMs.MG_VoidSQM;
+import nl.pokemon.game.client.enums.AreaType;
+import nl.pokemon.game.client.enums.Direction;
+import nl.pokemon.mapGenerator.model.SQMs.DevTool_BaseTile;
+import nl.pokemon.mapGenerator.model.SQMs.DevTool_VoidTile;
 import nl.pokemon.mapGenerator.model.View.MG_GridMap;
 import nl.pokemon.mapGenerator.model.View.MG_ViewMap;
 import nl.pokemon.mapGenerator.view.OptionPanel;
-import org.dpmFramework.annotation.Enable;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
-import javax.swing.border.LineBorder;
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -31,7 +25,7 @@ public class MG_ViewService {
     MG_ViewMap clientViewMap;
 
     @Inject
-    MG_VoidSQM voidSQM;
+    DevTool_VoidTile voidSQM;
 
     @Inject
     OptionPanel optionPanel;
@@ -64,7 +58,7 @@ public class MG_ViewService {
                 for (int y = 0; y <= 30; y++) {
                     for (int x = 0; x <= 30; x++) {
 
-                        MG_BaseSQM clientViewSQM = areaMap.getGridMap()[y][x];
+                        DevTool_BaseTile clientViewSQM = areaMap.getGridMap()[y][x];
 
                         int newX = clientViewSQM.getCoordinateX() + incrementX;
                         int newY = clientViewSQM.getCoordinateY() + incrementY;
@@ -72,7 +66,7 @@ public class MG_ViewService {
                         clientViewSQM.setCoordinateX(newX);
                         clientViewSQM.setCoordinateY(newY);
 
-                        MG_BaseSQM storedSQM;
+                        DevTool_BaseTile storedSQM;
                         if (newX < 0 || newY < 0
                                 || newX >= fullMap.getViewMap().get(elevation).get(areaType).getGridMap().length
                                 || newY >= fullMap.getViewMap().get(elevation).get(areaType).getGridMap()[0].length) {
@@ -108,7 +102,7 @@ public class MG_ViewService {
                 for (int y = 0; y <= 30; y++) {
                     for (int x = 0; x <= 30; x++) {
 
-                        MG_BaseSQM sqm = areaMap.getGridMap()[y][x];
+                        DevTool_BaseTile sqm = areaMap.getGridMap()[y][x];
                         changeSQMOffsetByZ(elevation, sqm, z);
                         sqm.setVisible(true);
                         if (elevation > z)
@@ -124,7 +118,7 @@ public class MG_ViewService {
         }
     }
 
-    private void changeSQMOffsetByZ(int currentZ, MG_BaseSQM viewSQM, int upToZ) {
+    private void changeSQMOffsetByZ(int currentZ, DevTool_BaseTile viewSQM, int upToZ) {
         // if z below player.z then change offset. player.z = z => standard offset, increment higher as well just in case
         int OFFSET_PIXEL_Y = 0;
         int newOffSetY;
@@ -164,7 +158,7 @@ public class MG_ViewService {
                 for (int y = 0; y <= 30; y++) {
                     for (int x = 0; x <= 30; x++) {
 
-                        MG_BaseSQM sqm = areaMap.getGridMap()[y][x];
+                        DevTool_BaseTile sqm = areaMap.getGridMap()[y][x];
                         changeSQMOffsetByZ(elevation, sqm, z);
                         sqm.setVisible(true);
                         if (elevation > optionPanel.getCurrentZ())

@@ -1,9 +1,8 @@
 package nl.pokemon.game.domain;
 
-import nl.pokemon.game.model.MapCoordination;
-import nl.pokemon.game.model.players.BaseEntity;
+import nl.pokemon.game.core.model.MapCoordination;
+import nl.pokemon.game.core.model.players.BaseEntity;
 
-import java.time.LocalTime;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class User {
