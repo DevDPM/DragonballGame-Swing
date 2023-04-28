@@ -20,7 +20,7 @@ public class DragonBallContainer {
     @Inject
     FullMapService fullMapService;
 
-    private Stack<DragonBall> dragonBallsContainer = new Stack<>();
+    private final Stack<DragonBall> dragonBallsContainer = new Stack<>();
     private DragonBall currentDragonball;
 
     private void init() {
@@ -45,13 +45,13 @@ public class DragonBallContainer {
         int y = random.nextInt(0, FullMap.fullMapHeight());
         int z = random.nextInt(FullTileMap.START_Z, FullTileMap.MAX_Z);
 
-        BaseTile mapSQM = fullMapService.getBaseSQMByPosition(new MapCoordination(x, y, z, AreaType.MAP));
-        BaseTile terrainSQM = fullMapService.getBaseSQMByPosition(new MapCoordination(x, y, z, AreaType.HIGHER_TERRAIN));
+        BaseTile mapSQM = fullMapService.getBaseTileByPosition(new MapCoordination(x, y, z, AreaType.MAP));
+        BaseTile terrainSQM = fullMapService.getBaseTileByPosition(new MapCoordination(x, y, z, AreaType.HIGHER_TERRAIN));
 
         if (!mapSQM.isNotWalkable() && mapSQM.getSqmId() != 0 &&
                 !terrainSQM.isNotWalkable() && terrainSQM.getSqmId() == 0) {
 
-            BaseTile baseTile = TilesetImageContainer.getSQMByIntAndArea(AreaType.LOWER_TERRAIN, sqmId);
+            BaseTile baseTile = TilesetImageContainer.getTileByIntAndArea(AreaType.LOWER_TERRAIN, sqmId);
             ItemTile dragonballSQM = new ItemTile();
             dragonballSQM.setImageIcon(baseTile.getImageIcon());
             dragonballSQM.setSqmId(baseTile.getSqmId());

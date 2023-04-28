@@ -34,7 +34,7 @@ public class Player {
     private GameScreen gameScreen; // The visible view screen
 
     @Inject
-    private SQMService sqmService;
+    private TileService tileService;
 
     @Inject
     private Movement movement;
@@ -68,11 +68,12 @@ public class Player {
                     return;
                 }
                 direction.set(moveStack.pop());
-
-                if (!sqmService.isWalkableTile(user, direction.get())) {
+                if (!tileService.isWalkableTile(user, direction.get())) {
                     stopMovingSequence(moveAction);
                     return;
                 }
+                if (tileService.isElevatingSQM(MapCoordination.getPlayerPositionWithDirection(user, direction.get())))
+                    fullMapService.moveToTopLayer(user);
                 setWalkingImage(direction.get());
             }
             movement.moveScreenByDirection(direction.get());
@@ -87,8 +88,8 @@ public class Player {
     }
 
     private void checkTileForDragonball() {
-        if (sqmService.isDragonBallTile(user.getMapCoordination())) {
-            ItemTile item = sqmService.getDragonBallTile(user.getMapCoordination());
+        if (tileService.isDragonBallTile(user.getMapCoordination())) {
+            ItemTile item = tileService.getDragonBallTile(user.getMapCoordination());
             addPoint(item.receivePoints());
             dragonBallContainer.getNextDragonBall();
             foundDragonball.showImage();
@@ -99,8 +100,8 @@ public class Player {
         MapCoordination oldPosition = MapCoordination.copyOf(user.getMapCoordination());
         MapCoordination nextPosition = MapCoordination.getPlayerPositionWithDirection(user, direction.get());
 
-        if (sqmService.isElevatingSQM(nextPosition)) {
-            Elevatable elevatingTile = (Elevatable) sqmService.getBaseTile(nextPosition, Elevatable.getAreaType());
+        if (tileService.isElevatingSQM(nextPosition)) {
+            Elevatable elevatingTile = (Elevatable) tileService.getBaseTile(nextPosition, Elevatable.getAreaType());
             user.getMapCoordination().elevate(elevatingTile.elevatingValue(), direction.get());
         } else {
             user.getMapCoordination().incrementByDirection(direction.get());
@@ -138,10 +139,6 @@ public class Player {
 
     public MapCoordination getUserCoordination() {
         return user.getMapCoordination();
-    }
-
-    public User getUserInstance() {
-        return user;
     }
 
     public BaseEntity getUserCharacter() {

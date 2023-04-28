@@ -14,7 +14,7 @@ public class TilesetImageContainer {
     private static Map<AreaType, Map<Integer, BaseTile>> SQMByArea = new HashMap<>();
     private static AtomicInteger ID_SQM;
 
-    public static BaseTile getSQMByIntAndArea(AreaType area, int sqmId) {
+    public static BaseTile getTileByIntAndArea(AreaType area, int sqmId) {
         return getSQMByArea(area).get(sqmId);
     }
 

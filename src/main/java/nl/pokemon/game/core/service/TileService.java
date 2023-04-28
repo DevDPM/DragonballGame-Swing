@@ -13,7 +13,7 @@ import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
 @Service
-public class SQMService {
+public class TileService {
 
     @Inject
     private FullMapService fullMapService;
@@ -21,17 +21,17 @@ public class SQMService {
     public boolean isDragonBallTile(MapCoordination mapCoordination) {
         MapCoordination newMapCoordination = new MapCoordination(mapCoordination.getX(), mapCoordination.getY(), mapCoordination.getZ(), AreaType.LOWER_TERRAIN);
 
-        BaseTile baseTile = fullMapService.getBaseSQMByPosition(newMapCoordination);
+        BaseTile baseTile = fullMapService.getBaseTileByPosition(newMapCoordination);
         return baseTile instanceof ItemTile;
     }
 
     public ItemTile getDragonBallTile(MapCoordination mapCoordination) {
         MapCoordination newMapCoordination = new MapCoordination(mapCoordination.getX(), mapCoordination.getY(), mapCoordination.getZ(), AreaType.LOWER_TERRAIN);
-        return (ItemTile) fullMapService.getBaseSQMByPosition(newMapCoordination);
+        return (ItemTile) fullMapService.getBaseTileByPosition(newMapCoordination);
     }
 
     public BaseTile getSQMByIntAndAreaOrNull(AreaType area, int sqmId) {
-        return TilesetImageContainer.getSQMByIntAndArea(area, sqmId);
+        return TilesetImageContainer.getTileByIntAndArea(area, sqmId);
     }
 
     public Elevatable isElevatingSQMOrNull(User user, Direction direction) {
@@ -44,7 +44,7 @@ public class SQMService {
 
         for (AreaType areaType : AreaType.values()) {
             mapCoordination.setAreaType(areaType);
-            BaseTile baseTile = fullMapService.getBaseSQMByPosition(mapCoordination);
+            BaseTile baseTile = fullMapService.getBaseTileByPosition(mapCoordination);
             if (baseTile instanceof Elevatable elevation)
                 return elevation;
         }
@@ -61,7 +61,7 @@ public class SQMService {
 
         for (AreaType areaType : AreaType.values()) {
             mapCoordination.setAreaType(areaType);
-            BaseTile baseTile = fullMapService.getBaseSQMByPosition(mapCoordination);
+            BaseTile baseTile = fullMapService.getBaseTileByPosition(mapCoordination);
 
             if (baseTile.isNotWalkable())
                 return false;
@@ -96,7 +96,7 @@ public class SQMService {
 
         MapCoordination copyOfPosition = MapCoordination.copyOf(nextPosition);
         copyOfPosition.setAreaType(Elevatable.getAreaType());
-        BaseTile baseTile = fullMapService.getBaseSQMByPosition(copyOfPosition);
+        BaseTile baseTile = fullMapService.getBaseTileByPosition(copyOfPosition);
         return baseTile instanceof Elevatable;
     }
 
@@ -110,6 +110,6 @@ public class SQMService {
         if (validateMapOutOfRange(nextPosition))
             return null;
 
-        return fullMapService.getBaseSQMByPosition(nextPosition);
+        return fullMapService.getBaseTileByPosition(nextPosition);
     }
 }

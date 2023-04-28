@@ -210,7 +210,7 @@ public class OptionPanel extends JPanel {
 
                     @Override
                     public void mouseExited(MouseEvent e) {
-                            selectedItem.setIcon(TilesetImageContainer.getSQMByIntAndArea(selectableArea.getKey(), lastSelectedSqmId).getImageIcon());
+                            selectedItem.setIcon(TilesetImageContainer.getTileByIntAndArea(selectableArea.getKey(), lastSelectedSqmId).getImageIcon());
                     }
                 });
                 selectableButtons.add(selectableButton);

@@ -1,14 +1,11 @@
 package nl.pokemon.game.core.service;
 
+import nl.pokemon.game.bootstrap.TilesetImageContainer;
 import nl.pokemon.game.client.model.GameScreen;
 import nl.pokemon.game.domain.User;
 import nl.pokemon.game.client.enums.AreaType;
-import nl.pokemon.game.client.enums.Direction;
-import nl.pokemon.game.core.model.Elevatable;
 import nl.pokemon.game.core.model.MapCoordination;
 import nl.pokemon.game.core.model.Tiles.BaseTile;
-import nl.pokemon.game.core.model.Tiles.ConvertToSQM;
-import nl.pokemon.game.core.model.Tiles.ItemTile;
 import nl.pokemon.game.core.model.dragonballs.DragonBallContainer;
 import nl.pokemon.game.bootstrap.FullMap;
 import nl.pokemon.game.client.view.DBCount;
@@ -25,7 +22,7 @@ public class FullMapService {
     private PropertyChangeSupport updateElevation;
 
     @Inject
-    private SQMService sqmService;
+    private TileService tileService;
 
     @Inject
     private Player player;
@@ -42,7 +39,7 @@ public class FullMapService {
         this.updateElevation.addPropertyChangeListener(gameScreen);
     }
 
-    public BaseTile getBaseSQMByPosition(MapCoordination mapCoordination) {
+    public BaseTile getBaseTileByPosition(MapCoordination mapCoordination) {
         int x = mapCoordination.getX();
         int y = mapCoordination.getY();
         int z = mapCoordination.getZ();
@@ -54,12 +51,12 @@ public class FullMapService {
         if (areaType.equals(AreaType.PLAYER_BOTTOM) || areaType.equals(AreaType.PLAYER_TOP)) {
             int userId = getFullMapGridInt(areaType, z)[y][x];
             if (userId == 0)
-                return ConvertToSQM.getSQM(areaType, userId);
+                return TilesetImageContainer.getTileByIntAndArea(areaType, userId);
             return player.getUserCharacter();
         }
 
         int sqmId = getFullMapGridInt(areaType, z)[y][x];
-        return ConvertToSQM.getSQM(areaType, sqmId);
+        return TilesetImageContainer.getTileByIntAndArea(areaType, sqmId);
     }
 
     public Map<Integer, Map<AreaType, int[][]>> getFullMap() {

@@ -4,16 +4,11 @@ import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.client.enums.Direction;
 import nl.pokemon.game.core.model.MapCoordination;
 import nl.pokemon.game.core.model.Tiles.BaseTile;
-import nl.pokemon.game.core.service.FullMapService;
-import nl.pokemon.game.core.service.SQMService;
 import nl.pokemon.game.core.service.Player;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
-import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.util.Map;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 public class Movement {

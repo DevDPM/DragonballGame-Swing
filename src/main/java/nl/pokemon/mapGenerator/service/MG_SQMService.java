@@ -48,15 +48,15 @@ public class MG_SQMService {
                     DevTool_BaseTile clientViewSQM = clientViewSQMs[viewY][viewX];
 
                     editableSqm.setSqmId(optionPanel.getLastSelectedSqmId());
-                    editableSqm.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
-                    editableSqm.setSqmSizeX(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
-                    editableSqm.setSqmSizeY(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
+                    editableSqm.setImageIcon(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
+                    editableSqm.setSqmSizeX(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
+                    editableSqm.setSqmSizeY(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
                     editableSqm.updateSQM();
 
                     clientViewSQM.setSqmId(optionPanel.getLastSelectedSqmId());
-                    clientViewSQM.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
-                    clientViewSQM.setSqmSizeX(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
-                    clientViewSQM.setSqmSizeY(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
+                    clientViewSQM.setImageIcon(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
+                    clientViewSQM.setSqmSizeX(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
+                    clientViewSQM.setSqmSizeY(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
                     clientViewSQM.updateSQM();
                 }
             }
@@ -70,9 +70,9 @@ public class MG_SQMService {
             for (int x = 0; x < baseSQMS[0].length; x++) {
                 DevTool_BaseTile editableSqm = baseSQMS[y][x];
                 editableSqm.setSqmId(optionPanel.getLastSelectedSqmId());
-                editableSqm.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
-                editableSqm.setSqmSizeX(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
-                editableSqm.setSqmSizeY(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
+                editableSqm.setImageIcon(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
+                editableSqm.setSqmSizeX(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
+                editableSqm.setSqmSizeY(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
                 editableSqm.updateSQM();
             }
         }
@@ -95,17 +95,17 @@ public class MG_SQMService {
                     DevTool_BaseTile editableSqm = storedSQMs[y][x];
 
                     editableSqm.setSqmId(optionPanel.getLastSelectedSqmId());
-                    editableSqm.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
-                    editableSqm.setSqmSizeX(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
-                    editableSqm.setSqmSizeY(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
+                    editableSqm.setImageIcon(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
+                    editableSqm.setSqmSizeX(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
+                    editableSqm.setSqmSizeY(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
                     editableSqm.updateSQM();
 
                     if (x <= 30 && y <= 30) {
                         DevTool_BaseTile clientViewSQM = clientViewSQMs[y][x];
                         clientViewSQM.setSqmId(optionPanel.getLastSelectedSqmId());
-                        clientViewSQM.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
-                        clientViewSQM.setSqmSizeX(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
-                        clientViewSQM.setSqmSizeY(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
+                        clientViewSQM.setImageIcon(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
+                        clientViewSQM.setSqmSizeX(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
+                        clientViewSQM.setSqmSizeY(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
                         clientViewSQM.updateSQM();
                     }
                 }
@@ -130,15 +130,15 @@ public class MG_SQMService {
             DevTool_BaseTile clientViewSQM = clientViewSQMs[clientY][clientX];
 
             storedSQM.setSqmId(optionPanel.getLastSelectedSqmId());
-            storedSQM.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
-            storedSQM.setSqmSizeX(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
-            storedSQM.setSqmSizeY(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
+            storedSQM.setImageIcon(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
+            storedSQM.setSqmSizeX(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
+            storedSQM.setSqmSizeY(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
             storedSQM.updateSQM();
 
             clientViewSQM.setSqmId(optionPanel.getLastSelectedSqmId());
-            clientViewSQM.setImageIcon(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
-            clientViewSQM.setSqmSizeX(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
-            clientViewSQM.setSqmSizeY(TilesetImageContainer.getSQMByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
+            clientViewSQM.setImageIcon(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getImageIcon());
+            clientViewSQM.setSqmSizeX(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeX());
+            clientViewSQM.setSqmSizeY(TilesetImageContainer.getTileByIntAndArea(optionPanel.getCurentAreaType(), optionPanel.getLastSelectedSqmId()).getSqmSizeY());
             clientViewSQM.updateSQM();
         }
     }

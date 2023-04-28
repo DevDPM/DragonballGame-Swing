@@ -8,7 +8,7 @@ import nl.pokemon.game.core.model.MapCoordination;
 import nl.pokemon.game.core.model.Tiles.BaseTile;
 import nl.pokemon.game.core.model.Tiles.VoidTile;
 import nl.pokemon.game.core.service.FullMapService;
-import nl.pokemon.game.core.service.SQMService;
+import nl.pokemon.game.core.service.TileService;
 import nl.pokemon.game.core.service.Player;
 import nl.pokemon.game.bootstrap.FullMap;
 import org.dpmFramework.annotation.Inject;
@@ -28,7 +28,7 @@ public class GameScreen implements PropertyChangeListener {
     VoidTile voidSQM;
 
     @Inject
-    SQMService sqmService;
+    TileService tileService;
 
     @Inject
     Player player;
@@ -68,7 +68,7 @@ public class GameScreen implements PropertyChangeListener {
                         } else {
                             if (area.equals(AreaType.PLAYER_BOTTOM) || area.equals(AreaType.PLAYER_TOP)) {
                                 if (storageGridMap[intY][intX] == 0) {
-                                    storedSQM = sqmService.getSQMByIntAndAreaOrNull(area, storageGridMap[intY][intX]);
+                                    storedSQM = tileService.getSQMByIntAndAreaOrNull(area, storageGridMap[intY][intX]);
                                 } else {
                                     storedSQM = player.getUserCharacter();
                                 }
@@ -76,7 +76,7 @@ public class GameScreen implements PropertyChangeListener {
                                 if (area == AreaType.LOWER_TERRAIN && intX == 35 && intY == 53){
                                 }
 
-                                storedSQM = sqmService.getSQMByIntAndAreaOrNull(area, storageGridMap[intY][intX]);
+                                storedSQM = tileService.getSQMByIntAndAreaOrNull(area, storageGridMap[intY][intX]);
                             }
                         }
                         BaseTile viewSQM = viewGridMap[y][x];
@@ -99,11 +99,10 @@ public class GameScreen implements PropertyChangeListener {
     }
 
     public void adjustPlayerToTopLayerByElevation(Direction direction, User player) {
-        Elevatable elv = sqmService.isElevatingSQMOrNull(player, direction);
+        Elevatable elv = tileService.isElevatingSQMOrNull(player, direction);
         if (elv != null) {
             fullMapService.moveToTopLayer(player);
         }
-
     }
 
     private void changeSQMOffsetByZ(int currentZ, BaseTile viewSQM, int playerZ) {
