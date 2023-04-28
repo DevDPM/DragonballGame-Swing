@@ -1,14 +1,13 @@
 package nl.pokemon.game.client.view;
 
 import nl.pokemon.game.bootstrap.Bootstrap;
-import nl.pokemon.game.bootstrap.FullMap;
 import nl.pokemon.game.client.controller.RpgController;
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.core.model.Tiles.BaseTile;
 import nl.pokemon.game.domain.Session;
-import nl.pokemon.game.client.model.output.TileMap;
-import nl.pokemon.game.client.model.output.FullTileMap;
-import nl.pokemon.game.client.model.output.GameScreen;
+import nl.pokemon.game.client.model.TileMap;
+import nl.pokemon.game.client.model.FullTileMap;
+import nl.pokemon.game.client.model.GameScreen;
 import org.dpmFramework.Kickstarter;
 
 import javax.swing.*;

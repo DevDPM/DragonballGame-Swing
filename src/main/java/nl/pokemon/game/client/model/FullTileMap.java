@@ -1,4 +1,4 @@
-package nl.pokemon.game.client.model.output;
+package nl.pokemon.game.client.model;
 
 import nl.pokemon.game.client.enums.AreaType;
 

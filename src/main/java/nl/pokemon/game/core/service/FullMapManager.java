@@ -1,6 +1,6 @@
 package nl.pokemon.game.core.service;
 
-import nl.pokemon.game.client.model.output.GameScreen;
+import nl.pokemon.game.client.model.GameScreen;
 import nl.pokemon.game.domain.User;
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.client.enums.Direction;
@@ -43,7 +43,6 @@ public class FullMapManager {
     }
 
     public void moveUser(User user, Direction direction) {
-        int userId = user.getId();
         MapCoordination mapCoordination = user.getMapCoordination();
 
         Elevatable elevation = sqmService.isElevatingSQMOrNull(user, direction);
@@ -61,10 +60,6 @@ public class FullMapManager {
             if (FullMap.erasePosition(mapCoordination)) {
                 mapCoordination.setX(mapCoordination.getX() + direction.getX());
                 mapCoordination.setY(mapCoordination.getY() + direction.getY());
-
-                if (sqmService.isWalkableTerrainOrNull(user) == null) {
-                    mapCoordination.setAreaType(AreaType.PLAYER_BOTTOM);
-                }
 
                 ItemTile itemSQM = sqmService.isDragonBallSQMOrNull(user);
                 if (itemSQM != null) {

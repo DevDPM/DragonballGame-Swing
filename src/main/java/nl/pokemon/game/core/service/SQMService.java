@@ -21,7 +21,7 @@ public class SQMService {
 
     public ItemTile isDragonBallSQMOrNull(User user) {
         MapCoordination mapCoordination = user.getMapCoordination();
-        MapCoordination newMapCoordination = new MapCoordination(mapCoordination.getX(), mapCoordination.getY(), mapCoordination.getZ(), AreaType.HIGHER_TERRAIN);
+        MapCoordination newMapCoordination = new MapCoordination(mapCoordination.getX(), mapCoordination.getY(), mapCoordination.getZ(), AreaType.LOWER_TERRAIN);
 
         BaseTile baseTile = fullMapManager.getBaseSQMByPosition(newMapCoordination);
         if (baseTile instanceof ItemTile item) {

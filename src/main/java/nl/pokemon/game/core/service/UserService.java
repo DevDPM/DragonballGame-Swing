@@ -1,6 +1,6 @@
 package nl.pokemon.game.core.service;
 
-import nl.pokemon.game.client.model.output.GameScreen;
+import nl.pokemon.game.client.model.GameScreen;
 import nl.pokemon.game.core.model.Elevatable;
 import nl.pokemon.game.core.model.Tiles.BaseTile;
 import nl.pokemon.game.domain.User;

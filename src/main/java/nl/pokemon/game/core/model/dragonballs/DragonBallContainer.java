@@ -4,7 +4,7 @@ import nl.pokemon.game.core.model.MapCoordination;
 import nl.pokemon.game.core.model.Tiles.BaseTile;
 import nl.pokemon.game.core.model.Tiles.ItemTile;
 import nl.pokemon.game.client.enums.AreaType;
-import nl.pokemon.game.client.model.output.FullTileMap;
+import nl.pokemon.game.client.model.FullTileMap;
 import nl.pokemon.game.core.service.FullMapManager;
 import nl.pokemon.game.bootstrap.FullMap;
 import nl.pokemon.game.bootstrap.TilesetImageContainer;
@@ -50,8 +50,11 @@ public class DragonBallContainer {
         if (!mapSQM.isNotWalkable() && mapSQM.getSqmId() != 0 &&
                 !terrainSQM.isNotWalkable() && terrainSQM.getSqmId() == 0) {
 
-            ItemTile dragonballSQM = (ItemTile) TilesetImageContainer.getSQMByIntAndArea(AreaType.LOWER_TERRAIN, sqmId);
-            return new DragonBall(new MapCoordination(x, y, z, dragonballSQM.getAreaType()), dragonballSQM);
+            BaseTile baseTile = TilesetImageContainer.getSQMByIntAndArea(AreaType.LOWER_TERRAIN, sqmId);
+            ItemTile dragonballSQM = new ItemTile();
+            dragonballSQM.setImageIcon(baseTile.getImageIcon());
+            dragonballSQM.setSqmId(baseTile.getSqmId());
+            return new DragonBall(new MapCoordination(x, y, z, AreaType.LOWER_TERRAIN), dragonballSQM);
         } else {
             return createDragonBallBySqmId(sqmId);
         }

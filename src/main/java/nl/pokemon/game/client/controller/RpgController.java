@@ -1,7 +1,7 @@
 package nl.pokemon.game.client.controller;
 
 import nl.pokemon.game.client.enums.Direction;
-import nl.pokemon.game.client.model.output.Movement;
+import nl.pokemon.game.client.model.Movement;
 import nl.pokemon.game.client.view.DBRadar;
 import org.dpmFramework.annotation.Controller;
 import org.dpmFramework.annotation.Inject;
