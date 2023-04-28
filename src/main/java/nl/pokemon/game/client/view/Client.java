@@ -20,7 +20,7 @@ public class Client extends JFrame {
 
     public Client() {
 
-        this.setTitle("Pokemon!");
+        this.setTitle("Dragon ball Z!");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         this.setSize(800, 800);
@@ -31,7 +31,7 @@ public class Client extends JFrame {
         Bootstrap.load();
 
         Session session = Kickstarter.getInstanceOf(Session.class);
-        session.start();
+        this.add(Kickstarter.getInstanceOf(EndGame.class));
         this.add(Kickstarter.getInstanceOf(TimeBox.class));
         this.add(Kickstarter.getInstanceOf(DBCount.class));
         this.add(Kickstarter.getInstanceOf(FoundDragonball.class));
@@ -60,5 +60,6 @@ public class Client extends JFrame {
         }
 
         this.setVisible(true);
+        session.start();
     }
 }

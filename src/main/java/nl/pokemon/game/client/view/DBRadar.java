@@ -1,9 +1,12 @@
 package nl.pokemon.game.client.view;
 
+import org.dpmFramework.annotation.Service;
+
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalTime;
 
+@Service
 public class DBRadar extends JLabel {
 
     private boolean visibility = false;

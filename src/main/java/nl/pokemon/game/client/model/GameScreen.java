@@ -1,5 +1,6 @@
 package nl.pokemon.game.client.model;
 
+import nl.pokemon.game.bootstrap.TilesetImageContainer;
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.core.model.MapCoordination;
 import nl.pokemon.game.core.model.tiles.BaseTile;
@@ -19,9 +20,6 @@ public class GameScreen implements PropertyChangeListener {
 
     @Inject
     FullTileMap fullTileMap;
-
-    @Inject
-    VoidTile voidSQM;
 
     @Inject
     TileService tileService;
@@ -56,14 +54,10 @@ public class GameScreen implements PropertyChangeListener {
                         BaseTile storedSQM;
 
                         if (intY < 0 || intX < 0 || intY >= FullMap.fullMapHeight() || intX >= FullMap.fullMapWidth()) {
-                            storedSQM = voidSQM;
+                            storedSQM = TilesetImageContainer.getTileByIntAndArea(area, 0);
                         } else {
-                            if (area.equals(AreaType.PLAYER_BOTTOM) || area.equals(AreaType.PLAYER_TOP)) {
-                                if (storageGridMap[intY][intX] == 0) {
-                                    storedSQM = tileService.getTileByAreaAndNumber(area, storageGridMap[intY][intX]);
-                                } else {
-                                    storedSQM = playerService.getUserCharacter();
-                                }
+                            if ((area.equals(AreaType.PLAYER_BOTTOM) || area.equals(AreaType.PLAYER_TOP)) && storageGridMap[intY][intX] != 0) {
+                                storedSQM = playerService.getUserCharacter();
                             } else {
                                 storedSQM = tileService.getTileByAreaAndNumber(area, storageGridMap[intY][intX]);
                             }

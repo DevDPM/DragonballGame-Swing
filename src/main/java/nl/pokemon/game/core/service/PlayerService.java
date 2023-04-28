@@ -134,6 +134,10 @@ public class PlayerService {
         gameScreen.updateView();
     }
 
+    public int getPoints() {
+        return user.getPoints();
+    }
+
     public void standStill(Direction direction) {
         user.getCharacter().setStandingImage(direction);
         gameScreen.updateView();

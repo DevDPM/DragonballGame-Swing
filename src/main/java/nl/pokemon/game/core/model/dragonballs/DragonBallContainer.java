@@ -1,5 +1,6 @@
 package nl.pokemon.game.core.model.dragonballs;
 
+import nl.pokemon.game.client.view.EndGame;
 import nl.pokemon.game.core.model.MapCoordination;
 import nl.pokemon.game.core.model.tiles.BaseTile;
 import nl.pokemon.game.core.model.tiles.ItemTile;
@@ -9,6 +10,7 @@ import nl.pokemon.game.core.model.tiles.LowTerrainTile;
 import nl.pokemon.game.core.service.FullMapService;
 import nl.pokemon.game.bootstrap.FullMap;
 import nl.pokemon.game.bootstrap.TilesetImageContainer;
+import nl.pokemon.game.domain.Session;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
@@ -20,6 +22,9 @@ public class DragonBallContainer {
     @Inject
     FullMapService fullMapService;
 
+    @Inject
+    Session session;
+
     private final Stack<DragonBall> dragonBallsContainer = new Stack<>();
     private DragonBall currentDragonball;
 
@@ -28,6 +33,7 @@ public class DragonBallContainer {
         FullMap.bootstrapFullMap();
         addNewDragonBalls();
     }
+
     private void addNewDragonBalls() {
         ArrayList<Integer> dragonballIds = new ArrayList<>(Arrays.asList(10, 11, 12, 13, 14, 15, 16));
         Random randomizedDB = new Random();
@@ -73,10 +79,13 @@ public class DragonBallContainer {
             System.out.println("current db: " + dragonBall.getMapCoordination().getX() + " " + dragonBall.getMapCoordination().getY() + " " + dragonBall.getMapCoordination().getZ() + "");
             return dragonBall;
         } catch (EmptyStackException e) {
-            // finish game
-            System.out.println("you won!");
+            session.stop();
         }
         throw new RuntimeException("Something terrible happened during getNextDragonBall");
+    }
+
+    public Stack<DragonBall> getDragonBallsContainer() {
+        return dragonBallsContainer;
     }
 
     public DragonBall getCurrentDragonball() {

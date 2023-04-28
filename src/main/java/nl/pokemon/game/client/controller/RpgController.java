@@ -1,7 +1,6 @@
 package nl.pokemon.game.client.controller;
 
 import nl.pokemon.game.client.enums.Direction;
-import nl.pokemon.game.client.model.Movement;
 import nl.pokemon.game.client.view.DBRadar;
 import nl.pokemon.game.core.service.PlayerService;
 import org.dpmFramework.annotation.Controller;
@@ -16,16 +15,17 @@ public class RpgController implements KeyListener {
 //    private final Logger log = LoggerFactory.getLogger(RpgController.class);
 
     @Inject
-    PlayerService user;
-
-    @Inject
-    Movement movement;
+    PlayerService playerService;
 
     @Inject
     DBRadar DBRadar;
 
     @Override
     public void keyPressed(KeyEvent keyEvent) {
+
+        if (playerService.getPoints() >= 7) {
+            return;
+        }
 
         switch (keyEvent.getKeyCode()) {
 //            case KeyEvent.VK_SPACE -> dragonBallRadar.useDragonBallRadar();
@@ -34,15 +34,15 @@ public class RpgController implements KeyListener {
 
         boolean pressWASD;
         pressWASD = switch (keyEvent.getKeyChar()) {
-            case 'w' -> user.addOrUpdateDirection(Direction.NORTH);
-            case 'a' -> user.addOrUpdateDirection(Direction.WEST);
-            case 's' -> user.addOrUpdateDirection(Direction.SOUTH);
-            case 'd' -> user.addOrUpdateDirection(Direction.EAST);
+            case 'w' -> playerService.addOrUpdateDirection(Direction.NORTH);
+            case 'a' -> playerService.addOrUpdateDirection(Direction.WEST);
+            case 's' -> playerService.addOrUpdateDirection(Direction.SOUTH);
+            case 'd' -> playerService.addOrUpdateDirection(Direction.EAST);
             default -> false;
         };
 
-        if (!user.isCharacterMoving() && pressWASD)
-            user.startMovingSequence();
+        if (!playerService.isCharacterMoving() && pressWASD)
+            playerService.startMovingSequence();
     }
 
     @Override
