@@ -3,8 +3,8 @@ package nl.pokemon.game.client.model;
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.client.enums.Direction;
 import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.Tiles.BaseTile;
-import nl.pokemon.game.core.service.Player;
+import nl.pokemon.game.core.model.tiles.BaseTile;
+import nl.pokemon.game.core.service.PlayerService;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
@@ -19,7 +19,7 @@ public class Movement {
     private int smoothMovePosY = 0;
 
     @Inject
-    Player player;
+    PlayerService playerService;
 
     @Inject
     GameScreen gameScreen;
@@ -37,7 +37,7 @@ public class Movement {
                     for (int x = 0; x < TileMap.MAX_X; x++) {
 
                         BaseTile viewSQM = viewGridMap[y][x];
-                        MapCoordination userCoordinate = player.getUserCoordination();
+                        MapCoordination userCoordinate = playerService.getUserCoordination();
                         if (!((x == 10 && y == 10 && z == userCoordinate.getZ()) &&
                                 areaType.equals(userCoordinate.getAreaType()))) {
                             int newPixelPosX;

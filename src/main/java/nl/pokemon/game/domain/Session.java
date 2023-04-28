@@ -2,14 +2,16 @@ package nl.pokemon.game.domain;
 
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.players.Goku;
+import nl.pokemon.game.core.model.characters.Goku;
+import nl.pokemon.game.core.service.FullMapService;
+import org.dpmFramework.Kickstarter;
 
 public class Session {
 
     private User user;
 
     public Session() {
-        User user = new User("Daniel", new Goku(), new MapCoordination(45, 63, 0, AreaType.PLAYER_BOTTOM));
+        User user = new User("Daniel", new Goku(), new MapCoordination(46, 63, 0, AreaType.PLAYER_BOTTOM));
 
         this.user = user;
     }
@@ -20,5 +22,9 @@ public class Session {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public void start() {
+        Kickstarter.getInstanceOf(FullMapService.class).setUserPosition(this.user);
     }
 }

@@ -1,16 +1,16 @@
-package nl.pokemon.game.core.model.Tiles;
+package nl.pokemon.game.core.model.tiles;
 
 import nl.pokemon.game.client.enums.AreaType;
 
-public class HighTerrainTile extends BaseTile {
+public class MapTile extends BaseTile {
 
     @Override
     public boolean isNotWalkable() {
-        return true;
+        return false;
     }
 
     @Override
     public AreaType getAreaType() {
-        return AreaType.HIGHER_TERRAIN;
+        return AreaType.MAP;
     }
 }

@@ -3,7 +3,7 @@ package nl.pokemon.game.bootstrap;
 import nl.pokemon.game.domain.User;
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.Tiles.BaseTile;
+import nl.pokemon.game.core.model.tiles.BaseTile;
 
 import java.util.*;
 

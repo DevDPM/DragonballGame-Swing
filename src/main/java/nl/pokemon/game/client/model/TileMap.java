@@ -1,8 +1,8 @@
 package nl.pokemon.game.client.model;
 
 import nl.pokemon.game.client.enums.AreaType;
-import nl.pokemon.game.core.model.Tiles.BaseTile;
-import nl.pokemon.game.core.model.Tiles.TileFactory;
+import nl.pokemon.game.core.model.tiles.BaseTile;
+import nl.pokemon.game.core.model.tiles.TileFactory;
 
 public final class TileMap {
 

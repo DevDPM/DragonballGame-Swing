@@ -1,4 +1,4 @@
-package nl.pokemon.game.core.model.players;
+package nl.pokemon.game.core.model.characters;
 
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.client.enums.Direction;

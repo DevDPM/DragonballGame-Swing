@@ -3,7 +3,7 @@ package nl.pokemon.game.client.view;
 import nl.pokemon.game.bootstrap.Bootstrap;
 import nl.pokemon.game.client.controller.RpgController;
 import nl.pokemon.game.client.enums.AreaType;
-import nl.pokemon.game.core.model.Tiles.BaseTile;
+import nl.pokemon.game.core.model.tiles.BaseTile;
 import nl.pokemon.game.domain.Session;
 import nl.pokemon.game.client.model.TileMap;
 import nl.pokemon.game.client.model.FullTileMap;
@@ -31,14 +31,13 @@ public class Client extends JFrame {
         Bootstrap.load();
 
         Session session = Kickstarter.getInstanceOf(Session.class);
-
-        this.add(new TimeBox());
-        this.add(new DBRadar());
+        session.start();
+        this.add(Kickstarter.getInstanceOf(TimeBox.class));
+        this.add(Kickstarter.getInstanceOf(DBCount.class));
         this.add(Kickstarter.getInstanceOf(FoundDragonball.class));
 
         this.add(Kickstarter.getInstanceOf(DBCount.class));
         FullTileMap view = Kickstarter.getInstanceOf(FullTileMap.class);
-        GameScreen gameScreen = Kickstarter.getInstanceOf(GameScreen.class);
 
         Map<Integer, Map<AreaType, TileMap>> fullMap = view.getFullTileMap();
         List<Integer> elevations = new ArrayList<>(fullMap.keySet());
@@ -54,15 +53,11 @@ public class Client extends JFrame {
                 for (int y = areaMap.getTileMap()[0].length-1; y >= 0; y--) {
                     for (int x = areaMap.getTileMap().length-1; x >= 0; x--) {
                         BaseTile sqm = areaMap.getTileMap()[y][x];
-                        sqm.setVisible(false);
-                        if (elevation == session.getUser().getMapCoordination().getZ())
-                            sqm.setVisible(true);
                         this.add(sqm);
                     }
                 }
             }
         }
-        gameScreen.updateView(session.getUser().getMapCoordination().getZ());
 
         this.setVisible(true);
     }

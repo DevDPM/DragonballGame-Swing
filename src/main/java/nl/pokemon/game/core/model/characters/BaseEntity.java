@@ -1,7 +1,7 @@
-package nl.pokemon.game.core.model.players;
+package nl.pokemon.game.core.model.characters;
 
 import nl.pokemon.game.client.enums.Direction;
-import nl.pokemon.game.core.model.Tiles.BaseTile;
+import nl.pokemon.game.core.model.tiles.BaseTile;
 
 public abstract class BaseEntity extends BaseTile {
 

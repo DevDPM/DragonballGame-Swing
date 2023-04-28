@@ -1,4 +1,4 @@
-package nl.pokemon.game.core.model.Tiles;
+package nl.pokemon.game.core.model.tiles;
 
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.core.model.Elevatable;

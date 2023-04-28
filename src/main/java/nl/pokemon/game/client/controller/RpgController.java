@@ -3,7 +3,7 @@ package nl.pokemon.game.client.controller;
 import nl.pokemon.game.client.enums.Direction;
 import nl.pokemon.game.client.model.Movement;
 import nl.pokemon.game.client.view.DBRadar;
-import nl.pokemon.game.core.service.Player;
+import nl.pokemon.game.core.service.PlayerService;
 import org.dpmFramework.annotation.Controller;
 import org.dpmFramework.annotation.Inject;
 
@@ -16,7 +16,7 @@ public class RpgController implements KeyListener {
 //    private final Logger log = LoggerFactory.getLogger(RpgController.class);
 
     @Inject
-    Player user;
+    PlayerService user;
 
     @Inject
     Movement movement;

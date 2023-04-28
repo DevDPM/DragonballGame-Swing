@@ -1,7 +1,7 @@
 package nl.pokemon.mapGenerator.view;
 
 import nl.pokemon.game.client.enums.AreaType;
-import nl.pokemon.game.core.model.Tiles.BaseTile;
+import nl.pokemon.game.core.model.tiles.BaseTile;
 import nl.pokemon.game.bootstrap.TilesetImageContainer;
 import nl.pokemon.mapGenerator.model.View.MG_ViewMap;
 import nl.pokemon.mapGenerator.service.MG_ViewService;

@@ -1,12 +1,8 @@
-package nl.pokemon.game.core.model.Tiles;
+package nl.pokemon.game.core.model.tiles;
 
 import nl.pokemon.game.client.enums.AreaType;
 
-public class VoidTile extends BaseTile {
-
-    public VoidTile() {
-        this.setImageIcon(null);
-    }
+public class HighTerrainTile extends BaseTile {
 
     @Override
     public boolean isNotWalkable() {
@@ -15,6 +11,6 @@ public class VoidTile extends BaseTile {
 
     @Override
     public AreaType getAreaType() {
-        return AreaType.MAP;
+        return AreaType.HIGHER_TERRAIN;
     }
 }

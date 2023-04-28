@@ -1,11 +1,11 @@
 package nl.pokemon.game.core.model.dragonballs;
 
 import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.Tiles.BaseTile;
-import nl.pokemon.game.core.model.Tiles.ItemTile;
+import nl.pokemon.game.core.model.tiles.BaseTile;
+import nl.pokemon.game.core.model.tiles.ItemTile;
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.client.model.FullTileMap;
-import nl.pokemon.game.core.model.Tiles.LowTerrainTile;
+import nl.pokemon.game.core.model.tiles.LowTerrainTile;
 import nl.pokemon.game.core.service.FullMapService;
 import nl.pokemon.game.bootstrap.FullMap;
 import nl.pokemon.game.bootstrap.TilesetImageContainer;
@@ -61,7 +61,7 @@ public class DragonBallContainer {
         }
     }
 
-    public DragonBall getNextDragonBall() throws EmptyStackException {
+    public DragonBall releaseNextDragonBall() throws EmptyStackException {
         if (currentDragonball != null) {
             fullMapService.setBaseSQMToPosition(currentDragonball.getMapCoordination(), new LowTerrainTile());
         }

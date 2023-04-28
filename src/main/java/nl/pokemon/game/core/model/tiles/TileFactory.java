@@ -1,6 +1,6 @@
-package nl.pokemon.game.core.model.Tiles;
+package nl.pokemon.game.core.model.tiles;
 
-import nl.pokemon.game.core.model.players.VoidPlayerTile;
+import nl.pokemon.game.core.model.characters.VoidPlayerTile;
 import nl.pokemon.game.client.enums.AreaType;
 
 public class TileFactory {

@@ -5,8 +5,8 @@ import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.client.enums.Direction;
 import nl.pokemon.game.core.model.Elevatable;
 import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.Tiles.BaseTile;
-import nl.pokemon.game.core.model.Tiles.ItemTile;
+import nl.pokemon.game.core.model.tiles.BaseTile;
+import nl.pokemon.game.core.model.tiles.ItemTile;
 import nl.pokemon.game.bootstrap.FullMap;
 import nl.pokemon.game.bootstrap.TilesetImageContainer;
 import org.dpmFramework.annotation.Inject;
@@ -30,25 +30,8 @@ public class TileService {
         return (ItemTile) fullMapService.getBaseTileByPosition(newMapCoordination);
     }
 
-    public BaseTile getSQMByIntAndAreaOrNull(AreaType area, int sqmId) {
+    public BaseTile getTileByAreaAndNumber(AreaType area, int sqmId) {
         return TilesetImageContainer.getTileByIntAndArea(area, sqmId);
-    }
-
-    public Elevatable isElevatingSQMOrNull(User user, Direction direction) {
-        return isElevatingSQMOrNull(getMapCoordinationByDirection(user, direction));
-    }
-
-    private Elevatable isElevatingSQMOrNull(MapCoordination mapCoordination) {
-        if (validateMapOutOfRange(mapCoordination))
-            return null;
-
-        for (AreaType areaType : AreaType.values()) {
-            mapCoordination.setAreaType(areaType);
-            BaseTile baseTile = fullMapService.getBaseTileByPosition(mapCoordination);
-            if (baseTile instanceof Elevatable elevation)
-                return elevation;
-        }
-        return null;
     }
 
     public boolean isWalkableTile(User user, Direction direction) {

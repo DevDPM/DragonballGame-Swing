@@ -1,15 +1,11 @@
 package nl.pokemon.game.client.model;
 
-import nl.pokemon.game.domain.User;
 import nl.pokemon.game.client.enums.AreaType;
-import nl.pokemon.game.client.enums.Direction;
-import nl.pokemon.game.core.model.Elevatable;
 import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.Tiles.BaseTile;
-import nl.pokemon.game.core.model.Tiles.VoidTile;
-import nl.pokemon.game.core.service.FullMapService;
+import nl.pokemon.game.core.model.tiles.BaseTile;
+import nl.pokemon.game.core.model.tiles.VoidTile;
 import nl.pokemon.game.core.service.TileService;
-import nl.pokemon.game.core.service.Player;
+import nl.pokemon.game.core.service.PlayerService;
 import nl.pokemon.game.bootstrap.FullMap;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
@@ -31,17 +27,14 @@ public class GameScreen implements PropertyChangeListener {
     TileService tileService;
 
     @Inject
-    Player player;
-
-    @Inject
-    FullMapService fullMapService;
+    PlayerService playerService;
 
     public void updateView() {
         updateView(null);
     }
 
     public void updateView(Integer visibilityUntilZ) {
-        MapCoordination userPosition = player.getUserCoordination();
+        MapCoordination userPosition = playerService.getUserCoordination();
         int START_X_MAP = userPosition.getX() - ((TileMap.MAX_X - 1)/2);
         int START_Y_MAP = userPosition.getY() - ((TileMap.MAX_Y - 1)/2);
         int START_Z_MAP = userPosition.getZ();
@@ -55,7 +48,6 @@ public class GameScreen implements PropertyChangeListener {
             Map<AreaType, int[][]> storageSurfaceGridMap = FullMap.getViewMap().get(z);
 
             for (AreaType area : AreaType.values()) {
-
                 BaseTile[][] viewGridMap = viewSurfaceGridMap.get(area).getTileMap();
                 int[][] storageGridMap = storageSurfaceGridMap.get(area);
 
@@ -68,15 +60,12 @@ public class GameScreen implements PropertyChangeListener {
                         } else {
                             if (area.equals(AreaType.PLAYER_BOTTOM) || area.equals(AreaType.PLAYER_TOP)) {
                                 if (storageGridMap[intY][intX] == 0) {
-                                    storedSQM = tileService.getSQMByIntAndAreaOrNull(area, storageGridMap[intY][intX]);
+                                    storedSQM = tileService.getTileByAreaAndNumber(area, storageGridMap[intY][intX]);
                                 } else {
-                                    storedSQM = player.getUserCharacter();
+                                    storedSQM = playerService.getUserCharacter();
                                 }
                             } else {
-                                if (area == AreaType.LOWER_TERRAIN && intX == 35 && intY == 53){
-                                }
-
-                                storedSQM = tileService.getSQMByIntAndAreaOrNull(area, storageGridMap[intY][intX]);
+                                storedSQM = tileService.getTileByAreaAndNumber(area, storageGridMap[intY][intX]);
                             }
                         }
                         BaseTile viewSQM = viewGridMap[y][x];
@@ -95,13 +84,6 @@ public class GameScreen implements PropertyChangeListener {
                     }
                 }
             }
-        }
-    }
-
-    public void adjustPlayerToTopLayerByElevation(Direction direction, User player) {
-        Elevatable elv = tileService.isElevatingSQMOrNull(player, direction);
-        if (elv != null) {
-            fullMapService.moveToTopLayer(player);
         }
     }
 
@@ -134,7 +116,6 @@ public class GameScreen implements PropertyChangeListener {
 
     @Override
     public void propertyChange(PropertyChangeEvent evt) {
-
         switch (evt.getPropertyName()) {
             case "changeElevation" -> updateView((Integer) evt.getNewValue());
             case "playerMoved", "playerVisibilityChange" -> updateView();

@@ -1,7 +1,7 @@
 package nl.pokemon.game.core.model.dragonballs;
 
 import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.Tiles.ItemTile;
+import nl.pokemon.game.core.model.tiles.ItemTile;
 
 public class DragonBall {
     private MapCoordination mapCoordination;

@@ -1,6 +1,6 @@
 package nl.pokemon.game.bootstrap;
 
-import nl.pokemon.game.core.model.Tiles.*;
+import nl.pokemon.game.core.model.tiles.*;
 import nl.pokemon.game.client.enums.AreaType;
 
 import javax.swing.*;

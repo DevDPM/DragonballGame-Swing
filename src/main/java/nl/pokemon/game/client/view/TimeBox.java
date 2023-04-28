@@ -1,13 +1,14 @@
 package nl.pokemon.game.client.view;
 
-import nl.pokemon.game.domain.User;
 import nl.pokemon.game.core.model.dragonballs.DragonBallContainer;
 import org.dpmFramework.Kickstarter;
+import org.dpmFramework.annotation.Service;
 
 import javax.swing.*;
 import java.awt.*;
 import java.time.LocalTime;
 
+@Service
 public class TimeBox extends JLabel {
 
     public TimeBox() {
@@ -25,7 +26,7 @@ public class TimeBox extends JLabel {
 
             int totalSeconds = currentTime - startTime;
             if (totalSeconds == 5) {
-                Kickstarter.getInstanceOf(DragonBallContainer.class).getNextDragonBall();
+                Kickstarter.getInstanceOf(DragonBallContainer.class).releaseNextDragonBall();
             }
             if (totalSeconds < 60) {
                 this.setText("Time: " + totalSeconds + "s");

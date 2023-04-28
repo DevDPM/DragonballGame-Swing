@@ -1,7 +1,7 @@
 package nl.pokemon.game.config;
 
 import nl.pokemon.game.domain.Session;
-import nl.pokemon.game.core.model.Tiles.VoidTile;
+import nl.pokemon.game.core.model.tiles.VoidTile;
 import nl.pokemon.game.client.model.FullTileMap;
 import nl.pokemon.game.repository.UserRepository;
 import nl.pokemon.game.client.view.DBCount;

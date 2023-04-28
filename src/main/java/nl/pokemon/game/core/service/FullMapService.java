@@ -5,7 +5,7 @@ import nl.pokemon.game.client.model.GameScreen;
 import nl.pokemon.game.domain.User;
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.Tiles.BaseTile;
+import nl.pokemon.game.core.model.tiles.BaseTile;
 import nl.pokemon.game.core.model.dragonballs.DragonBallContainer;
 import nl.pokemon.game.bootstrap.FullMap;
 import nl.pokemon.game.client.view.DBCount;
@@ -25,7 +25,7 @@ public class FullMapService {
     private TileService tileService;
 
     @Inject
-    private Player player;
+    private PlayerService playerService;
 
     @Inject
     private DragonBallContainer dragonBallContainer;
@@ -52,7 +52,7 @@ public class FullMapService {
             int userId = getFullMapGridInt(areaType, z)[y][x];
             if (userId == 0)
                 return TilesetImageContainer.getTileByIntAndArea(areaType, userId);
-            return player.getUserCharacter();
+            return playerService.getUserCharacter();
         }
 
         int sqmId = getFullMapGridInt(areaType, z)[y][x];
@@ -97,5 +97,11 @@ public class FullMapService {
             }
             updateElevation.firePropertyChange(fireProperty, null, user.getMapCoordination().getZ());
         }
+    }
+
+    public void setUserPosition(User user) {
+        FullMap.updateUserPosition(user);
+        String fireProperty = "changeElevation";
+        updateElevation.firePropertyChange(fireProperty, null, user.getMapCoordination().getZ());
     }
 }

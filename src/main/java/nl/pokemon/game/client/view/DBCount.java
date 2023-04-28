@@ -1,9 +1,11 @@
 package nl.pokemon.game.client.view;
 
-import nl.pokemon.game.core.model.Tiles.ItemTile;
+import nl.pokemon.game.core.model.tiles.ItemTile;
+import org.dpmFramework.annotation.Service;
 
 import javax.swing.*;
 
+@Service
 public class DBCount extends JLabel {
 
     public DBCount() {
