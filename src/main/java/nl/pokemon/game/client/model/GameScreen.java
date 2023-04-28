@@ -7,9 +7,9 @@ import nl.pokemon.game.core.model.Elevatable;
 import nl.pokemon.game.core.model.MapCoordination;
 import nl.pokemon.game.core.model.Tiles.BaseTile;
 import nl.pokemon.game.core.model.Tiles.VoidTile;
-import nl.pokemon.game.core.service.FullMapManager;
+import nl.pokemon.game.core.service.FullMapService;
 import nl.pokemon.game.core.service.SQMService;
-import nl.pokemon.game.core.service.UserService;
+import nl.pokemon.game.core.service.Player;
 import nl.pokemon.game.bootstrap.FullMap;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
@@ -31,17 +31,17 @@ public class GameScreen implements PropertyChangeListener {
     SQMService sqmService;
 
     @Inject
-    UserService userService;
+    Player player;
 
     @Inject
-    FullMapManager fullMapManager;
+    FullMapService fullMapService;
 
     public void updateView() {
         updateView(null);
     }
 
     public void updateView(Integer visibilityUntilZ) {
-        MapCoordination userPosition = userService.getUserCoordination();
+        MapCoordination userPosition = player.getUserCoordination();
         int START_X_MAP = userPosition.getX() - ((TileMap.MAX_X - 1)/2);
         int START_Y_MAP = userPosition.getY() - ((TileMap.MAX_Y - 1)/2);
         int START_Z_MAP = userPosition.getZ();
@@ -70,7 +70,7 @@ public class GameScreen implements PropertyChangeListener {
                                 if (storageGridMap[intY][intX] == 0) {
                                     storedSQM = sqmService.getSQMByIntAndAreaOrNull(area, storageGridMap[intY][intX]);
                                 } else {
-                                    storedSQM = userService.getUserCharacter();
+                                    storedSQM = player.getUserCharacter();
                                 }
                             } else {
                                 if (area == AreaType.LOWER_TERRAIN && intX == 35 && intY == 53){
@@ -101,7 +101,7 @@ public class GameScreen implements PropertyChangeListener {
     public void adjustPlayerToTopLayerByElevation(Direction direction, User player) {
         Elevatable elv = sqmService.isElevatingSQMOrNull(player, direction);
         if (elv != null) {
-            fullMapManager.moveToTopLayer(player);
+            fullMapService.moveToTopLayer(player);
         }
 
     }

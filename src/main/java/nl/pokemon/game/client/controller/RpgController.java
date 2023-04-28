@@ -3,6 +3,7 @@ package nl.pokemon.game.client.controller;
 import nl.pokemon.game.client.enums.Direction;
 import nl.pokemon.game.client.model.Movement;
 import nl.pokemon.game.client.view.DBRadar;
+import nl.pokemon.game.core.service.Player;
 import org.dpmFramework.annotation.Controller;
 import org.dpmFramework.annotation.Inject;
 
@@ -13,6 +14,9 @@ import java.awt.event.KeyListener;
 public class RpgController implements KeyListener {
 
 //    private final Logger log = LoggerFactory.getLogger(RpgController.class);
+
+    @Inject
+    Player user;
 
     @Inject
     Movement movement;
@@ -28,22 +32,17 @@ public class RpgController implements KeyListener {
             case KeyEvent.VK_ALT -> DBRadar.useDragonBallRadar();
         }
 
-        boolean validKey;
-        validKey = switch (keyEvent.getKeyChar()) {
-            case 'w' -> movement.addOrUpdateDirection(Direction.NORTH);
-            case 'a' -> movement.addOrUpdateDirection(Direction.WEST);
-            case 's' -> movement.addOrUpdateDirection(Direction.SOUTH);
-            case 'd' -> movement.addOrUpdateDirection(Direction.EAST);
+        boolean pressWASD;
+        pressWASD = switch (keyEvent.getKeyChar()) {
+            case 'w' -> user.addOrUpdateDirection(Direction.NORTH);
+            case 'a' -> user.addOrUpdateDirection(Direction.WEST);
+            case 's' -> user.addOrUpdateDirection(Direction.SOUTH);
+            case 'd' -> user.addOrUpdateDirection(Direction.EAST);
             default -> false;
         };
 
-        if (movement.isNotMoving() && validKey) {
-            movement.setNotMoving(false);
-
-            if (!movement.getMoveStack().isEmpty())
-                movement.moveScreenByDirection(movement.getMoveStack().pop());
-        }
-
+        if (!user.isCharacterMoving() && pressWASD)
+            user.startMovingSequence();
     }
 
     @Override

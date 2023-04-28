@@ -34,6 +34,7 @@ public class Client extends JFrame {
 
         this.add(new TimeBox());
         this.add(new DBRadar());
+        this.add(Kickstarter.getInstanceOf(FoundDragonball.class));
 
         this.add(Kickstarter.getInstanceOf(DBCount.class));
         FullTileMap view = Kickstarter.getInstanceOf(FullTileMap.class);

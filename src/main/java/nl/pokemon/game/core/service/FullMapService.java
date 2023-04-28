@@ -20,7 +20,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.Map;
 
 @Service
-public class FullMapManager {
+public class FullMapService {
 
     private PropertyChangeSupport updateElevation;
 
@@ -28,7 +28,7 @@ public class FullMapManager {
     private SQMService sqmService;
 
     @Inject
-    private UserService userService;
+    private Player player;
 
     @Inject
     private DragonBallContainer dragonBallContainer;
@@ -37,40 +37,9 @@ public class FullMapManager {
     private DBCount DBCount;
 
     private void init() {
-        this.updateElevation = new PropertyChangeSupport(Kickstarter.getInstanceOf(FullMapManager.class));
+        this.updateElevation = new PropertyChangeSupport(Kickstarter.getInstanceOf(FullMapService.class));
         GameScreen gameScreen = Kickstarter.getInstanceOf(GameScreen.class);
         this.updateElevation.addPropertyChangeListener(gameScreen);
-    }
-
-    public void moveUser(User user, Direction direction) {
-        MapCoordination mapCoordination = user.getMapCoordination();
-
-        Elevatable elevation = sqmService.isElevatingSQMOrNull(user, direction);
-
-        if (elevation != null) {
-            if (FullMap.erasePosition(mapCoordination)) {
-                mapCoordination.elevate(elevation.incrementElevationNumber(), direction.getX(), direction.getY(), AreaType.PLAYER_BOTTOM);
-                updateElevation.firePropertyChange("changeElevation", null, mapCoordination.getZ());
-                FullMap.setUserToPosition(mapCoordination, user);
-            }
-        } else if (sqmService.isWalkableSQM(user, direction)) {
-            if (FullMap.erasePosition(mapCoordination)) {
-                mapCoordination.incrementByDirection(direction);
-
-                ItemTile itemSQM = sqmService.isDragonBallSQMOrNull(user);
-                if (itemSQM != null) {
-                    System.out.println("invoked");
-                    userService.addPoint(itemSQM.receivePoints());
-                    MapCoordination DBPosition = dragonBallContainer.getCurrentDragonball().getMapCoordination();
-                    FullMap.erasePosition(DBPosition);
-
-                    dragonBallContainer.getNextDragonBall();
-                    DBCount.addDragonBall(itemSQM);
-                }
-                updateElevation.firePropertyChange("playerMoved", null, null);
-                FullMap.setUserToPosition(mapCoordination, user);
-            }
-        }
     }
 
     public BaseTile getBaseSQMByPosition(MapCoordination mapCoordination) {
@@ -86,7 +55,7 @@ public class FullMapManager {
             int userId = getFullMapGridInt(areaType, z)[y][x];
             if (userId == 0)
                 return ConvertToSQM.getSQM(areaType, userId);
-            return userService.getUserCharacter();
+            return player.getUserCharacter();
         }
 
         int sqmId = getFullMapGridInt(areaType, z)[y][x];
@@ -111,22 +80,25 @@ public class FullMapManager {
         if (FullMap.erasePosition(mapCoordination)) {
             AreaType newAreaType = AreaType.PLAYER_TOP;
             mapCoordination.setAreaType(newAreaType);
-            FullMap.setUserToPosition(mapCoordination, user);
-            updateElevation.firePropertyChange("playerVisibilityChange", null, null);
-        }
-    }
-
-    public void moveToBottomLayer(User user) {
-        MapCoordination mapCoordination = user.getMapCoordination();
-
-        if (FullMap.erasePosition(mapCoordination)) {
-            AreaType newAreaType = AreaType.PLAYER_BOTTOM;
-            FullMap.setUserToPosition(mapCoordination, user);
+            FullMap.updateUserPosition(user);
             updateElevation.firePropertyChange("playerVisibilityChange", null, null);
         }
     }
 
     public void setBaseSQMToPosition(MapCoordination mapCoordination, BaseTile sqm) {
         FullMap.setItemToPosition(mapCoordination, sqm);
+    }
+
+    public void updateUserPosition(MapCoordination oldPosition, User user) {
+        if (FullMap.erasePosition(oldPosition)) {
+            FullMap.updateUserPosition(user);
+            String fireProperty;
+            if (oldPosition.getZ() != user.getMapCoordination().getZ()) {
+                fireProperty = "changeElevation";
+            } else {
+                fireProperty = "playerMoved";
+            }
+            updateElevation.firePropertyChange(fireProperty, null, user.getMapCoordination().getZ());
+        }
     }
 }

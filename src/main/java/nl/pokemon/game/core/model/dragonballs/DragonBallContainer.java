@@ -5,7 +5,8 @@ import nl.pokemon.game.core.model.Tiles.BaseTile;
 import nl.pokemon.game.core.model.Tiles.ItemTile;
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.client.model.FullTileMap;
-import nl.pokemon.game.core.service.FullMapManager;
+import nl.pokemon.game.core.model.Tiles.LowTerrainTile;
+import nl.pokemon.game.core.service.FullMapService;
 import nl.pokemon.game.bootstrap.FullMap;
 import nl.pokemon.game.bootstrap.TilesetImageContainer;
 import org.dpmFramework.annotation.Inject;
@@ -17,7 +18,7 @@ import java.util.*;
 public class DragonBallContainer {
 
     @Inject
-    FullMapManager fullMapManager;
+    FullMapService fullMapService;
 
     private Stack<DragonBall> dragonBallsContainer = new Stack<>();
     private DragonBall currentDragonball;
@@ -25,9 +26,9 @@ public class DragonBallContainer {
     private void init() {
         TilesetImageContainer.bootstrap();
         FullMap.bootstrapFullMap();
-        addNewDragonballs();
+        addNewDragonBalls();
     }
-    private void addNewDragonballs() {
+    private void addNewDragonBalls() {
         ArrayList<Integer> dragonballIds = new ArrayList<>(Arrays.asList(10, 11, 12, 13, 14, 15, 16));
         Random randomizedDB = new Random();
         while (dragonballIds.size() > 0) {
@@ -44,8 +45,8 @@ public class DragonBallContainer {
         int y = random.nextInt(0, FullMap.fullMapHeight());
         int z = random.nextInt(FullTileMap.START_Z, FullTileMap.MAX_Z);
 
-        BaseTile mapSQM = fullMapManager.getBaseSQMByPosition(new MapCoordination(x, y, z, AreaType.MAP));
-        BaseTile terrainSQM = fullMapManager.getBaseSQMByPosition(new MapCoordination(x, y, z, AreaType.HIGHER_TERRAIN));
+        BaseTile mapSQM = fullMapService.getBaseSQMByPosition(new MapCoordination(x, y, z, AreaType.MAP));
+        BaseTile terrainSQM = fullMapService.getBaseSQMByPosition(new MapCoordination(x, y, z, AreaType.HIGHER_TERRAIN));
 
         if (!mapSQM.isNotWalkable() && mapSQM.getSqmId() != 0 &&
                 !terrainSQM.isNotWalkable() && terrainSQM.getSqmId() == 0) {
@@ -61,10 +62,13 @@ public class DragonBallContainer {
     }
 
     public DragonBall getNextDragonBall() throws EmptyStackException {
+        if (currentDragonball != null) {
+            fullMapService.setBaseSQMToPosition(currentDragonball.getMapCoordination(), new LowTerrainTile());
+        }
         DragonBall dragonBall;
         try {
             dragonBall = dragonBallsContainer.pop();
-            fullMapManager.setBaseSQMToPosition(dragonBall.getMapCoordination(), dragonBall.getItem());
+            fullMapService.setBaseSQMToPosition(dragonBall.getMapCoordination(), dragonBall.getItem());
             this.currentDragonball = dragonBall;
             System.out.println("current db: " + dragonBall.getMapCoordination().getX() + " " + dragonBall.getMapCoordination().getY() + " " + dragonBall.getMapCoordination().getZ() + "");
             return dragonBall;

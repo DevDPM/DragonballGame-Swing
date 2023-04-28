@@ -7,31 +7,27 @@ import nl.pokemon.game.core.model.Elevatable;
 import nl.pokemon.game.core.model.MapCoordination;
 import nl.pokemon.game.core.model.Tiles.BaseTile;
 import nl.pokemon.game.core.model.Tiles.ItemTile;
-import nl.pokemon.game.core.model.Tiles.LowTerrainTile;
 import nl.pokemon.game.bootstrap.FullMap;
 import nl.pokemon.game.bootstrap.TilesetImageContainer;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
-import java.util.Map;
-import java.util.function.Function;
-
 @Service
 public class SQMService {
 
     @Inject
-    private FullMapManager fullMapManager;
+    private FullMapService fullMapService;
 
-    public ItemTile isDragonBallSQMOrNull(User user) {
-        MapCoordination mapCoordination = user.getMapCoordination();
+    public boolean isDragonBallTile(MapCoordination mapCoordination) {
         MapCoordination newMapCoordination = new MapCoordination(mapCoordination.getX(), mapCoordination.getY(), mapCoordination.getZ(), AreaType.LOWER_TERRAIN);
 
-        BaseTile baseTile = fullMapManager.getBaseSQMByPosition(newMapCoordination);
-        if (baseTile instanceof ItemTile item) {
-            return item;
-        } else {
-            return null;
-        }
+        BaseTile baseTile = fullMapService.getBaseSQMByPosition(newMapCoordination);
+        return baseTile instanceof ItemTile;
+    }
+
+    public ItemTile getDragonBallTile(MapCoordination mapCoordination) {
+        MapCoordination newMapCoordination = new MapCoordination(mapCoordination.getX(), mapCoordination.getY(), mapCoordination.getZ(), AreaType.LOWER_TERRAIN);
+        return (ItemTile) fullMapService.getBaseSQMByPosition(newMapCoordination);
     }
 
     public BaseTile getSQMByIntAndAreaOrNull(AreaType area, int sqmId) {
@@ -48,24 +44,24 @@ public class SQMService {
 
         for (AreaType areaType : AreaType.values()) {
             mapCoordination.setAreaType(areaType);
-            BaseTile baseTile = fullMapManager.getBaseSQMByPosition(mapCoordination);
+            BaseTile baseTile = fullMapService.getBaseSQMByPosition(mapCoordination);
             if (baseTile instanceof Elevatable elevation)
                 return elevation;
         }
         return null;
     }
 
-    public boolean isWalkableSQM(User user, Direction direction) {
-        return isWalkableSQM(getMapCoordinationByDirection(user, direction));
+    public boolean isWalkableTile(User user, Direction direction) {
+        return isWalkableTile(getMapCoordinationByDirection(user, direction));
     }
 
-    private boolean isWalkableSQM(MapCoordination mapCoordination) {
+    private boolean isWalkableTile(MapCoordination mapCoordination) {
         if (validateMapOutOfRange(mapCoordination))
             return false;
 
         for (AreaType areaType : AreaType.values()) {
             mapCoordination.setAreaType(areaType);
-            BaseTile baseTile = fullMapManager.getBaseSQMByPosition(mapCoordination);
+            BaseTile baseTile = fullMapService.getBaseSQMByPosition(mapCoordination);
 
             if (baseTile.isNotWalkable())
                 return false;
@@ -92,5 +88,28 @@ public class SQMService {
             y += direction.getY();
         }
         return new MapCoordination(x, y, z, mapCoordination.getAreaType());
+    }
+
+    public boolean isElevatingSQM(MapCoordination nextPosition) {
+        if (validateMapOutOfRange(nextPosition))
+            return false;
+
+        MapCoordination copyOfPosition = MapCoordination.copyOf(nextPosition);
+        copyOfPosition.setAreaType(Elevatable.getAreaType());
+        BaseTile baseTile = fullMapService.getBaseSQMByPosition(copyOfPosition);
+        return baseTile instanceof Elevatable;
+    }
+
+    public BaseTile getBaseTile(MapCoordination nextPosition, AreaType areaType) {
+        MapCoordination copyOfPosition = MapCoordination.copyOf(nextPosition);
+        copyOfPosition.setAreaType(areaType);
+        return getBaseTile(copyOfPosition);
+    }
+
+    public BaseTile getBaseTile(MapCoordination nextPosition) {
+        if (validateMapOutOfRange(nextPosition))
+            return null;
+
+        return fullMapService.getBaseSQMByPosition(nextPosition);
     }
 }

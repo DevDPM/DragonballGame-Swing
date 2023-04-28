@@ -19,7 +19,8 @@ public class FullMap {
         viewMap.putAll(JsonDeserialize.deserializeJsonFromFullMap(viewMap));
     }
 
-    public static boolean setUserToPosition(MapCoordination mapCoordination, User user) {
+    public static boolean updateUserPosition(User user) {
+        MapCoordination mapCoordination = user.getMapCoordination();
         int x = mapCoordination.getX();
         int y = mapCoordination.getY();
         int z = mapCoordination.getZ();

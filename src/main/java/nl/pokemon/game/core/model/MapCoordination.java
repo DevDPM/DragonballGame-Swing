@@ -2,6 +2,7 @@ package nl.pokemon.game.core.model;
 
 import nl.pokemon.game.client.enums.AreaType;
 import nl.pokemon.game.client.enums.Direction;
+import nl.pokemon.game.domain.User;
 
 public class MapCoordination {
     private int x;
@@ -16,16 +17,33 @@ public class MapCoordination {
         this.areaType = areaType;
     }
 
-    public void elevate(int elevation, int x, int y, AreaType areaType) {
-        this.x += (x * 2);
-        this.y += (y * 2);
+    public void elevate(int elevation, Direction direction) {
+        this.x += (direction.getX() * 2);
+        this.y += (direction.getY() * 2);
         this.z += elevation;
-        this.areaType = areaType;
+        this.areaType = AreaType.PLAYER_BOTTOM;
     }
 
     public void incrementByDirection(Direction direction) {
         this.x += direction.getX();
         this.y += direction.getY();
+    }
+
+    public static MapCoordination getPlayerPositionWithDirection(User user, Direction direction) {
+        MapCoordination mapCoordination = user.getMapCoordination();
+        int x = mapCoordination.getX();
+        int y = mapCoordination.getY();
+        int z = mapCoordination.getZ();
+
+        if (direction != null) {
+            x += direction.getX();
+            y += direction.getY();
+        }
+        return new MapCoordination(x, y, z, mapCoordination.getAreaType());
+    }
+
+    public static MapCoordination copyOf(MapCoordination nextPosition) {
+        return new MapCoordination(nextPosition.getX(), nextPosition.getY(), nextPosition.getZ(), nextPosition.getAreaType());
     }
 
     public int getX() {

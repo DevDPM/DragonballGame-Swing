@@ -17,7 +17,7 @@ public class FloorDownTile extends BaseTile implements Elevatable {
     }
 
     @Override
-    public int incrementElevationNumber() {
+    public int elevatingValue() {
         return -1;
     }
 }
