@@ -44,7 +44,7 @@ public class Movement {
     boolean notMoving = true;
 
 
-    public void move(Direction direction) {
+    public void moveScreenByDirection(Direction direction) {
 
         User user = userService.getUserInstance();
 
@@ -57,7 +57,6 @@ public class Movement {
 
         userService.setWalkingImage(direction);
         gameScreen.adjustPlayerToTopLayerByElevation(direction, user);
-        gameScreen.adjustPlayerToTopLayerByTerrain(direction, user);
         gameScreen.updateView();
         setPixelMovement(direction);
 
@@ -104,7 +103,6 @@ public class Movement {
         fullMapManager.moveUser(user, movedDirection.get());
 
         if (moveStack.isEmpty()) {
-            gameScreen.adjustPlayerToTopLayerByTerrain(user);
             stopMovement(movedDirection, actionEvent);
         } else {
             Direction nextDirection = moveStack.pop();
@@ -113,7 +111,6 @@ public class Movement {
                 stopMovement(movedDirection, actionEvent);
             } else {
                 gameScreen.adjustPlayerToTopLayerByElevation(nextDirection, user);
-                gameScreen.adjustPlayerToTopLayerByTerrain(nextDirection, user);
                 userService.setWalkingImage(nextDirection);
                 gameScreen.updateView();
                 pixelCounter.set(0);
@@ -143,18 +140,10 @@ public class Movement {
         this.smoothMovePosY = 0;
 
         switch (direction) {
-            case NORTH -> {
-                smoothMovePosY = speedPixelPerIterate;
-            }
-            case EAST -> {
-                smoothMovePosX = -speedPixelPerIterate;
-            }
-            case SOUTH -> {
-                smoothMovePosY = -speedPixelPerIterate;
-            }
-            case WEST -> {
-                smoothMovePosX = speedPixelPerIterate;
-            }
+            case NORTH -> smoothMovePosY = speedPixelPerIterate;
+            case EAST -> smoothMovePosX = -speedPixelPerIterate;
+            case SOUTH -> smoothMovePosY = -speedPixelPerIterate;
+            case WEST -> smoothMovePosX = speedPixelPerIterate;
         }
     }
 

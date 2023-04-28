@@ -13,6 +13,9 @@ import nl.pokemon.game.bootstrap.TilesetImageContainer;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
 
+import java.util.Map;
+import java.util.function.Function;
+
 @Service
 public class SQMService {
 
@@ -33,26 +36,6 @@ public class SQMService {
 
     public BaseTile getSQMByIntAndAreaOrNull(AreaType area, int sqmId) {
         return TilesetImageContainer.getSQMByIntAndArea(area, sqmId);
-    }
-
-    public BaseTile isWalkableTerrainOrNull(User user) {
-        return isWalkableTerrainOrNull(user.getMapCoordination());
-    }
-
-    public BaseTile isWalkableTerrainOrNull(User user, Direction direction) {
-        return isWalkableTerrainOrNull(getMapCoordinationByDirection(user, direction));
-    }
-
-    private BaseTile isWalkableTerrainOrNull(MapCoordination mapCoordination) {
-        if (validateMapOutOfRange(mapCoordination))
-            return null;
-
-        MapCoordination newMapCoordination = new MapCoordination(mapCoordination.getX(), mapCoordination.getY(), mapCoordination.getZ(), AreaType.HIGHER_TERRAIN);
-        BaseTile baseTile = fullMapManager.getBaseSQMByPosition(newMapCoordination);
-        if (baseTile instanceof LowTerrainTile && !baseTile.isNotWalkable()) {
-            return baseTile;
-        }
-        return null;
     }
 
     public Elevatable isElevatingSQMOrNull(User user, Direction direction) {
@@ -77,9 +60,6 @@ public class SQMService {
     }
 
     private boolean isWalkableSQM(MapCoordination mapCoordination) {
-        int x = mapCoordination.getX();
-        int y = mapCoordination.getY();
-
         if (validateMapOutOfRange(mapCoordination))
             return false;
 

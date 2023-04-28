@@ -12,10 +12,6 @@ public class Session {
         User user = new User("Daniel", new Goku(), new MapCoordination(45, 63, 0, AreaType.PLAYER_BOTTOM));
 
         this.user = user;
-//        Kickstarter.getInstanceOf(UserRepository.class).getUserDataBase().put(user.getId(), user);
-//        FullMapManager fullMapManager = Kickstarter.getInstanceOf(FullMapManager.class);
-//
-//        fullMapManager.moveUser(user, Direction.EAST);
     }
 
     public User getUser() {

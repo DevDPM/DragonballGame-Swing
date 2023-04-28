@@ -41,7 +41,7 @@ public class RpgController implements KeyListener {
             movement.setNotMoving(false);
 
             if (!movement.getMoveStack().isEmpty())
-                movement.move(movement.getMoveStack().pop());
+                movement.moveScreenByDirection(movement.getMoveStack().pop());
         }
 
     }

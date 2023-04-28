@@ -3,6 +3,7 @@ package nl.pokemon.game.core.service;
 import nl.pokemon.game.client.model.GameScreen;
 import nl.pokemon.game.core.model.Elevatable;
 import nl.pokemon.game.core.model.Tiles.BaseTile;
+import nl.pokemon.game.core.model.Tiles.ItemTile;
 import nl.pokemon.game.domain.User;
 import nl.pokemon.game.client.enums.Direction;
 import nl.pokemon.game.core.model.MapCoordination;
@@ -10,6 +11,8 @@ import nl.pokemon.game.domain.Session;
 import nl.pokemon.game.core.model.players.BaseEntity;
 import org.dpmFramework.annotation.Inject;
 import org.dpmFramework.annotation.Service;
+
+import java.util.Stack;
 
 @Service
 public class UserService {
@@ -28,6 +31,8 @@ public class UserService {
 
     private User user;
 
+    Stack<Direction> moveStack = new Stack<>();
+
     private void init() {
         this.user = session.getUser();
     }
@@ -36,15 +41,48 @@ public class UserService {
         if (!sqmService.isWalkableSQM(user, direction))
             return;
 
-        Elevatable elevatingTile = sqmService.isElevatingSQMOrNull(user, direction);
-        if (elevatingTile != null) {
-            // service user make elevation
+
+        if (true) {
+            // perform elevation
         } else {
-            BaseTile baseTile = sqmService.isWalkableTerrainOrNull(user, direction);
-            if (baseTile != null) {
-                // make player elevated
-            }
+            // perform movement
+            // change fullmap data
+            // update screen
         }
+
+
+    }
+
+    public boolean addOrUpdateDirection(Direction direction) {
+        if (!moveStack.isEmpty()) {
+            moveStack.pop();
+        }
+        return moveStack.add(direction);
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+    private MapCoordination getMapCoordinationByDirection(Direction direction) {
+        MapCoordination mapCoordination = user.getMapCoordination();
+        int x = mapCoordination.getX();
+        int y = mapCoordination.getY();
+        int z = mapCoordination.getZ();
+
+        if (direction != null) {
+            x += direction.getX();
+            y += direction.getY();
+        }
+        return new MapCoordination(x, y, z, mapCoordination.getAreaType());
     }
 
     public void setWalkingImage(Direction direction) {

@@ -106,23 +106,6 @@ public class GameScreen implements PropertyChangeListener {
 
     }
 
-    public void adjustPlayerToTopLayerByTerrain(Direction direction, User player) {
-        BaseTile stepOnbaseTile = sqmService.isWalkableTerrainOrNull(player, direction);
-        BaseTile currentlyOnbaseTile = sqmService.isWalkableTerrainOrNull(player);
-        if (stepOnbaseTile != null || currentlyOnbaseTile != null) {
-            fullMapManager.moveToTopLayer(player);
-        }
-    }
-
-    public void adjustPlayerToTopLayerByTerrain(User player) {
-        BaseTile currentlyOnbaseTile = sqmService.isWalkableTerrainOrNull(player);
-        if (currentlyOnbaseTile != null) {
-            fullMapManager.moveToTopLayer(player);
-        } else {
-            fullMapManager.moveToBottomLayer(player);
-        }
-    }
-
     private void changeSQMOffsetByZ(int currentZ, BaseTile viewSQM, int playerZ) {
         // if z below player.z then change offset. player.z = z => standard offset, increment higher as well just in case
         int OFFSET_PIXEL_Y = -170;

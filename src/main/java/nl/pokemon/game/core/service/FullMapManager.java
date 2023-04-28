@@ -49,17 +49,13 @@ public class FullMapManager {
 
         if (elevation != null) {
             if (FullMap.erasePosition(mapCoordination)) {
-                mapCoordination.setX(mapCoordination.getX() + (2 * direction.getX()));
-                mapCoordination.setY(mapCoordination.getY() + (2 * direction.getY()));
-                mapCoordination.setZ(mapCoordination.getZ() + elevation.incrementElevationNumber());
-                mapCoordination.setAreaType(AreaType.PLAYER_BOTTOM);
+                mapCoordination.elevate(elevation.incrementElevationNumber(), direction.getX(), direction.getY(), AreaType.PLAYER_BOTTOM);
                 updateElevation.firePropertyChange("changeElevation", null, mapCoordination.getZ());
                 FullMap.setUserToPosition(mapCoordination, user);
             }
         } else if (sqmService.isWalkableSQM(user, direction)) {
             if (FullMap.erasePosition(mapCoordination)) {
-                mapCoordination.setX(mapCoordination.getX() + direction.getX());
-                mapCoordination.setY(mapCoordination.getY() + direction.getY());
+                mapCoordination.incrementByDirection(direction);
 
                 ItemTile itemSQM = sqmService.isDragonBallSQMOrNull(user);
                 if (itemSQM != null) {
