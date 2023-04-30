@@ -31,4 +31,9 @@ public class DBCount extends JLabel {
         this.repaint();
     }
 
+    public void reset() {
+        this.removeAll();
+        this.repaint();
+    }
+
 }

@@ -23,6 +23,9 @@ public class TimeBox extends JLabel {
     }
 
     public void startTimer() {
+        if (timer != null && timer.isRunning())
+            return;
+
         int startTime = LocalTime.now().toSecondOfDay();
          timer = new Timer(1000, e -> {
             int currentTime = LocalTime.now().toSecondOfDay();
@@ -50,5 +53,10 @@ public class TimeBox extends JLabel {
 
     public LocalTime getPlayTime() {
         return LocalTime.ofSecondOfDay(playTimeInSeconds);
+    }
+
+    public void reset() {
+        if (timer != null)
+            timer.stop();
     }
 }

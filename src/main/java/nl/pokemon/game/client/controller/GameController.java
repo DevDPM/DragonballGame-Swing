@@ -10,7 +10,7 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 @Controller
-public class RpgController implements KeyListener {
+public class GameController implements KeyListener {
 
 //    private final Logger log = LoggerFactory.getLogger(RpgController.class);
 

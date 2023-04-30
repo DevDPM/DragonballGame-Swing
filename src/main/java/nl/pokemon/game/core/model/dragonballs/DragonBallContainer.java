@@ -1,6 +1,5 @@
 package nl.pokemon.game.core.model.dragonballs;
 
-import nl.pokemon.game.client.view.EndGame;
 import nl.pokemon.game.core.model.MapCoordination;
 import nl.pokemon.game.core.model.tiles.BaseTile;
 import nl.pokemon.game.core.model.tiles.ItemTile;
@@ -31,10 +30,9 @@ public class DragonBallContainer {
     private void init() {
         TilesetImageContainer.bootstrap();
         FullMap.bootstrapFullMap();
-        addNewDragonBalls();
     }
 
-    private void addNewDragonBalls() {
+    public void addNewDragonBalls() {
         ArrayList<Integer> dragonballIds = new ArrayList<>(Arrays.asList(10, 11, 12, 13, 14, 15, 16));
         Random randomizedDB = new Random();
         while (dragonballIds.size() > 0) {
@@ -80,8 +78,8 @@ public class DragonBallContainer {
             return dragonBall;
         } catch (EmptyStackException e) {
             session.stop();
+            return null;
         }
-        throw new RuntimeException("Something terrible happened during getNextDragonBall");
     }
 
     public Stack<DragonBall> getDragonBallsContainer() {

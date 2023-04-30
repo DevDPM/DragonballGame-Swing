@@ -50,17 +50,13 @@ public class PlayerService {
     private FoundDragonball foundDragonball;
 
     public static final int SPEED_TIMER_DELAY = 10;
-    private User user;
     Stack<Direction> moveStack = new Stack<>();
     AtomicReference<Direction> direction = new AtomicReference<>();
 
     boolean characterMoving = false;
 
-    private void init() {
-        this.user = session.getUser();
-    }
-
     public void startMovingSequence() {
+        User user = session.getUser();
         characterMoving = true;
         AtomicInteger iterateCount = new AtomicInteger(0);
         Timer smoothMoving = new Timer(SPEED_TIMER_DELAY, moveAction -> {
@@ -89,6 +85,7 @@ public class PlayerService {
     }
 
     private void checkTileForDragonball() {
+        User user = session.getUser();
         if (tileService.isDragonBallTile(user.getMapCoordination())) {
             ItemTile item = tileService.getDragonBallTile(user.getMapCoordination());
             addPoint(item.receivePoints());
@@ -99,6 +96,7 @@ public class PlayerService {
     }
 
     private void updatePlayerCoordinates() {
+        User user = session.getUser();
         MapCoordination oldPosition = MapCoordination.copyOf(user.getMapCoordination());
         MapCoordination nextPosition = MapCoordination.getPlayerPositionWithDirection(user, direction.get());
 
@@ -130,28 +128,34 @@ public class PlayerService {
     }
 
     public void setWalkingImage(Direction direction) {
+        User user = session.getUser();
         user.getCharacter().setWalkingImage(direction);
         gameScreen.updateView();
     }
 
     public int getPoints() {
+        User user = session.getUser();
         return user.getPoints();
     }
 
     public void standStill(Direction direction) {
+        User user = session.getUser();
         user.getCharacter().setStandingImage(direction);
         gameScreen.updateView();
     }
 
     public MapCoordination getUserCoordination() {
+        User user = session.getUser();
         return user.getMapCoordination();
     }
 
     public BaseEntity getUserCharacter() {
+        User user = session.getUser();
         return user.getCharacter();
     }
 
     public void addPoint(int receivePoints) {
+        User user = session.getUser();
         user.addToPoints(receivePoints);
     }
 }
