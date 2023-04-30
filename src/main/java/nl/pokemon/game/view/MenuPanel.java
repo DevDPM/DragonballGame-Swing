@@ -59,7 +59,12 @@ public class MenuPanel extends JPanel {
 
         @Override
         public void actionPerformed(ActionEvent e) {
-            System.out.println("show top score");
+            JFrame f = (JFrame) SwingUtilities.getAncestorOfClass(Client.class, Kickstarter.getInstanceOf(MenuPanel.class));
+            f.getContentPane().removeAll();
+            f.repaint();
+            f.add(Kickstarter.getInstanceOf(TopScorePanel.class));
+            f.validate();
+            Kickstarter.getInstanceOf(TopScorePanel.class).showTopScore();
         }
     }
 }

@@ -65,6 +65,7 @@ public class Session {
         timeBox.reset();
         scoreRepository.saveScore(scoreData);
         endGamePanel.writeDataOnScreen(scoreData);
-        FullMap.erasePosition(this.user.getMapCoordination());
+        if (FullMap.erasePosition(this.user.getMapCoordination()))
+            System.out.println("last position deleted");
     }
 }
