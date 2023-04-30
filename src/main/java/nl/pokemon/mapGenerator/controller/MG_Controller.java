@@ -1,6 +1,6 @@
 package nl.pokemon.mapGenerator.controller;
 
-import nl.pokemon.game.client.enums.Direction;
+import nl.pokemon.game.enums.Direction;
 //import nl.pokemon.mapGenerator.service.MG_ViewService;
 import nl.pokemon.mapGenerator.service.MG_ViewService;
 import org.dpmFramework.annotation.Controller;

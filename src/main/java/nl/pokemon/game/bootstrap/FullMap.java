@@ -1,9 +1,9 @@
 package nl.pokemon.game.bootstrap;
 
 import nl.pokemon.game.domain.User;
-import nl.pokemon.game.client.enums.AreaType;
-import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.tiles.BaseTile;
+import nl.pokemon.game.enums.AreaType;
+import nl.pokemon.game.model.core.model.MapCoordination;
+import nl.pokemon.game.model.core.model.tiles.BaseTile;
 
 import java.util.*;
 

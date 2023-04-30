@@ -1,16 +1,16 @@
 package nl.pokemon.game.domain;
 
 import nl.pokemon.game.bootstrap.FullMap;
-import nl.pokemon.game.client.enums.AreaType;
-import nl.pokemon.game.client.model.GameScreen;
-import nl.pokemon.game.client.view.DBCount;
-import nl.pokemon.game.client.view.EndGamePanel;
-import nl.pokemon.game.core.model.ScoreData;
-import nl.pokemon.game.client.view.TimeBox;
-import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.characters.Goku;
-import nl.pokemon.game.core.model.dragonballs.DragonBallContainer;
-import nl.pokemon.game.core.service.FullMapService;
+import nl.pokemon.game.enums.AreaType;
+import nl.pokemon.game.model.client.GameScreen;
+import nl.pokemon.game.view.gamePanel.Counter;
+import nl.pokemon.game.view.gamePanel.EndGamePanel;
+import nl.pokemon.game.model.core.model.ScoreData;
+import nl.pokemon.game.view.gamePanel.TimeBox;
+import nl.pokemon.game.model.core.model.MapCoordination;
+import nl.pokemon.game.model.core.model.characters.Goku;
+import nl.pokemon.game.model.core.model.dragonballs.DragonBallContainer;
+import nl.pokemon.game.model.core.service.FullMapService;
 import nl.pokemon.game.repository.ScoreRepository;
 import org.dpmFramework.Kickstarter;
 import org.dpmFramework.annotation.Inject;
@@ -32,18 +32,18 @@ public class Session {
     private DragonBallContainer dragonBallContainer;
 
     @Inject
-    private DBCount dbCount;
+    private Counter counter;
 
     @Inject
-    GameScreen gameScreen;
+    private GameScreen gameScreen;
 
     @Inject
+    private FullMapService fullMapService;
 
     private User user;
 
     public Session() {
-        User user = new User("Daniel", new Goku(), new MapCoordination(46, 63, 0, AreaType.PLAYER_BOTTOM));
-        this.user = user;
+        this.user = new User("Daniel", new Goku(), new MapCoordination(46, 63, 0, AreaType.PLAYER_BOTTOM));
     }
 
     public User getUser() {
@@ -52,8 +52,8 @@ public class Session {
 
     public void start() {
         this.user = new User("Daniel", new Goku(), new MapCoordination(46, 63, 0, AreaType.PLAYER_BOTTOM));
-        Kickstarter.getInstanceOf(FullMapService.class).setUserPosition(this.user);
-        dbCount.reset();
+        fullMapService.setUserPosition(this.user);
+        counter.reset();
         dragonBallContainer.addNewDragonBalls();
         gameScreen.updateView(this.user.getMapCoordination().getZ());
         timeBox.startTimer();

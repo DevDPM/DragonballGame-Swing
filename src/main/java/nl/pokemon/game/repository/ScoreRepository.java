@@ -1,13 +1,10 @@
 package nl.pokemon.game.repository;
 
-import nl.pokemon.game.core.model.ScoreData;
-import nl.pokemon.game.domain.User;
+import nl.pokemon.game.model.core.model.ScoreData;
 import org.dpmFramework.annotation.Service;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class ScoreRepository {

@@ -1,7 +1,7 @@
 package nl.pokemon.mapGenerator.util;
 
 import com.google.gson.Gson;
-import nl.pokemon.game.client.enums.AreaType;
+import nl.pokemon.game.enums.AreaType;
 
 import java.io.BufferedWriter;
 import java.io.FileOutputStream;

@@ -1,18 +1,14 @@
-package nl.pokemon.mapGenerator.model.SQMs;
+package nl.pokemon.game.model.core.model.tiles;
 
 import nl.pokemon.game.enums.AreaType;
 
 import javax.swing.*;
-import java.awt.event.ActionListener;
 
-public abstract class DevTool_BaseTile extends JButton implements ActionListener {
+public abstract class BaseTile extends JLabel {
 
     private int indexX;
     private int indexY;
     private ImageIcon imageIcon;
-
-    private int coordinateX;
-    private int coordinateY;
 
     private int sqmSizeX = 1;
     private int sqmSizeY = 1;
@@ -23,14 +19,15 @@ public abstract class DevTool_BaseTile extends JButton implements ActionListener
     public static final int SQM_PIXEL_WIDTH_X = 50;
     public static final int SQM_PIXEL_HEIGHT_Y = 50;
 
-    private int OFFSET_PIXEL_X = 0;
-    private int OFFSET_PIXEL_Y = 0;
+    private int OFFSET_PIXEL_X = -120;
+    private int OFFSET_PIXEL_Y = -170;
 
     private int sqmId;
-    private AreaType areaType;
+
+    public abstract boolean isNotWalkable();
+    public abstract AreaType getAreaType();
 
     public void updateSQM() {
-        this.setContentAreaFilled(false);
         setPixelPosXByIndex(this.indexX);
         setPixelPosYByIndex(this.indexY);
         this.setIcon(this.imageIcon);
@@ -60,7 +57,7 @@ public abstract class DevTool_BaseTile extends JButton implements ActionListener
     }
 
     public ImageIcon getImageIcon() {
-        return this.imageIcon;
+        return imageIcon;
     }
 
     public void setImageIcon(ImageIcon imageIcon) {
@@ -99,10 +96,6 @@ public abstract class DevTool_BaseTile extends JButton implements ActionListener
         this.pixelY = pixel;
     }
 
-    public void setOFFSET_PIXEL_X(int OFFSET_PIXEL_X) {
-        this.OFFSET_PIXEL_X = OFFSET_PIXEL_X;
-    }
-
     public void setOFFSET_PIXEL_Y(int OFFSET_PIXEL_Y) {
         this.OFFSET_PIXEL_Y = OFFSET_PIXEL_Y;
     }
@@ -111,39 +104,7 @@ public abstract class DevTool_BaseTile extends JButton implements ActionListener
         return sqmId;
     }
 
-    public int getIndexX() {
-        return indexX;
-    }
-
-    public int getIndexY() {
-        return indexY;
-    }
-
     public void setSqmId(int sqmId) {
         this.sqmId = sqmId;
-    }
-
-    public AreaType getAreaType() {
-        return areaType;
-    }
-
-    public void setAreaType(AreaType areaType) {
-        this.areaType = areaType;
-    }
-
-    public int getCoordinateX() {
-        return coordinateX;
-    }
-
-    public void setCoordinateX(int coordinateX) {
-        this.coordinateX = coordinateX;
-    }
-
-    public int getCoordinateY() {
-        return coordinateY;
-    }
-
-    public void setCoordinateY(int coordinateY) {
-        this.coordinateY = coordinateY;
     }
 }

@@ -1,6 +1,6 @@
 package nl.pokemon.mapGenerator.view;
 
-import nl.pokemon.game.client.enums.AreaType;
+import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.game.bootstrap.FullMap;
 import nl.pokemon.game.bootstrap.TilesetImageContainer;
 import nl.pokemon.mapGenerator.model.SQMs.DevTool_BaseTile;

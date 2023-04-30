@@ -1,7 +1,7 @@
 package nl.pokemon;
 
 import nl.pokemon.game.bootstrap.Bootstrap;
-import nl.pokemon.game.client.view.Client;
+import nl.pokemon.game.view.Client;
 import org.dpmFramework.Kickstarter;
 
 public class Main {

@@ -2,7 +2,7 @@ package nl.pokemon.game.bootstrap;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import nl.pokemon.game.client.enums.AreaType;
+import nl.pokemon.game.enums.AreaType;
 
 import java.io.*;
 import java.lang.reflect.Type;

@@ -1,7 +1,7 @@
 package nl.pokemon.game.domain;
 
-import nl.pokemon.game.core.model.MapCoordination;
-import nl.pokemon.game.core.model.characters.BaseEntity;
+import nl.pokemon.game.model.core.model.MapCoordination;
+import nl.pokemon.game.model.core.model.characters.BaseEntity;
 
 import java.util.concurrent.atomic.AtomicInteger;
 

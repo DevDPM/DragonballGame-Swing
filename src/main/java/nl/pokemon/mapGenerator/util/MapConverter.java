@@ -1,6 +1,6 @@
 package nl.pokemon.mapGenerator.util;
 
-import nl.pokemon.game.client.enums.AreaType;
+import nl.pokemon.game.enums.AreaType;
 import nl.pokemon.mapGenerator.model.SQMs.DevTool_BaseTile;
 import nl.pokemon.mapGenerator.model.View.MG_GridMap;
 
