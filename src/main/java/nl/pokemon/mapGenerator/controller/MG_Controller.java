@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
 public class MG_Controller implements KeyListener {
 
     @Inject
-    MG_ViewService mgViewService;
+    private MG_ViewService mgViewService;
 
 
     @Override

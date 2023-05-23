@@ -16,7 +16,7 @@ public class TimeBox extends JLabel {
 
     public TimeBox() {
         this.setVisible(true);
-        this.setBounds(350, 0, 150,75);
+        this.setBounds(350, 0, 200,75);
         this.setFocusable(false);
         this.setForeground(Color.WHITE);
         this.setFont(new Font("Monaco", Font.BOLD, 30));
@@ -31,7 +31,7 @@ public class TimeBox extends JLabel {
             int currentTime = LocalTime.now().toSecondOfDay();
 
              playTimeInSeconds = currentTime - startTime;
-            if (playTimeInSeconds == 5) {
+            if (playTimeInSeconds == 2) {
                 Kickstarter.getInstanceOf(DragonBallContainer.class).releaseNextDragonBall();
             }
             if (playTimeInSeconds < 60) {

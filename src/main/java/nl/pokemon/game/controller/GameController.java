@@ -29,7 +29,7 @@ public class GameController implements KeyListener {
 
         switch (keyEvent.getKeyCode()) {
 //            case KeyEvent.VK_SPACE -> dragonBallRadar.useDragonBallRadar();
-            case KeyEvent.VK_ALT -> Radar.useDragonBallRadar();
+//            case KeyEvent.VK_ALT -> Radar.useDragonBallRadar();
         }
 
         boolean pressWASD;

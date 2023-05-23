@@ -19,16 +19,16 @@ import java.util.Map;
 public class MG_ViewService {
 
     @Inject(name = "fullMap")
-    MG_ViewMap fullMap;
+    private MG_ViewMap fullMap;
 
     @Inject(name = "clientViewMap")
-    MG_ViewMap clientViewMap;
+    private MG_ViewMap clientViewMap;
 
     @Inject
-    DevTool_VoidTile voidSQM;
+    private DevTool_VoidTile voidSQM;
 
     @Inject
-    OptionPanel optionPanel;
+    private OptionPanel optionPanel;
 
     private final int MAX_X = 50;
     private final int MAX_Y = 50;

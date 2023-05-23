@@ -24,10 +24,10 @@ public class EndGamePanel extends JLabel {
         this.setBounds(250,200,300,300);
         this.setBackground(Color.darkGray);
         this.setOpaque(true);
-        this.add(new MainMenu());
     }
 
     public void writeDataOnScreen(ScoreData scoreData) {
+        this.add(new MainMenu());
         this.setVisible(true);
         this.setText(getEndGameText(scoreData));
         this.setForeground(Color.WHITE);

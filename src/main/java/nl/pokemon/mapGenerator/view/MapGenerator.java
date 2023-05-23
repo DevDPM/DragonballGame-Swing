@@ -10,11 +10,11 @@ public class MapGenerator extends JFrame {
 
     public MapGenerator() {
 
-        this.setTitle("Pokemon Map Generator!");
+        this.setTitle("Dragonball Z Map Editor!");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        this.setResizable(false);
         this.setSize(1300, 1000);
         this.setLocationRelativeTo(null);
+        this.setResizable(false);
         this.setLayout(new BorderLayout());
         this.setFocusable(true);
         this.addKeyListener(Kickstarter.getInstanceOf(MG_Controller.class));

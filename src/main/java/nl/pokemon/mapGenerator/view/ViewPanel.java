@@ -18,10 +18,10 @@ import java.util.Map;
 public class ViewPanel extends JPanel {
 
     @Inject(name = "fullMap")
-    MG_ViewMap fullMap;
+    private MG_ViewMap fullMap;
 
     @Inject(name = "clientViewMap")
-    MG_ViewMap clientViewMap;
+    private MG_ViewMap clientViewMap;
 
 
     public ViewPanel() {
@@ -29,8 +29,8 @@ public class ViewPanel extends JPanel {
     }
 
     public void init() {
-        FullMap.bootstrapFullMap();
-        TilesetImageContainer.bootstrap();
+//        FullMap.bootstrapFullMap();
+//        TilesetImageContainer.bootstrap();
 
         List<Integer> elevations = new ArrayList<>(FullMap.getViewMap().keySet());
         Collections.reverse(elevations);
@@ -55,7 +55,7 @@ public class ViewPanel extends JPanel {
                         sqm.setSqmSizeX(TilesetImageContainer.getSQMByArea(areaType).get(areaMap[y][x]).getSqmSizeX());
                         sqm.setSqmSizeY(TilesetImageContainer.getSQMByArea(areaType).get(areaMap[y][x]).getSqmSizeY());
                         sqm.updateSQM();
-                        if (y <= 30 && x <= 30) {
+                        if (y <= 13 && x <= 18) {
                             DevTool_BaseTile clientViewSQM = clientViewMap.getViewMap().get(elevation).get(areaType).getGridMap()[y][x];
                             clientViewSQM.setIndexX(x);
                             clientViewSQM.setIndexY(y);
