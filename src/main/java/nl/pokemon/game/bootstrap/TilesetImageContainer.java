@@ -57,7 +57,7 @@ public class TilesetImageContainer {
                 sqm.setSqmSizeY(icon.getIconHeight()/ BaseTile.SQM_PIXEL_HEIGHT_Y);
                 sqm.setImageIcon(icon);
                 sqm.updateSQM();
-
+                if (fileName.getName().equals(".DS_Store")) continue;
                 int id = Integer.parseInt(fileName.getName().replaceAll("\\D+",""));
                 sqm.setSqmId(id);
                 SQMMap.put(id, sqm);

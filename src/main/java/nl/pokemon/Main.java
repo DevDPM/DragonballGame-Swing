@@ -10,8 +10,8 @@ public class Main {
         Bootstrap.load();
         Kickstarter.ignite(Main.class);
 
-//        new Client();
-        new MapGenerator();
+        new Client();
+//        new MapGenerator();
 
     }
 }
